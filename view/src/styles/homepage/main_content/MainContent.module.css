@@ -1,0 +1,54 @@
+.main__content__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 900px;
+    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(212, 212, 212));
+}
+
+.main__content__cards__area {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: "c1   c1  c2   c2"
+                         "c1   c1  c2   c2"
+                         "c3   c3  c3   c3";
+    gap: 2%;
+    padding: 2%;
+    height: 80%;
+    width: 80%;
+    max-width: 1000px;
+}
+
+@media only screen and (max-width: 727px) and (min-width: 539px){
+    .main__content__block {
+        height: 1200px;
+    }
+    .main__content__cards__area {
+        height: 85%;
+        width: 90%;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "c1   c1   c1  c1"
+                             "c2   c2   c2  c2"
+                             "c3   c3   c3  c3";
+    }
+    
+}
+
+@media only screen and (max-width: 538px){
+    .main__content__block {
+        height: 1700px;
+    }
+    .main__content__cards__area {
+        height: 86%;
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas: "c1   c1   c1  c1"
+                             "c2   c2   c2  c2"
+                             "c3   c3   c3  c3";
+    }
+}

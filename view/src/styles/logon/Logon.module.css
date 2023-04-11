@@ -1,0 +1,180 @@
+.form__background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(230, 228, 228));
+}
+
+.form__block {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    top: -50%;
+    opacity: 0;
+    height: 555px;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.514);
+    background-color: white;
+    transition: opacity 4s, top 1s;
+}
+
+.form__background.loaded .form__block{
+    top: 15%;
+    opacity: 1;
+}
+
+.form__field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.logon__message {
+    margin: 8% 0 0 0;
+    color: rgb(255, 51, 0);
+}
+
+/*#8B8B8B*/
+
+.separation__line {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    margin: 4% 0 6% 0;
+}
+
+.name__block, .email__block, .password__block {
+    width: 80%;
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login__password__block {
+    margin-bottom: 0%;
+}
+
+.name__input, .email__input, .password__input {
+    font-size: 1.1em;
+    padding: 5px;
+    outline: 0;
+    border: 0.2px solid rgb(117, 116, 116);
+}
+
+.password__area, .name__area, .email__area {
+    border: 0.1px solid #8b8b8b96;
+    background-color: white;
+    border-radius: 8px;
+    display: flex;
+    height: 50%;
+    width: 100%;
+}
+
+.data__label {
+    margin-bottom: 2%;
+}
+
+#name__input__logon, #email__input__logon, #password__input__logon {
+    font-size: 1.1em;
+}
+
+.name__input, .email__input, .password__input {
+    width: 85%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+}
+
+.name__image__area, .email__image__area, .password__image__area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+    transition: background-color .2s;
+}
+
+.toggle__password__visibility:hover {
+    background-color: rgb(37, 143, 175);
+    cursor: pointer;
+}
+
+.logon__link {
+    font-size: 0.95em;
+    color: rgb(102, 99, 99);
+}
+
+.input__symbol {
+    width: 23px;
+    height: 23px;
+    object-fit: cover;
+}
+
+.logon__link > a {
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 1200px) and (min-width: 1100px) {
+    .form__block {
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width: 1099px) and (min-width: 1027px) {
+    .form__block {
+        width: 37%;
+    }
+}
+
+@media only screen and (max-width: 1026px) and (min-width: 972px) {
+    .form__block {
+        width: 39%;
+    }
+}
+
+@media only screen and (max-width: 971px) and (min-width: 860px){
+    .form__block {
+        width: 42%;
+    }
+}
+
+@media only screen and (max-width: 859px) and (min-width: 755px){
+    .form__block {
+        width: 44%;
+    }
+}
+
+@media only screen and (max-width: 754px) and (min-width: 672px){
+    .form__block {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 671px) and (min-width: 573px){
+    .form__block {
+        width: 60%;
+    }
+}
+
+
+@media only screen and (max-width: 572px) and (min-width: 486px){
+    .form__block {
+        width: 80%;
+    }
+}
+
+@media only screen and (max-width: 485px) and (min-width: 406px){
+    .form__block {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 405px){
+    .form__block {
+        width: 95%;
+    }
+}

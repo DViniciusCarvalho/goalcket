@@ -1,0 +1,57 @@
+.name__block, .email__block, .password__block {
+    width: 80%;
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+}
+
+.login__password__block {
+    margin-bottom: 0%;
+}
+
+.name__input, .email__input, .password__input {
+    font-size: 1.1em;
+    padding: 5px;
+    outline: 0;
+    border: 0.2px solid rgb(117, 116, 116);
+    
+}
+
+.password__area, .name__area, .email__area {
+    border: 0.1px solid #8b8b8b96;
+    background-color: white;
+    border-radius: 40px;
+    display: flex;
+    height: 50%;
+    width: 100%;
+}
+
+.data__label {
+    margin-bottom: 2%;
+}
+
+#name__input, #email__input, #password__input {
+    font-size: 1.1em;
+}
+
+.name__input, .email__input, .password__input {
+    width: 85%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+}
+
+.name__image__area, .email__image__area, .password__image__area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    height: 100%;
+    transition: background-color .2s;
+}
+
+.input__symbol {
+    width: 23px;
+    height: 23px;
+    object-fit: cover;
+}

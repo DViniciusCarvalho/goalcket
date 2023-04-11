@@ -1,0 +1,89 @@
+.hero__section__background {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 4%;
+    width: 100%;
+    height: 450px;
+    background-image: url("../../../../public/assets/rocket.jpg");
+    background-position: center bottom;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.hero__section__main__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2%;
+    width: 35%;
+    min-width: 364px;
+    height: 230px;
+}
+
+.hero__section__main__content__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25%;
+    width: 100%;
+    font-size: 2.1em;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.753);
+}
+
+.hero__section__main__content__text {
+    height: 45%;
+    width: 100%;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.685);
+    font-size: 1.01em;
+    text-align: justify;
+}
+
+.hero__section__join__us__button {
+    font-size: 1.3em;
+    width: 80%;
+    height: 29%;
+    background-color: rgb(0, 0, 0);
+    border-radius: 8px;
+    border: none;
+    transition: background-color .4s;
+    color: white;
+}
+
+.hero__section__join__us__button:hover {
+    cursor: pointer;
+    background-color: rgb(255, 60, 0);
+}
+
+@media only screen and (max-width: 727px) and (min-width: 459px){
+    .hero__section__background {
+        padding-bottom: 10%;
+    }
+    
+    .hero__section__main__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2%;
+        width: 60%;
+        min-width: 60%;
+    }
+}
+
+@media only screen and (max-width: 458px){
+    .hero__section__background {
+        padding-bottom: 10%;
+    }
+    
+    .hero__section__main__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2%;
+        width: 80%;
+        min-width: 80%;
+    }
+}
+

@@ -1,0 +1,49 @@
+.go__to__home {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    width: 160px;
+    height: 40px;
+    text-decoration: none;
+    color: black;
+}
+
+.go__to__home:hover {
+    cursor: pointer;
+}
+
+.arrow__button__line__one, .arrow__button__line__two {
+    position: absolute;
+    left: 0%;
+    top: calc(50% - 6%);
+    width: 12%;
+    height: 12%;
+    border-radius: 8px;
+    background-color: black;
+    transform-origin: 0% 44%;
+    transition: background-color .4s ;
+}
+
+.arrow__button__line__one {
+    transform: rotate(45deg);
+}
+
+.arrow__button__line__two{
+    transform: rotate(-45deg);
+}
+
+.go__to__home:hover .arrow__button__line__one,.go__to__home:hover .arrow__button__line__two {
+    background-color: rgb(255, 81, 0);
+}
+
+.button__description {
+    font-size: 1.3em;
+    margin-left: 25%;
+    transition: color .4s;
+}
+
+.go__to__home:hover .button__description {
+    color: rgb(255, 81, 0);
+}

@@ -1,0 +1,76 @@
+.button {
+    width: 80%;
+    height: 9%;
+    border-radius: 40px;
+    background-color: rgb(0, 0, 0);
+    border: none;
+    color: white;
+    font-size: 1.1em;
+    margin: 7% 0 8% 0;
+    transition: background-color .2s;
+}
+
+.button:hover {
+    cursor: pointer;
+    background-color: rgb(235, 74, 10);
+}
+
+@media only screen and (max-width: 1200px) and (min-width: 1100px) {
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 1099px) and (min-width: 1027px) {
+    .button {
+        margin: 7% 0 9% 0;
+    }
+}
+
+@media only screen and (max-width: 1026px) and (min-width: 972px) {
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 971px) and (min-width: 860px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 859px) and (min-width: 755px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 754px) and (min-width: 681px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 680px) and (min-width: 573px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 572px) and (min-width: 486px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 485px) and (min-width: 406px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}
+
+@media only screen and (max-width: 405px){
+    .button {
+        margin: 7% 0 13% 0;
+    }
+}

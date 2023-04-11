@@ -1,0 +1,54 @@
+User:
+{ 
+    "name": client.name, 
+    "email": client.email, 
+    "password": client.password, 
+    "rooms": { 
+        "personal": { 
+            "todo": { 
+                "color": "#4CB120", 
+                "cards": []
+            },
+            "doing": { 
+                "color": "#1F6B69", 
+                "cards": []
+            },
+            "done":{ 
+                "color": "#000000", 
+                "cards": []
+            }
+        },
+        "groups": [
+            { 
+                "name": "sla", 
+                "hash": "asjuahdad" 
+            }
+        ]
+    } 
+}
+
+
+Groups:
+{ 
+    "name": "sla",
+    "hash": "asjuahdad",
+    "password": "alguma coisa"
+    "members": [
+        "name": "alguma coisa",
+        "roles": []
+    ]
+    "columns": {
+        "todo": { 
+            "color": "#4CB120", 
+            "cards": []
+        },
+        "doing": { 
+            "color": "#1F6B69", 
+            "cards": []
+        },
+        "done":{ 
+            "color": "#000000", 
+            "cards": []
+        }
+    }
+}

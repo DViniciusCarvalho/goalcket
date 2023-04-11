@@ -1,0 +1,82 @@
+.card {
+    padding: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.205);
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.548);
+    text-align: justify;
+    background-color: white;
+}
+
+.card__title {
+    color: #dd3c0b;
+}
+
+.card__description {
+    color: black;
+}
+
+.card__one {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: red;
+}
+
+.card__two {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: green;
+}
+
+
+.card__three {
+    display: flex;
+    align-items: center;
+} 
+
+.card__three__content__area {
+    width: 80%;
+    margin-left: 5%;
+}
+
+.card__three__content__area > .card__title {
+    margin-bottom: 19px;
+}
+
+@media only screen and (max-width: 727px) and (min-width: 539px){
+    .card__three {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card__three__content__area {
+        margin: 0;
+        width: 100%;
+    }
+
+    .card__three__content__area > .card__title {
+        text-align: center;
+        margin-bottom: 19px;
+    }
+}
+
+@media only screen and (max-width: 538px){
+    .card__three {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card__three__content__area {
+        margin: 0;
+        width: 100%;
+    }
+
+    .card__title {
+        margin-bottom: 30px;
+    }
+
+    .card__three__content__area > .card__title {
+        text-align: center;
+        margin-bottom: 49px;
+    }
+}
