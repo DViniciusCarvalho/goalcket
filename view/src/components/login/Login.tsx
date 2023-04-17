@@ -83,16 +83,18 @@ export default function LoginComponent(){
             router.push("/internal")
         }
         else if (response.status === 404){
-            statusMessage = "invalid-login";
+            statusMessage = "invalidLogin";
+            showPopUp(statusMessage);
         }
         else if(response.status === 400){
-            statusMessage = "invalid-input";
+            statusMessage = "invalidInput";
+            showPopUp(statusMessage);
         }
         else {
-            statusMessage = "server-error";
+            statusMessage = "serverError";
+            showPopUp(statusMessage);
         }
         
-        showPopUp(statusMessage);
         clearInputs();
     }
 

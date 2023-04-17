@@ -38,7 +38,7 @@ class ClientOperations:
                             "cards": []
                         },
                         "done":{ 
-                            "color": "#000000", 
+                            "color": "#ffffff", 
                             "cards": []
                         }
                     },

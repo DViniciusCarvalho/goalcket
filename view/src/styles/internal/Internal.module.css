@@ -1,5 +1,7 @@
 .internal__background {
     width: 100vw;
     height: 800px;
-    background-color: rgb(235, 235, 192);
+    background-image: linear-gradient(to left top, rgb(201, 203, 216), white);
 }
+
+/* rgb(235, 235, 192) */

@@ -86,19 +86,19 @@ export default function logonComponent(){
         let statusMessage, requestStatus;
 
         if (response.status === 201){
-            statusMessage = "logon-success";
+            statusMessage = "successfulLogon";
             requestStatus = "success";
         }
         else if (response.status === 409){
-            statusMessage = "invalid-user";
+            statusMessage = "invalidUser";
             requestStatus = "error";
         }
         else if (response.status === 400){
-            statusMessage = "invalid-input";
+            statusMessage = "invalidInput";
             requestStatus = "error";
         }
         else {
-            statusMessage = "server-error";
+            statusMessage = "serverError";
             requestStatus = "error";
         }
 

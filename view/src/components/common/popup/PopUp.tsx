@@ -8,13 +8,13 @@ import Image from "next/image";
 
 export default function PopUp({ content, visibilityClass, status }: PopUpProps) {
 
-    const popUpMessages: {[key: string]: string} = { 
-        "invalid-login": "Invalid credentials, password or e-mail incorrect.",
-        "invalid-input": "Invalid credentials, don't use HTML tags and emails must have '@'",
-        "invalid-user": "E-mail already used. Please, try to use another one.",
-        "logon-sucess": "Registered with success.",
-        "server-error": "An error occurred. Please try again later."
-    }; 
+    const popUpMessages: {[key: string]: string} = {
+        invalidLogin: "Invalid credentials, password or e-mail incorrect.",
+        invalidInput: "Invalid credentials, don't use HTML tags and emails must have '@'",
+        invalidUser: "E-mail already used. Please, try to use another one.",
+        successfulLogon: "Registered with success.",
+        serverError: "An error occurred. Please try again later."
+    };
 
     return (
         <div className={`${style.pop__up__box} ${style[visibilityClass]} ${style[status]}`}>

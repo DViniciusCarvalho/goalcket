@@ -1,8 +1,16 @@
+from pathlib import Path
+import sys
+
+file = Path(__file__).resolve()
+parent, root = file.parent, file.parents[1]
+sys.path.append(str(root))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 from controller import ClientController
+
 
 app = FastAPI()
 

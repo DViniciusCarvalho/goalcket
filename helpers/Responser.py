@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import sys
-from typing import Union, Dict
+from typing import Union, Dict, Any
 
 file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
@@ -27,7 +27,7 @@ class Responser:
     
     @validate_arguments
     @staticmethod
-    def fetch_data_json(http_status: int, name: Union[str, None], rooms: Union[Dict[str, Union[Dict[str, list], list]], None]):
+    def fetch_data_json(http_status: int, name: Union[str, None], rooms: Any):
         dict_format = { "status": http_status, "name": name, "rooms": rooms }
         jsonified = json.dumps(dict_format)
         return jsonified

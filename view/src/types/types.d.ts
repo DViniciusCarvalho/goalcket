@@ -42,6 +42,35 @@ export interface DescriptionProps {
     color: string;
 }
 
+export interface PersonalProps {
+    toDoColor: string;
+    doingColor: string; 
+    doneColor: string;
+}
+
+export interface ToDoProps {
+    color: string;
+    cards: Card[];
+}
+
+export interface DoingProps {
+    color: string;
+    cards: Card[];
+}
+
+export interface DoneProps {
+    color: string;
+    cards: Card[];
+}
+
+export interface CardsAreaProps {
+    cards: Card[];
+}
+
+export interface KanbanCardProps {
+    position: Property.Position | string;
+}
+
 // Request interfaces
 export interface LogonRequestParameters {
     method: "POST";
@@ -96,8 +125,8 @@ export interface FetchDataResponse {
     status: number;
     name: string;
     rooms: {
-        personal: Personal,
-        groups: Group[]
+        personal: IPersonal,
+        groups: IGroup[]
     }
 }
 

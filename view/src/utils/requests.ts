@@ -1,5 +1,6 @@
 import { LogonRequestParameters } from "@/types/types";
 import { LoginRequestParameters } from "@/types/types";
+import { FetchDataRequestParameters } from "@/types/types";
 
 // Logon
 export const arrangeLogonRequest = (name: string, email: string, password: string): LogonRequestParameters => {
@@ -21,4 +22,15 @@ export const arrangeLoginRequest = (email: string, password: string): LoginReque
         body: JSON.stringify(dataToSend)
     }
     return parameters;
+}
+
+// Fetch data
+export const getFetchDataRequestConfig = (): FetchDataRequestParameters => {
+    const token = { token: localStorage.getItem("token") ?? "" };
+    const requestConfig: FetchDataRequestParameters = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(token)
+    }
+    return requestConfig;
 }
