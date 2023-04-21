@@ -1,7 +1,8 @@
 .internal__background {
     width: 100vw;
-    height: 800px;
+    height: 100vh;
     background-image: linear-gradient(to left top, rgb(201, 203, 216), white);
+    overflow-y: hidden;
 }
 
 /* rgb(235, 235, 192) */

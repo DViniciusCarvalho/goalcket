@@ -31,7 +31,7 @@ export default function Functionalities(){
             </select>
           </div>
           <div className={functStyle.priority__block}>
-            <label htmlFor="s__priority" className={functStyle.priority__label}>Destination</label>
+            <label htmlFor="s__priority" className={functStyle.priority__label}>Priority</label>
             <select className={functStyle.priority__select} id="s__priority">
               <option value="low">Low</option>
               <option value="medium">Medium</option>

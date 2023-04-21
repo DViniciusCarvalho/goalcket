@@ -27,7 +27,28 @@ class Responser:
     
     @validate_arguments
     @staticmethod
-    def fetch_data_json(http_status: int, name: Union[str, None], rooms: Any):
+    def fetch_data_json(http_status: int, name: Union[str, None], rooms: Any) -> json:
         dict_format = { "status": http_status, "name": name, "rooms": rooms }
+        jsonified = json.dumps(dict_format)
+        return jsonified
+    
+    @validate_arguments
+    @staticmethod
+    def create_group_json(http_status: int, group_hash: str) -> json:
+        dict_format = { "status": http_status, "hash": group_hash }
+        jsonified = json.dumps(dict_format)
+        return jsonified
+    
+    @validate_arguments
+    @staticmethod
+    def get_group_json(http_status: int, group_data: Any) -> json:
+        dict_format = { "status": http_status, "group": group_data }
+        jsonified = json.dumps(dict_format)
+        return jsonified
+    
+    @validate_arguments
+    @staticmethod
+    def update_color_json(http_status: int) -> json:
+        dict_format = { "status": http_status }
         jsonified = json.dumps(dict_format)
         return jsonified

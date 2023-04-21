@@ -25,7 +25,7 @@ class Tokenizer:
     def decode(token: str) -> Union[str, False]:
         try:
             payload = jwt.decode(token, Tokenizer.SECRET, Tokenizer.ALGORITHM)
-            id = payload["sub"]
-            return id
+            user_id = payload["sub"]
+            return user_id
         except jwt.InvalidTokenError:
             return False

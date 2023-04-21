@@ -4,11 +4,11 @@ import Doing from "../columns/Doing";
 import Done from "../columns/Done";
 import Functionalities from "../columns/Functionalities";
 
-export default function Personal({ toDo, doing, done }: any) {
+export default function Personal({ todo, doing, done }: any) {
     
-    const toDoProps = { color: toDo.color, cards: toDo.cards };
-    const doingProps = { color: doing.color, cards: doing.cards };
-    const doneProps = { color: done.color, cards: done.cards };
+    const toDoProps = { ...todo };
+    const doingProps = { ...doing };
+    const doneProps = { ...done };
 
     return (
         <React.Fragment>

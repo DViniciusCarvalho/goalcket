@@ -1,3 +1,8 @@
+export interface OverlayProps {
+    visibility: "invisible" | "visible";
+    handlePopUpGroupState: () => void;
+}
+
 export interface HeaderProps {
     needChangeBackground: boolean;
     headerPage: string;
@@ -37,9 +42,15 @@ export interface OptionProps {
     groupHash: string;
 }
 
+export interface JoinGroupPopUpProps {
+    popUpDisplay: "invisible" | "visible";
+    handleJoinGroupState: () => void;
+}
+
 export interface DescriptionProps {
     area: string;
     color: string;
+    isGroup: boolean;
 }
 
 export interface PersonalProps {
@@ -51,16 +62,19 @@ export interface PersonalProps {
 export interface ToDoProps {
     color: string;
     cards: Card[];
+    isGroup: boolean;
 }
 
 export interface DoingProps {
     color: string;
     cards: Card[];
+    isGroup: boolean;
 }
 
 export interface DoneProps {
     color: string;
     cards: Card[];
+    isGroup: boolean;
 }
 
 export interface CardsAreaProps {
@@ -70,6 +84,21 @@ export interface CardsAreaProps {
 export interface KanbanCardProps {
     position: Property.Position | string;
 }
+
+export interface ErrorProps {
+    getGroupRequestStatusMessage: string;
+}
+
+export interface GroupContentProps {
+    name: string;
+    members: IMember[];
+    columns: {
+        todo: ToDoProps,
+        doing: DoingProps,
+        done: DoneProps
+    }
+}
+
 
 // Request interfaces
 export interface LogonRequestParameters {
@@ -90,6 +119,36 @@ export interface FetchDataRequestParameters {
     body: string;
 }
 
+export interface GetGroupContentRequestParameters {
+    method: "POST";
+    headers: {[key: string]: string};
+    body: string;
+}
+
+export interface ChangeColorPersonalRequestParameters {
+    method: "PUT";
+    headers: {[key: string]: string};
+    body: string;
+}
+
+export interface ChangeColorGroupRequestParameters {
+    method: "PUT";
+    headers: {[key: string]: string};
+    body: string;
+}
+
+export interface CreateGroupRequestParameters {
+    method: "POST";
+    headers: {[key: string]: string};
+    body: string;
+}
+
+export interface JoinGroupRequestParameters {
+    method: "POST";
+    headers: {[key: string]: string};
+    body: string;
+}
+
 // Response interfaces
 export interface LogonResponse {
     status: number;
@@ -100,13 +159,47 @@ export interface LoginResponse {
     token: string;
 }
 
-interface Card {
-
+export interface FetchDataResponse {
+    status: number;
+    name: string;
+    rooms: {
+        personal: IPersonal,
+        groups: IGroup[]
+    }
 }
 
-interface Column {
+export interface CreateGroupResponse {
+    status: number;
+    hash: string;
+}
+
+export interface GetGroupContentResponse {
+    status: number;
+    group: {
+        name: string;
+        members: IMember[];
+        columns: {
+            todo: ToDoProps,
+            doing: DoingProps,
+            done: DoneProps
+        }
+    }
+}
+
+// Components patterns
+export interface IMember {
+    name: string;
+    roles: string[]
+}
+
+export interface ICard {
+    content: string;
+    priority: string;
+}
+
+export interface Column {
     color: string;
-    cards: Card[]
+    cards: ICard[]
 }
 
 export interface IGroup {
@@ -119,15 +212,6 @@ export interface IPersonal {
     todo: Column;
     doing: Column;
     done: Column;
-}
-
-export interface FetchDataResponse {
-    status: number;
-    name: string;
-    rooms: {
-        personal: IPersonal,
-        groups: IGroup[]
-    }
 }
 
 

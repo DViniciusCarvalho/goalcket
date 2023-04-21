@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from controller import ClientController
+from controller import ClientController, DataController
 
 
 app = FastAPI()
@@ -31,6 +31,7 @@ app.add_middleware(
 )
 
 app.include_router(ClientController.router)
+app.include_router(DataController.router)
 
 if __name__ == "__main__":
     uvicorn.run("app:app", reload=True, host=SERVER_HOST, port=SERVER_PORT)

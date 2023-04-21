@@ -6,7 +6,7 @@ import { IGroup } from "@/types/types";
 
 export default function InternalHeader(){
 
-    const { name, groups } = useContext(InternalPageContext);
+    const { name, groups, handlePopUpGroupState, handleChangeRoom } = useContext(InternalPageContext);
 
     const [ userGroups, setUserGroups ] = useState<IGroup[]>([]);
 
@@ -18,9 +18,11 @@ export default function InternalHeader(){
         setUserGroups(groups);
     }
 
-    function changeGroup(event: React.ChangeEvent<HTMLSelectElement>){
-        const value = event.target!.value;
-        // request para o server para pegar os dados dos grupos
+    function changeRoom(event: React.ChangeEvent<HTMLSelectElement>){
+        const selectedIndex = event.target!.selectedIndex;
+        const selectedOption = event.target!.options[selectedIndex];
+        const selectedOptionId = selectedOption.id;
+        handleChangeRoom(selectedOptionId);
     }
 
     return (
@@ -29,15 +31,15 @@ export default function InternalHeader(){
                 Hi, {name}!
             </div>
             <div className={headerStyles.nav__area}>
-                <select onChange={changeGroup} className={headerStyles.group__select}>
-                    <option value="personal"> Personal </option>
+                <select onChange={changeRoom} className={headerStyles.group__select}>
+                    <option value="personal" id="personal"> Personal </option>
                     {userGroups.length && (userGroups.map(group => (
                         <React.Fragment key={group.hash}>
                             <Group groupName={group.name} groupHash={group.hash}/>
                         </React.Fragment>
                     )))}
                 </select>
-                <button className={headerStyles.join_group__button}>Join group</button>
+                <button className={headerStyles.join_group__button} onClick={handlePopUpGroupState}>Join group</button>
             </div>
         </header>
     );

@@ -16,19 +16,26 @@
     outline: 0;
     width: 200px;
     height: 50%;
-    border-radius: 10px;
+    border-radius: 0px;
     text-align: center;
-    border: 1px solid rgba(66, 69, 78, 0.445);
-    background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
+    background-color: rgb(10, 10, 10);
+    color: white;
+    border: 1px solid rgba(217, 217, 223, 0.274);
     font-size: 1.01em;
     margin-right: 20px;
 }
 
-.option {
+.group__select > option {
     display:flex;
     align-items: center;
     justify-content: center;
+    background-color: rgb(10, 10, 10);
+    color: white;
+    transition: background-color .5s, color .5s;
+}
+
+.group__select > option:checked {
+    background-color: rgb(39, 40, 41);
 }
 
 .nav__area {
@@ -42,7 +49,7 @@
 .join_group__button {
     width: 150px;
     height: 100%;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: rgb(10, 10, 10);
     font-size: 1.1em;
     color: white;

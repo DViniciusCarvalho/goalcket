@@ -4,10 +4,17 @@ import Description from "./Description";
 import { DoingProps } from "@/types/types";
 import CardsArea from "../card/CardsArea";
 
-export default function Doing({ color, cards }: DoingProps){
+export default function Doing({ color, cards, isGroup }: DoingProps){
+
+    const doingDescriptionProps = {
+        area: "doing",
+        color: color, 
+        isGroup: isGroup
+    }
+
     return (
         <section className={mainStyles.doing__area}>
-            <Description area={"Doing"} color={color}/>
+            <Description {...doingDescriptionProps}/>
             <CardsArea cards={cards}/>
         </section>
     );

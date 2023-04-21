@@ -7,12 +7,14 @@
     color: white;
     font-size: 1.1em;
     margin: 7% 0 8% 0;
-    transition: background-color .2s;
+    transition: background-color .5s, transform .5s;
 }
 
 .button:hover {
     cursor: pointer;
-    background-color: rgb(235, 74, 10);
+    background-color:rgb(32, 30, 46);
+    transform: scale(1.009);
+    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
 }
 
 @media only screen and (max-width: 1200px) and (min-width: 1100px) {

@@ -7,7 +7,7 @@ import NameInput from "../common/inputs/NameInput";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
 import Button from "@/components/common/button/Button";
-import { arrangeLogonRequest } from "@/utils/requests";
+import { getLogonRequestConfig } from "@/utils/requests";
 import { delay } from "@/utils/delay";
 import { PopUpProps, InputProps, ButtonProps, LogonRequestParameters, LogonResponse } from "@/types/types";
 
@@ -71,7 +71,7 @@ export default function logonComponent(){
 
     function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>): void {
         event.preventDefault();
-        const logonRequestParameters = arrangeLogonRequest(nameValue, emailValue, passwordValue);
+        const logonRequestParameters = getLogonRequestConfig(nameValue, emailValue, passwordValue);
         doLogonRequest(logonRequestParameters);
     }
 

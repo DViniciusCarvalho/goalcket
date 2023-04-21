@@ -10,17 +10,18 @@
     transition: background-color .5s;
 }
 
+
+.header.in--origin {
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+}
+
 .header.aboutpage.in--origin {
     background-color: rgba(255, 255, 255, 0.836);
     border-style: solid;
     border-color: rgba(46, 45, 45, 0.233);
     border-width: 0px 0px 0.01px 0px;
-    color: rgb(0, 0, 0);
-}
-
-.header.in--origin {
-    background-color: transparent;
-    color: rgba(255, 255, 255, 0.781);
+    color: rgb(0, 0, 0) !important;
 }
 
 .header.out--origin {
@@ -42,7 +43,14 @@
     font-weight: 600;
     letter-spacing: 2px;
     font-family: "Teko";
-    color: rgb(0, 0, 0);
     text-align: center;
+}
+
+.header.in--origin .header__logo {
+    color: white;
+}
+
+.header.aboutpage.in--origin .header__logo {
+    color: black;
 }
 

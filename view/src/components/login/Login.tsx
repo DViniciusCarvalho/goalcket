@@ -7,7 +7,7 @@ import GoToHomeButton from "../common/go_to_home/GoToHomeButton";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
 import Button from "../common/button/Button";
-import { arrangeLoginRequest } from "@/utils/requests";
+import { getLoginRequestConfig } from "@/utils/requests";
 import { delay } from "@/utils/delay";
 import { PopUpProps, InputProps, ButtonProps, LoginRequestParameters, LoginResponse } from "@/types/types";
 
@@ -64,7 +64,7 @@ export default function LoginComponent(){
 
     function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>): void{
         event.preventDefault();
-        const loginRequestParameters = arrangeLoginRequest(emailValue, passwordValue);
+        const loginRequestParameters = getLoginRequestConfig(emailValue, passwordValue);
         doLoginRequest(loginRequestParameters);
     }
 

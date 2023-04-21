@@ -4,7 +4,7 @@
     justify-content: center;
     width: 100vw;
     height: 100vh;
-    background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(230, 228, 228));
+    background-image: linear-gradient(to bottom, rgb(61, 61, 77), rgb(182, 179, 192));
 }
 
 .form__block {
@@ -35,7 +35,7 @@
 
 .logon__message {
     margin: 8% 0 0 0;
-    color: rgb(255, 51, 0);
+    color: rgb(39, 41, 48);
 }
 
 /*#8B8B8B*/
@@ -96,11 +96,6 @@
     width: 15%;
     height: 100%;
     transition: background-color .2s;
-}
-
-.toggle__password__visibility:hover {
-    background-color: rgb(37, 143, 175);
-    cursor: pointer;
 }
 
 .logon__link {

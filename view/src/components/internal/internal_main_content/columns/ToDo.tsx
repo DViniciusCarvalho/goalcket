@@ -2,13 +2,19 @@ import React from "react";
 import mainStyles from "@/styles/internal/main/Main.module.css";
 import Description from "./Description";
 import { ToDoProps } from "@/types/types";
-import Card from "../card/Card";
 import CardsArea from "../card/CardsArea";
 
-export default function ToDo({ color, cards }: ToDoProps){
+export default function ToDo({ color, cards, isGroup }: ToDoProps){
+
+    const todoDescriptionProps = {
+        area: "todo",
+        color: color, 
+        isGroup: isGroup
+    }
+
     return (
         <section className={mainStyles.todo__area}>
-            <Description area={"To do"} color={color}/>
+            <Description {...todoDescriptionProps}/>
             <CardsArea cards={cards}/>
         </section>
     );

@@ -4,9 +4,7 @@ export const debounce = <T extends Function>(func: T, wait: number, immediate: b
         const context = this;
         const later = () => {
             timeout = null;
-            if (!immediate) {
-            func.apply(context, args);
-            }
+            if (!immediate) func.apply(context, args);
         };
         const callNow = immediate && !timeout;
         clearTimeout(timeout!);

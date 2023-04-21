@@ -7,7 +7,12 @@ User:
         "personal": { 
             "todo": { 
                 "color": "#4CB120", 
-                "cards": []
+                "cards": [
+                    {
+                        "content": "",
+                        "priority": ""
+                    }
+                ]
             },
             "doing": { 
                 "color": "#1F6B69", 
@@ -21,7 +26,7 @@ User:
         "groups": [
             { 
                 "name": "sla", 
-                "hash": "asjuahdad" 
+                "hash": "asjuahdad"
             }
         ]
     } 
@@ -34,9 +39,12 @@ Groups:
     "hash": "asjuahdad",
     "password": "alguma coisa"
     "members": [
-        "name": "alguma coisa",
-        "roles": []
-    ]
+        {
+            "name": "alguma coisa",
+            "id": "id ai",
+            "roles": []
+        }
+    ],
     "columns": {
         "todo": { 
             "color": "#4CB120", 

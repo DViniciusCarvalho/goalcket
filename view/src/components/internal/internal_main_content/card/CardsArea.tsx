@@ -6,14 +6,9 @@ import { CardsAreaProps } from "@/types/types";
 export default function CardsArea({ cards }: CardsAreaProps){
     return (
         <section className={mainStyles.cards__area}>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
             {cards && (
                 (cards.map(card => (
-                    <Card/>
+                    <Card content={card.content} priority={card.priority}/>
                 )))
             )}
         </section>
