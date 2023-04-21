@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default function Error({ getGroupRequestStatusMessage }: ErrorProps) {
 
-    console.log(getGroupRequestStatusMessage)
     const errorMessage: {[key: string]: { statusCode: number, message: string}} = {
         forbidden: { 
             statusCode: 403, 

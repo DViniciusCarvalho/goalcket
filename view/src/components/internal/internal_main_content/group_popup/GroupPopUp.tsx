@@ -1,6 +1,7 @@
 import React from "react";
 import joinPopUpStyle from "@/styles/internal/main/Main.module.css";
 import Image from "next/image";
+import { GroupPopUpProps } from "@/types/types";
 
 export default function GroupPopUp({ 
     firstImage, 
@@ -15,7 +16,7 @@ export default function GroupPopUp({
     handleCreateClick,
     firstValue,
     secondValue
-}: any) {
+}: GroupPopUpProps) {
 
     const buttonElementsAnOr = [
         <button className={joinPopUpStyle.confirm__entry__button} onClick={handleJoinClick}> Join </button>,

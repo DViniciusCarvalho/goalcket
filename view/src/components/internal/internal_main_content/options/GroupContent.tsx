@@ -7,12 +7,24 @@ import Functionalities from "../columns/Functionalities";
 
 export default function GroupContent({ name, members, columns }: GroupContentProps){
     
-    const toDoProps = { ...columns.todo, isGroup: true };
-    const doingProps = { ...columns.doing, isGroup: true };
-    const doneProps = { ...columns.done, isGroup: true };
+    const toDoProps = { 
+        ...columns.todo, 
+        isGroup: true 
+    };
+
+    const doingProps = { 
+        ...columns.doing, 
+        isGroup: true 
+    };
+    
+    const doneProps = { 
+        ...columns.done, 
+        isGroup: true 
+    };
 
     return (
         <React.Fragment>
+            { name }
             <ToDo {...toDoProps}/>
             <Doing {...doingProps}/>
             <Done {...doneProps}/>

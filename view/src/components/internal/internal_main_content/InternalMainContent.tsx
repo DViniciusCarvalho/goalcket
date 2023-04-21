@@ -9,7 +9,8 @@ import TokenIcon from "../../../../public/assets/token.png";
 import LockIcon from "../../../../public/assets/lock.png";
 import GroupIcon from "../../../../public/assets/group.png";
 import { getCreateGroupRequestConfig } from "@/utils/requests";
-import { CreateGroupRequestParameters, CreateGroupResponse } from "@/types/types";
+import { CreateGroupRequestParameters, CreateGroupResponse, GroupPopUpProps } from "@/types/types";
+import { PersonalData, GroupContentProps, ErrorProps } from "@/types/types";
 
 export default function InternalMainContent(){
 
@@ -19,6 +20,76 @@ export default function InternalMainContent(){
 
     const [ firstValue, setFirstValue ] = useState<string>("");
     const [ secondValue, setSecondValue ] = useState<string>("");
+
+    const commonProps = {
+        popUpType: popUpType,
+        handlePopUpGroupState: handlePopUpGroupState,
+        changeFirstInput: changeFirstInput,
+        changeSecondInput: changeSecondInput,
+        handleJoinClick: handleJoinClick,
+        handleCreateClick: handleCreateClick,
+        firstValue: firstValue,
+        secondValue: secondValue
+    };
+
+    const joinGroupProps: GroupPopUpProps = {
+        firstImage: TokenIcon,
+        secondImage: LockIcon,
+        firstLabelMessage: "Group token:",
+        secondLabelMessage: "Group password:",
+        ...commonProps
+    };
+
+    const createGroupProps: GroupPopUpProps = {
+        firstImage: GroupIcon,
+        secondImage: LockIcon,
+        firstLabelMessage: "Group name:",
+        secondLabelMessage: "Group password:",
+        ...commonProps
+    };
+
+    const personalProps: PersonalData = { 
+        ...personal 
+    };
+
+    const groupContentProps: GroupContentProps = { 
+        ...groupData 
+    };
+
+    const errorProps: ErrorProps = { 
+        getGroupRequestStatusMessage: getGroupRequestStatusMessage 
+    };
+
+
+    function changeFirstInput(value: string){
+        setFirstValue(value);
+    }
+
+    function changeSecondInput(value: string){
+        setSecondValue(value);
+    }
+
+    function clearInputs(){
+        setFirstValue("");
+        setSecondValue("");
+    }
+
+    function handleJoinClick() {
+        if (popUpType === "create") {
+            setPopUpType("join");
+            clearInputs();
+            return;
+        }
+        console.log("pode mandar a req pro join");
+    }
+
+    async function doJoinGroupRequest(){
+
+    }
+
+    function handleJoinGroupResponse(){
+        
+    }
 
     function handleCreateClick() {
         if (popUpType === "join") {
@@ -48,67 +119,6 @@ export default function InternalMainContent(){
             console.log("Deu merda paizao");
         }
     }
-
-    function handleJoinClick() {
-        if (popUpType === "create") {
-            setPopUpType("join");
-            clearInputs();
-            return;
-        }
-        console.log("pode mandar a req pro join");
-    }
-
-    async function doJoinGroupRequest(){
-
-    }
-
-    function handleJoinGroupResponse(){
-        
-    }
-
-    function clearInputs(){
-        setFirstValue("");
-        setSecondValue("");
-    }
-
-    function changeFirstInput(value: string){
-        setFirstValue(value);
-    }
-
-    function changeSecondInput(value: string){
-        setSecondValue(value);
-    }
-    
-    const commonProps = {
-        popUpType: popUpType,
-        handlePopUpGroupState: handlePopUpGroupState,
-        changeFirstInput: changeFirstInput,
-        changeSecondInput: changeSecondInput,
-        handleJoinClick: handleJoinClick,
-        handleCreateClick: handleCreateClick,
-        firstValue: firstValue,
-        secondValue: secondValue
-    };
-
-    const joinGroupProps = {
-        firstImage: TokenIcon,
-        secondImage: LockIcon,
-        firstLabelMessage: "Group token:",
-        secondLabelMessage: "Group password:",
-        ...commonProps
-    };
-
-    const createGroupProps = {
-        firstImage: GroupIcon,
-        secondImage: LockIcon,
-        firstLabelMessage: "Group name:",
-        secondLabelMessage: "Group password:",
-        ...commonProps
-    };
-
-    const personalProps = { ...personal };
-    const groupContentProps = { ...groupData };
-    const errorProps = { getGroupRequestStatusMessage: getGroupRequestStatusMessage };
 
     return (
         <main className={mainStyles.main__area}>

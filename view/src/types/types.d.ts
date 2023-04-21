@@ -1,3 +1,24 @@
+// types
+export type PersonalData = null | IPersonal;
+
+export type GroupList = null | IGroup[];
+
+export type OverlayVisibility = "visible" | "invisible";
+
+export type Group = {
+    name: string;
+    members: IMember[];
+    columns: {
+        todo: ToDoProps,
+        doing: DoingProps,
+        done: DoneProps
+    }
+}
+
+export type GroupData = Group | {};
+
+export type PopUpType = "join" | "create";
+
 export interface OverlayProps {
     visibility: "invisible" | "visible";
     handlePopUpGroupState: () => void;
@@ -42,9 +63,19 @@ export interface OptionProps {
     groupHash: string;
 }
 
-export interface JoinGroupPopUpProps {
-    popUpDisplay: "invisible" | "visible";
-    handleJoinGroupState: () => void;
+export interface GroupPopUpProps {
+    firstImage: StaticImageData;
+    secondImage: StaticImageData;
+    firstLabelMessage: string;
+    secondLabelMessage: string;
+    popUpType: PopUpType;
+    handlePopUpGroupState: () => void;
+    changeFirstInput: (value: string) => void;
+    changeSecondInput: (value: string) => void; 
+    handleJoinClick: () => void;
+    handleCreateClick: () => void;
+    firstValue: string;
+    secondValue: string;
 }
 
 export interface DescriptionProps {
@@ -99,6 +130,9 @@ export interface GroupContentProps {
     }
 }
 
+export interface ErrorProps {
+    getGroupRequestStatusMessage: string;
+}
 
 // Request interfaces
 export interface LogonRequestParameters {
@@ -175,15 +209,7 @@ export interface CreateGroupResponse {
 
 export interface GetGroupContentResponse {
     status: number;
-    group: {
-        name: string;
-        members: IMember[];
-        columns: {
-            todo: ToDoProps,
-            doing: DoingProps,
-            done: DoneProps
-        }
-    }
+    group: Group;
 }
 
 // Components patterns
@@ -213,5 +239,3 @@ export interface IPersonal {
     doing: Column;
     done: Column;
 }
-
-

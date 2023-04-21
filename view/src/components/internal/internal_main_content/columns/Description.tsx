@@ -12,8 +12,8 @@ export default function Description({ area, color, isGroup }: DescriptionProps) 
 
     const { currentGroupId } = useContext(InternalPageContext);
 
-    const [ descriptionBackground, setDescriptionBackground ] = useState(color);
-    const [ initialColor, setInitialColor ] = useState(color);
+    const [ descriptionBackground, setDescriptionBackground ] = useState<string>(color);
+    const [ initialColor, setInitialColor ] = useState<string>(color);
 
     function changeColor(event: React.ChangeEvent<HTMLInputElement>){
         setDescriptionBackground(event.target.value);

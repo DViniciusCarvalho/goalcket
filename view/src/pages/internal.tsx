@@ -5,6 +5,7 @@ import InternalHeader from "@/components/internal/header/InternalHeader";
 import InternalMainContent from "@/components/internal/internal_main_content/InternalMainContent";
 import internalStyles from "@/styles/internal/Internal.module.css";
 import { FetchDataRequestParameters, FetchDataResponse, IPersonal, IGroup, GetGroupContentResponse } from "@/types/types";
+import { PersonalData, GroupList, OverlayVisibility, GroupData, PopUpType } from "@/types/types";
 import { GetGroupContentRequestParameters } from "@/types/types";
 import { getFetchDataRequestConfig, getGroupContentRequestConfig } from "@/utils/requests";
 
@@ -15,16 +16,16 @@ export default function Internal(){
     const router = useRouter();
 
     const [ name, setName ] = useState<string>("");
-    const [ personal, setPersonal ] = useState<null | IPersonal>(null);
-    const [ groups, setGroups ] = useState<null | IGroup[]>(null);
-    const [ loaded, setLoaded ] = useState(false);
-    const [ overlayAndPopUpVisibility, setOverlayAndPopUpVisibility ] = useState<"visible" | "invisible">("invisible");
+    const [ personal, setPersonal ] = useState<PersonalData>(null);
+    const [ groups, setGroups ] = useState<GroupList>(null);
+    const [ loaded, setLoaded ] = useState<boolean>(false);
+    const [ overlayAndPopUpVisibility, setOverlayAndPopUpVisibility ] = useState<OverlayVisibility>("invisible");
     const [ currentRoom, setCurrentRoom ] = useState<string>("personal");
-    const [ groupData, setGroupData ] = useState({});
-    const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState(false);
-    const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState("notFound");
-    const [ currentGroupId, setCurrentGroupId ] = useState("");
-    const [ popUpType, setPopUpType ] = useState<"join" | "create">("join");
+    const [ groupData, setGroupData ] = useState<GroupData>({});
+    const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState<boolean>(false);
+    const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState<string>("notFound");
+    const [ currentGroupId, setCurrentGroupId ] = useState<string>("");
+    const [ popUpType, setPopUpType ] = useState<PopUpType>("join");
 
     const contextValues = {
         name: name,

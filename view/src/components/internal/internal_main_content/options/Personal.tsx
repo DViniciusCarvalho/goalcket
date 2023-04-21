@@ -6,9 +6,17 @@ import Functionalities from "../columns/Functionalities";
 
 export default function Personal({ todo, doing, done }: any) {
     
-    const toDoProps = { ...todo };
-    const doingProps = { ...doing };
-    const doneProps = { ...done };
+    const toDoProps = { 
+        ...todo 
+    };
+    
+    const doingProps = { 
+        ...doing 
+    };
+
+    const doneProps = { 
+        ...done 
+    };
 
     return (
         <React.Fragment>
