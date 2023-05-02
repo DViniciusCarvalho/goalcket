@@ -1,15 +1,14 @@
-from pydantic import StrictStr
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Dict
 
+@dataclass
 class Client:
-    email: Optional[StrictStr]
-    password: Optional[StrictStr]
-    name: Optional[StrictStr]
+    email: str = ""
+    password: str = ""
+    name: str = ""
+    rooms: Dict = field(default=Dict, init=False)
 
-    def __init__(self, email, password, name=""):
-        self.email = email
-        self.password = password
-        self.name = name
+    def __post_init__(self):
         self.rooms = { 
             "personal": { 
                 "todo": { 

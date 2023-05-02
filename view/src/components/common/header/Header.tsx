@@ -1,29 +1,23 @@
 import React, { useState } from "react";
 import headerStyle from "../../../styles/common/header/Header.module.css";
 import Menu from "./Menu";
-import { HeaderProps, MenuProps } from "@/types/types";
-import { debounce } from "@/utils/debounce";
+import { debounce } from "@/lib/debounce";
+import { Props } from "@/types/props";
 
-export default function Header({ needChangeBackground, headerPage }: HeaderProps){
+export default function Header({ needChangeBackground, headerPage }: Props.HeaderProps){
 
     const [ headerBackgroundColor, setHeaderBackgroundColor ] = useState<string>("in--origin");
 
-    const menuProps: MenuProps = {
+    const menuProps: Props.MenuProps = {
         headerPosition: headerBackgroundColor
     }
 
-    const defineHeaderClass = (scrollTop: number): void => {
-        if(scrollTop <= 300){
-            setHeaderBackgroundColor("in--origin");
-        }
-        else {
-            setHeaderBackgroundColor("out--origin");
-        }
+    function defineHeaderClass (scrollTop: number): void {
+        setHeaderBackgroundColor(() => scrollTop <= 300? "in--origin" : "out--origin");
     }
 
     if(typeof window !== "undefined" && needChangeBackground){
         window.addEventListener("scroll", debounce(() => {
-            
             const html = document.documentElement!;
             const scrollTop = html.scrollTop || document.body.scrollTop;
             defineHeaderClass(scrollTop);

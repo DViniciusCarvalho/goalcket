@@ -2,11 +2,11 @@ import React from "react";
 import Header from "@/components/common/header/Header";
 import AboutMainContent from "@/components/about/AboutMainContent";
 import Footer from "@/components/common/footer/Footer";
-import { HeaderProps } from "@/types/types";
+import { Props } from "@/types/props";
 
 export default function About() {
 
-    const aboutHeaderProps: HeaderProps = {
+    const aboutHeaderProps: Props.HeaderProps = {
         needChangeBackground: false,
         headerPage: "aboutpage"
     }

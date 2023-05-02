@@ -1,28 +1,22 @@
 import React, { useState } from "react";
-import menuStyles from "../../../styles/common/header/Menu.module.css";
-import { MenuProps } from "@/types/types";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import menuStyles from "../../../styles/common/header/Menu.module.css";
+import Link from "next/link";
+import { Props } from "@/types/props";
 
-export default function Menu({ headerPosition }: MenuProps){
+export default function Menu({ headerPosition }: Props.MenuProps){
 
     const router = useRouter();
 
     const [ menuVisibility, setMenuVisibility ] = useState<string>("invisible");
     const [ buttonStatus, setButtonStatus ] = useState<string>("closed");
 
-    const changeMenuVisibility = (): void => {
-        setMenuVisibility((prevVisibility) => {
-            const newVisibility = prevVisibility === "invisible" ? "visible" : "invisible";
-            return newVisibility;
-        });
-        setButtonStatus((prevStatus) => {
-            const newVisibility = prevStatus === "openned" ? "closed" : "openned";
-            return newVisibility;
-        });
+    function changeMenuVisibility (): void {
+        setMenuVisibility((prevVisibility) => (prevVisibility === "invisible")? "visible" : "invisible");
+        setButtonStatus((prevStatus) => (prevStatus === "openned")? "closed" : "openned");
     }
 
-    const goToLogin = () => {
+    function goToLogin() {
         router.push("/login");
     }
 

@@ -1,15 +1,25 @@
-import React, { useEffect, useState } from "react"
-import Link from "next/link";
+import React, { useEffect, useState, useRef } from "react";
+
 import logonStyle from "@/styles/logon/Logon.module.css";
-import PopUp from "@/components/common/popup/PopUp";
-import GoToHomeButton from "../common/go_to_home/GoToHomeButton";
+
+import Link from "next/link";
+import StatusPopUp from "@/components/common/popups/StatusPopUp";
+import GoToHomeButton from "../common/buttons/GoToHomeButton";
 import NameInput from "../common/inputs/NameInput";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
-import Button from "@/components/common/button/Button";
-import { getLogonRequestConfig } from "@/utils/requests";
-import { delay } from "@/utils/delay";
-import { PopUpProps, InputProps, ButtonProps, LogonRequestParameters, LogonResponse } from "@/types/types";
+import Button from "@/components/common/buttons/Button";
+
+import { delay } from "@/lib/delay";
+import { LOGON_USER_ENDPOINT } from "@/lib/endpoints";
+import { getLogonRequestConfig } from "@/lib/requests";
+import { getAppropriateLogonUserStatusMessage } from "@/lib/validation";
+
+import { Props } from "@/types/props";
+import { Request } from "@/types/requests";
+import { Response } from "@/types/responses";
+
+
 
 export default function logonComponent(){
     
@@ -22,28 +32,31 @@ export default function logonComponent(){
     const [ httpStatusContent, setHttpStatusContent ] = useState<string>("");
     const [ requestStatus, setRequestStatus ] = useState<string>("error");
 
-    const popUpProps: PopUpProps = {
+    const requestController = new AbortController();
+    const { signal } = requestController;
+    
+    const statusPopUpProps: Props.StatusPopUpProps = {
         content: httpStatusContent,
         visibilityClass: popUpVisibility,
         status: requestStatus
     };
 
-    const nameInputProps: InputProps = {
+    const nameInputProps: Props.InputProps = {
         changeValue: changeName,
         value: nameValue
     };
 
-    const emailInputProps: InputProps = {
+    const emailInputProps: Props.InputProps = {
         changeValue: changeEmail,
         value: emailValue
     };
 
-    const passwordInputProps: InputProps = {
+    const passwordInputProps: Props.InputProps = {
         changeValue: changePassword,
         value: passwordValue
     };
 
-    const logonButtonProps: ButtonProps = {
+    const logonButtonProps: Props.ButtonProps = {
         message: "Sign up",
         handleSubmitButtonClick: handleSubmitButtonClick
     };
@@ -75,39 +88,22 @@ export default function logonComponent(){
         doLogonRequest(logonRequestParameters);
     }
 
-    async function doLogonRequest(requestConfig: LogonRequestParameters) {
-        const response = await fetch("http://localhost:3001/logon-user", requestConfig);
-        const responseStringfied: string = await response.json();
-        const responseObjectfied: LogonResponse = JSON.parse(responseStringfied);
-        handleLogonResponse(responseObjectfied);
+    async function doLogonRequest(requestConfig: Request.LogonRequestParameters) {
+        const response = await fetch(LOGON_USER_ENDPOINT, { ...requestConfig, signal: signal });
+        const { status } = response;
+        requestController.abort();
+        handleLogonResponse(status);
     }
 
-    async function handleLogonResponse(response: LogonResponse) {
-        let statusMessage, requestStatus;
+    async function handleLogonResponse(httpStatus: number) {
+        const { statusMessage, statusType } = getAppropriateLogonUserStatusMessage(httpStatus);
 
-        if (response.status === 201){
-            statusMessage = "successfulLogon";
-            requestStatus = "success";
-        }
-        else if (response.status === 409){
-            statusMessage = "invalidUser";
-            requestStatus = "error";
-        }
-        else if (response.status === 400){
-            statusMessage = "invalidInput";
-            requestStatus = "error";
-        }
-        else {
-            statusMessage = "serverError";
-            requestStatus = "error";
-        }
-
-        showPopUp(statusMessage, requestStatus);
+        showPopUp(statusMessage, statusType);
         clearInputs();
     }
 
-    async function showPopUp(statusMessage: string, requestStatus: string) {
-        setRequestStatus(requestStatus);
+    async function showPopUp(statusMessage: string, statusType: string) {
+        setRequestStatus(statusType);
         setHttpStatusContent(statusMessage);
         setPopUpVisibility("visible");
         await delay(5000);
@@ -124,7 +120,7 @@ export default function logonComponent(){
     return (
         <div className={`${logonStyle.form__background} ${logonStyle[loadClass]}`}>
             <GoToHomeButton/>
-            <PopUp {...popUpProps}/>
+            <StatusPopUp {...statusPopUpProps}/>
             <div className={logonStyle.form__block}>
                 <form action="/logon" method="post" className={logonStyle.form__field} autoComplete="off">
                     <h1 className={logonStyle.logon__message}>Sign up</h1>

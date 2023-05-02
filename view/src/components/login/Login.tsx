@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
+
 import loginStyle from "@/styles/login/Login.module.css";
-import PopUp from "../common/popup/PopUp";
-import GoToHomeButton from "../common/go_to_home/GoToHomeButton";
+
+import Link from "next/link";
+import StatusPopUp from "../common/popups/StatusPopUp";
+import GoToHomeButton from "../common/buttons/GoToHomeButton";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
-import Button from "../common/button/Button";
-import { getLoginRequestConfig } from "@/utils/requests";
-import { delay } from "@/utils/delay";
-import { PopUpProps, InputProps, ButtonProps, LoginRequestParameters, LoginResponse } from "@/types/types";
+import Button from "../common/buttons/Button";
+
+import { delay } from "@/lib/delay";
+import { LOGIN_USER_ENDPOINT } from "@/lib/endpoints";
+import { getLoginRequestConfig } from "@/lib/requests";
+
+import { Props } from "@/types/props";
+import { Request } from "@/types/requests";
+import { Response } from "@/types/responses";
+import { getAppropriateLoginUserStatusMessage } from "@/lib/validation";
 
 
 export default function LoginComponent(){
@@ -23,24 +31,27 @@ export default function LoginComponent(){
     const [ popUpVisibility, setPopUpVisibility ] = useState<string>("invisible");
     const [ httpStatusContent, setHttpStatusContent ] = useState<string>("");
 
-    const popUpProps: PopUpProps = {
+    const requestController = new AbortController();
+    const { signal } = requestController;
+
+    const popUpProps: Props.StatusPopUpProps = {
         content: httpStatusContent,
         visibilityClass: popUpVisibility,
         status: "error"
     };
 
-    const emailInputProps: InputProps = {
+    const emailInputProps: Props.InputProps = {
         changeValue: changeEmail,
         value: emailValue
     };
 
-    const passwordInputProps: InputProps = {
+    const passwordInputProps: Props.InputProps = {
         margin: "6%",
         changeValue: changePassword,
         value: passwordValue
     };
 
-    const loginButtonProps: ButtonProps = {
+    const loginButtonProps: Props.ButtonProps = {
         message: "Sign in",
         handleSubmitButtonClick: handleSubmitButtonClick
     };
@@ -68,34 +79,26 @@ export default function LoginComponent(){
         doLoginRequest(loginRequestParameters);
     }
 
-    async function doLoginRequest(requestConfig: LoginRequestParameters) {
-        const response = await fetch("http://localhost:3001/login-user", requestConfig);
-        const responseStringfied: string = await response.json();
-        const responseObjectfied: LoginResponse = JSON.parse(responseStringfied);
-        handleLoginResponse(responseObjectfied);
+    async function doLoginRequest(requestConfig: Request.LoginRequestParameters) {
+        const response = await fetch(LOGIN_USER_ENDPOINT, { ...requestConfig, signal: signal });
+        const { status } = response;
+        const responseObjectfied: Response.LoginResponse = await response.json();
+        requestController.abort();
+        handleLoginResponse(status, responseObjectfied);
     }
 
-    function handleLoginResponse(response: LoginResponse): void {
-        let statusMessage = "";
+    function handleLoginResponse(httpStatus: number, response: Response.LoginResponse): void {
+        const { token } = response;
+        const { statusMessage, isAuthenticated } = getAppropriateLoginUserStatusMessage(httpStatus);
 
-        if (response.status === 200){
-            localStorage.setItem("token", response.token);
-            router.push("/internal")
-        }
-        else if (response.status === 404){
-            statusMessage = "invalidLogin";
-            showPopUp(statusMessage);
-        }
-        else if(response.status === 400){
-            statusMessage = "invalidInput";
-            showPopUp(statusMessage);
+        if (isAuthenticated) {
+            localStorage.setItem("token", token);
+            router.push("/internal");
         }
         else {
-            statusMessage = "serverError";
             showPopUp(statusMessage);
+            clearInputs();
         }
-        
-        clearInputs();
     }
 
     async function showPopUp(statusMessage: string) {
@@ -113,7 +116,7 @@ export default function LoginComponent(){
     return (
         <div className={`${loginStyle.form__background} ${loginStyle[loadClass]}`}>
             <GoToHomeButton/>
-            <PopUp {...popUpProps}/>
+            <StatusPopUp {...popUpProps}/>
             <div className={loginStyle.form__block}>
                 <form action="/login" method="post" className={loginStyle.form__field} autoComplete="off">
                     <h1 className={loginStyle.login__message}>Sign in</h1>

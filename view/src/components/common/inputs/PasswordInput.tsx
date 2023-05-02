@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { InputProps } from "@/types/types";
 import inputStyle from "@/styles/common/inputs/Inputs.module.css";
 import KeyImage from "../../../../public/assets/key.png";
+import Image from "next/image";
+import { Props } from "@/types/props";
 
-export default function PasswordInput({ margin, changeValue, value }: InputProps){
+export default function PasswordInput({ margin, changeValue, value }: Props.InputProps){
     return(
         <div className={inputStyle.password__block} style={{marginBottom: margin}}>
             <label htmlFor="password__input" className={inputStyle.data__label}> Password: </label>

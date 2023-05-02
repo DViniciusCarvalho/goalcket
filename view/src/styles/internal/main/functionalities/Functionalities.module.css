@@ -1,0 +1,406 @@
+.funct__container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    width: 24%;
+    margin-left: 4%;
+}
+
+/* Search card container */
+.search__card__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6%;
+    height: 140px;
+    border-radius: 10px;
+    background-image: linear-gradient(to right bottom, rgb(227, 234, 240), rgb(156, 169, 177));
+    box-shadow: 0px 0px 6px rgb(123, 124, 138);
+}
+
+.search__input__block {
+    display: flex;
+    padding: 0;
+    width: 80%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(66, 69, 78, 0.445);
+    background-color: white;
+    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
+}
+
+.search__input {
+    height: 100%;
+    width: 85%;
+    margin: 0;
+    border-radius: 0px 13px 13px 0px;
+    border: none;
+    outline: 0;
+    padding: 5px;
+    font-size: 1.01em;
+    background-color: transparent;
+}
+
+.search__icon__block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    height: 100%;
+    border-radius: 13px 0px 0px 13px;
+}
+
+.search__icon {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+}
+
+.search__button {
+    width: 80%;
+    background-color: black;
+    color: white;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.01em;
+    transition: background-color .5s, transform .5s;
+}
+
+.search__button:hover, .add__button:hover {
+    cursor: pointer;
+    background-color:rgb(32, 30, 46);
+    transform: scale(1.009);
+    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
+}
+
+.show__add__card__button {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-color: black;
+    border: none;
+    width: 26%;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    order: 3;
+    transition: background-color .5s, transform .5s;
+}
+
+/* Show add card button */
+.add__icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+}
+
+.show__add__card__button:hover {
+    cursor: pointer;
+    background-color:rgb(32, 30, 46);
+    transform: scale(1.009);
+    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
+}
+
+/* Add card container*/
+.add__card__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 300px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    transform: scale(1);
+    background-image: linear-gradient(to right bottom, rgb(227, 234, 240), rgb(156, 169, 177));
+    box-shadow: 0px 0px 6px rgb(123, 124, 138);
+}
+
+.exit__button__section {
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    height: 50px;
+}
+
+.exit__button {
+    padding: 14px;
+    display: flex;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+}
+
+.exit__button:hover .exit__button__line{
+    background-color: rgb(118, 134, 172);
+}
+
+.exit__button__line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 20px;
+    height: 3px;
+    border-radius: 5px;
+    background-color: black;
+    transition: background-color .3s;
+}
+
+.exit__button__line:nth-child(1) {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.exit__button__line:nth-child(2) {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.new__card__info {
+    display: flex;
+    width: 100%;
+    height: 60px;
+}
+
+.destination__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+.destination__label, .priority__label {
+    font-size: 0.95em;
+}
+
+.priority__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+
+.column__destination, .priority__select {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    width: 80%;
+    text-align: center;
+    border: 1px solid rgba(66, 69, 78, 0.445);
+    background-color: white;
+    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
+}
+
+.content__text__block {
+    display: flex;
+    flex-direction: column;
+    padding: 5%;
+}
+
+.context__text__label {
+    font-size: 0.95em;
+    margin-bottom: 3px;
+}
+
+.content__textarea {
+    outline: 0;
+    resize: none;
+    padding: 5px;
+    height: 130px;
+    border-radius: 10px;
+    font-size: 1em;
+    border: 1px solid rgba(66, 69, 78, 0.445);
+    background-color: white;
+    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
+}
+
+.add__button {
+    width: 90%;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.01em;
+    margin-left: 5%;
+    background-color: black;
+    color: white;
+    transition: background-color .5s, transform .5s;
+}
+
+/* Group token container */
+.group__token__block {
+    display: flex;
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+    border-radius: 10px;
+    background-image: linear-gradient(to right bottom, rgb(227, 234, 240), rgb(156, 169, 177));
+    box-shadow: 0px 0px 6px rgb(123, 124, 138);
+}
+
+.group__token {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    width: 85%;
+    height: 100%;
+    border-radius: 10px 0px 0px 10px;
+    box-shadow: inset 0px 0px 3px rgb(45, 45, 49);
+    background-color: white;
+}
+
+
+.group__token::-webkit-scrollbar {
+    height: 0px;
+}
+
+.copy__token__button {
+    width: 15%;
+    height: 100%;
+    border: 0.1px solid rgba(5, 9, 27, 0.473);
+    border-radius:  0px 10px 10px 0px;
+    background: black;
+    transition: background-color .5s, transform .5s;
+}
+
+.copy__token__button:hover {
+    cursor: pointer;
+    background-color:rgb(32, 30, 46);
+    transform: scale(1.009);
+    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
+}
+
+.copy__icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 994px) and (min-width: 766px) {
+    .funct__container {
+        width: 31%;
+    }
+}
+
+@media only screen and (max-width: 765px) {
+    .funct__container {
+        width: 100%;
+        height: auto;
+        margin: 0px 0px 40px 0px;
+        gap: 14%;
+    }
+
+    .search__card__container {
+        background-image: none;
+        box-shadow: none;
+        flex-direction: row;
+        padding: 0;
+        gap: 3%;
+        order: 2;
+        height: auto;
+    }
+
+    .search__button {
+        width: 20%;
+    }
+
+    .show__add__card__button {
+        display: flex;
+    }
+
+    .add__card__container {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 80%;
+        height: 400px;
+        z-index: 99999;
+        gap: 6%;
+        order: 4;
+        padding: 0px 3% 3% 3%;
+        border-radius: 0px;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.301);
+        background-image: none;
+        background-color: white;
+        transition: transform .5s;
+    }
+
+    .add__card__container.invisible {
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    .add__card__container.visible {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .exit__button__section {
+        display: flex;
+    }
+
+    .new__card__info {
+        flex-direction: column;
+        height: 26%;
+        margin-top: -18px;
+    }
+
+    .destination__block, .priority__block {
+        align-items: flex-start;
+    }
+
+    .priority__block {
+        margin-top: 6px;
+    }
+
+    .column__destination, .priority__select {
+        box-shadow: none;
+        border: 0.1px solid rgba(27, 27, 56, 0.589);
+    }
+
+    .content__text__block {
+        padding: 0;
+    }
+
+    .content__textarea {
+        box-shadow: none;
+        border: 0.1px solid rgba(27, 27, 56, 0.589);
+    }
+
+    .add__button {
+        width: 100%;
+        height: 50px;
+        margin: 0;
+    }
+
+    .group__token__block {
+        background-image: none;
+        box-shadow: none;
+        padding: 0;
+        height: 40px;
+        margin-bottom: 70px;
+        order: 1;
+    }
+}
+ 
+@media only screen and (max-width: 499px) {
+    .show__add__card__button {
+        width: 40%;
+    }
+
+    .search__button {
+        width: 30%;
+    }
+
+    .add__card__container {
+        width: 96%;
+    }
+}

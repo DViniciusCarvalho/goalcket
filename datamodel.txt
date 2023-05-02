@@ -16,7 +16,11 @@ User:
             },
             "doing": { 
                 "color": "#1F6B69", 
-                "cards": []
+                "cards": [
+                    {
+                        "id": 2
+                    }
+                ]
             },
             "done":{ 
                 "color": "#000000", 
@@ -25,8 +29,8 @@ User:
         },
         "groups": [
             { 
-                "name": "sla", 
-                "hash": "asjuahdad"
+                "name": "", 
+                "hash": ""
             }
         ]
     } 
@@ -35,20 +39,32 @@ User:
 
 Groups:
 { 
-    "name": "sla",
-    "hash": "asjuahdad",
-    "password": "alguma coisa"
+    "name": "",
+    "hash": "",
+    "password": ""
     "members": [
         {
-            "name": "alguma coisa",
-            "id": "id ai",
+            "name": "",
+            "id": "",
             "roles": []
         }
     ],
     "columns": {
         "todo": { 
             "color": "#4CB120", 
-            "cards": []
+            "cards": [
+                {
+                    "content": "",
+                    "priority": "",
+                    "timestamp": "",
+                    "id": "",
+                    "creator": {
+                        "name": "",
+                        "id": "",
+                        "roles": []
+                    }
+                }
+            ]
         },
         "doing": { 
             "color": "#1F6B69", 

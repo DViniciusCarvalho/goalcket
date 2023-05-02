@@ -2,7 +2,20 @@
     width: 100vw;
     height: 100vh;
     background-image: linear-gradient(to left top, rgb(201, 203, 216), white);
-    overflow-y: hidden;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 994px) and (min-width: 766px) {
+    .internal__background  {
+        height: 1000px;
+    }
+    
+}
+
+@media only screen and (max-width: 765px) {
+    .internal__background {
+        height: auto;
+    }
 }
 
 /* rgb(235, 235, 192) */

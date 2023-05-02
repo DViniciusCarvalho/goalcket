@@ -1,0 +1,12 @@
+.option {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(10, 10, 10);
+    color: white;
+    transition: background-color .5s, color .5s;
+}
+
+.option:checked {
+    background-color: rgb(39, 40, 41);
+}

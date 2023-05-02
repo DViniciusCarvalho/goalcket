@@ -1,13 +1,13 @@
 from pathlib import Path
-import sys
+from sys import path
 
 file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+path.append(str(root))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
+from uvicorn import run
 
 from controller import ClientController, DataController
 
@@ -16,6 +16,7 @@ app = FastAPI()
 
 SERVER_HOST = "localhost"
 SERVER_PORT = 3001
+
 
 origins = [
     "http://localhost",
@@ -34,4 +35,9 @@ app.include_router(ClientController.router)
 app.include_router(DataController.router)
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", reload=True, host=SERVER_HOST, port=SERVER_PORT)
+    run(
+        "app:app", 
+        reload=True, 
+        host=SERVER_HOST, 
+        port=SERVER_PORT
+    )

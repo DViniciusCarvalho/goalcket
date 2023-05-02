@@ -1,17 +1,17 @@
 from pathlib import Path
-import sys
+from sys import path
 
 file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+path.append(str(root))
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
+from fastapi.responses import JSONResponse
 
 from database.ClientOperations import ClientOperations
-from helpers.Responser import Responser
-from helpers.Sanitizer import Sanitizer
-from helpers.Tokenizer import Tokenizer
-from helpers.Validator import Validator
+from helpers.sanitization import input_valid
+from helpers.tokenjwt import create_token, decode_token
+from helpers.validation import valid_inputs
 from model.Client import Client
 from model.Http import Http
 
@@ -28,12 +28,16 @@ class ClientController:
         email = data["email"]
         password = data["password"]
         client = Client(email, password, name)
-        valid_inoffensive_inputs = Validator.valid_inputs(client.email, client.password, client.name)
-        has_not_offensive_inputs = Sanitizer.input_valid(client.email, client.password, client.name)
+        valid_inoffensive_inputs = valid_inputs(client.email, client.password, client.name)
+        has_not_offensive_inputs = input_valid(client.email, client.password, client.name)
         if has_not_offensive_inputs and valid_inoffensive_inputs:
-            status = ClientOperations.sign_up(client)
-            return Responser.logon_json(status)
-        return Responser.logon_json(Http.bad_request)
+            sign_up_status_code = ClientOperations.sign_up(client)
+            if sign_up_status_code == Http.created:
+                return JSONResponse(status_code=Http.created)
+            elif sign_up_status_code == Http.conflict:
+                raise HTTPException(status_code=Http.conflict)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.bad_request)
 
     @staticmethod
     @router.post("/login-user")
@@ -42,27 +46,28 @@ class ClientController:
         email = data["email"]
         password = data["password"]
         client = Client(email, password)
-        if Sanitizer.input_valid(client.email, client.password):
-            status, user_id = ClientOperations.sign_in(client)
-            if status == Http.ok:
-                token = Tokenizer.create(user_id)
-                return Responser.login_json(status, token)
-            return Responser.login_json(status, None)
-        return Responser.login_json(Http.bad_request, None)
+        has_not_offensive_inputs = input_valid(client.email, client.password)
+        if has_not_offensive_inputs:
+            sign_in_status_code, user_id = ClientOperations.sign_in(client)
+            if sign_in_status_code == Http.ok:
+                token = create_token(user_id)
+                content = { "token": token }
+                return JSONResponse(status_code=Http.ok, content=content)
+            elif sign_in_status_code == Http.not_found:
+                raise HTTPException(status_code=Http.not_found)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.bad_request)
     
     @staticmethod
     @router.post("/internal-page")
     async def internal(request: Request):
         data = await request.json()
         token = data["token"]
-        user_id = Tokenizer.decode(token)
+        user_id = decode_token(token)
         if user_id:
-            status, name, rooms = ClientOperations.fetch_data(user_id)
-            return Responser.fetch_data_json(status, name, rooms)
-        return Responser.fetch_data_json(Http.forbidden, None, None)
-
-
-    @staticmethod
-    @router.post("/join-group")
-    async def join_group(request: Request):
-        pass
+            fetch_data_status_code, name, rooms = ClientOperations.fetch_data(user_id)
+            if fetch_data_status_code == Http.ok:
+                content = { "name": name, "rooms": rooms }
+                return JSONResponse(status_code=Http.ok, content=content)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)

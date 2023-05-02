@@ -1,0 +1,192 @@
+.big__card__container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    gap: 3%;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+    width: 98%;
+    max-width: 750px;
+    height: 600px;
+    background-color: rgb(48, 50, 54);
+    border-radius: 10px;
+    transition: transform .5s;
+}
+
+.big__card__container.visible {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.big__card__container.invisible {
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.big__card__header {
+    height: 25%;
+    width: 100%;
+    background-color: rgb(64, 66, 73);
+    border-radius: 10px 10px 0px 0px;
+}
+
+.big__card__close__block {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height: 34%;
+}
+
+.close__button {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    margin-right: 4px;
+    transition: background-color .5s;
+}
+
+.close__button:hover {
+    background-color: rgb(63, 66, 71);
+}
+
+.close__button__line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 4px;
+    border-radius: 5px;
+    background-color: rgb(227, 255, 255);
+    transition: background-color .5s;
+}
+
+.close__button__line:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close__button__line:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.close__button:hover .close__button__line:first-child, .close__button:hover .close__button__line:last-child{
+    background-color: rgb(130, 140, 172);
+}
+
+.big__card__info__block {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 45%;
+    border-color: rgba(107, 120, 122, 0.425);
+    border-style: solid;
+    border-width: 1px 1px 0.5px 1px;
+    padding: 0px 2%;
+}
+
+.big__card__info__creator__and__date {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4%;
+    height: 100%;
+    width: 40%;
+}
+
+.big__card__info__creator {
+    color: white;
+}
+
+.big__card__info__date {
+    color: rgba(209, 229, 248, 0.808);
+    font-size: 0.9em;
+}
+
+.big__card__info__priority {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4%;
+    width: 20%;
+    height: 100%;
+}
+
+.big__card__info__priority__text {
+    color: white;
+}
+
+.big__card__info__priority__colorization {
+    width: 80%;
+    height: 18px;
+    border: 0.2px solid rgba(255, 255, 255, 0.541);
+    border-radius: 10px;
+}
+
+.big__card__buttons__block {
+    display: flex;
+    gap: 0.2%;
+    width: 100%;
+    height: 21%;
+    padding: 0px 2%;
+    border-color: rgba(107, 120, 122, 0.425);
+    border-style: solid;
+    border-width: 0.5px 1px 1px 1px;
+}
+
+.big__card__buttons__block > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+    width: 15%;
+    color: white;
+    background-color: rgb(64, 66, 73);
+    border: 0.2px solid rgba(87, 96, 104, 0.479);
+    border-radius: 4px;
+    transition: background-color .5s;
+}
+
+.big__card__buttons__block > button:hover {
+    background-color: rgb(78, 80, 88);
+}
+
+.big__card__button__exclude__icon, .big__card__button__move__icon {
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+}
+
+.big__card__content {
+    word-break: break-word;
+    height: 68%;
+    color: white;
+    padding: 0px 20px 20px 20px;
+    overflow-y: auto;
+    outline: 0;
+}
+
+@media only screen and (max-width: 469px) {
+    .big__card__info__creator__and__date {
+        width: 60%;
+    }
+    
+    .big__card__info__priority {
+        width: 30%;
+    }
+
+    .big__card__buttons__block {
+        gap: 1%;
+    }
+
+    .big__card__buttons__block > button {
+        width: 26%;
+    }
+}
+

@@ -1,0 +1,28 @@
+.member__info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4%;
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 2px rgba(52, 54, 66, 0.637);
+}
+
+.member__profile__image {
+    width: 40px;
+    height: 40px;
+}
+
+.member__name__role__block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-x: hidden;
+    width: 60%;
+}
+
+.member__name {
+    font-size: 1.1em;
+    color: rgb(34, 33, 39);
+    text-overflow: ellipsis;
+}

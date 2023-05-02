@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { InputProps } from "@/types/types";
 import inputStyle from "@/styles/common/inputs/Inputs.module.css";
+import Image from "next/image";
 import UserImage from "../../../../public/assets/user.png";
+import { Props } from "@/types/props";
 
-export default function NameInput({ changeValue, value }: InputProps){
+export default function NameInput({ changeValue, value }: Props.InputProps){
     return(
         <div className={inputStyle.name__block}>
             <label htmlFor="name__input" className={inputStyle.data__label}> Name: </label>

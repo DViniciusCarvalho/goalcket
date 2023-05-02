@@ -1,13 +1,35 @@
 import React, { useEffect, useState, createContext } from "react";
 import { useRouter } from "next/router";
-import Overlay from "@/components/common/overlay/Overlay";
-import InternalHeader from "@/components/internal/header/InternalHeader";
-import InternalMainContent from "@/components/internal/internal_main_content/InternalMainContent";
+
 import internalStyles from "@/styles/internal/Internal.module.css";
-import { FetchDataRequestParameters, FetchDataResponse, IPersonal, IGroup, GetGroupContentResponse } from "@/types/types";
-import { PersonalData, GroupList, OverlayVisibility, GroupData, PopUpType } from "@/types/types";
-import { GetGroupContentRequestParameters } from "@/types/types";
-import { getFetchDataRequestConfig, getGroupContentRequestConfig } from "@/utils/requests";
+
+import FirstLayerOverlay from "@/components/common/overlay/FirstLayerOverlay";
+import SecondLayerOverlay from "@/components/common/overlay/SecondLayerOverlay";
+import InternalHeader from "@/components/internal/header/InternalHeader";
+import InternalMainContent from "@/components/internal/main/InternalMainContent";
+
+import { delay } from "@/lib/delay";
+import { 
+    getAppropriateGetGroupStatusMessage, 
+    getAppropriatePopUpsVisibility, 
+    getAppropriateBigCardOptionPopUpsVisibility,
+    getAppropriateDeletePersonalCardStatusMessage,
+    getAppropriateDeleteGroupCardStatusMessage,
+    getAppropriateMovePersonalCardStatusMessage,
+    getAppropriateMoveGroupCardStatusMessage
+} from "@/lib/validation";
+
+import { fetchUserInitialData } from "@/actions/fetchInitialData";
+import { getGroupContent } from "@/actions/getGroupContent";
+import { deletePersonalCard, getPersonalCardsWithoutDeletedCard } from "@/actions/deletePersonalCard";
+import { deleteGroupCard, getGroupCardsWithoutDeletedCard } from "@/actions/deleteGroupCard";
+import { getPersonalCardsWithMovedCard, movePersonalCard } from "@/actions/movePersonalCard";
+import { getGroupCardsWithMovedCard, moveGroupCard } from "@/actions/moveGroupCard";
+import { changePersonalCardContent } from "@/actions/changePersonalCardContent";
+import { changeGroupCardContent } from "@/actions/changeGroupCardContent";
+
+import { Data } from "@/types/data";
+
 
 export const InternalPageContext = createContext<any>(null);
 
@@ -15,40 +37,86 @@ export default function Internal(){
 
     const router = useRouter();
 
-    const [ name, setName ] = useState<string>("");
-    const [ personal, setPersonal ] = useState<PersonalData>(null);
-    const [ groups, setGroups ] = useState<GroupList>(null);
-    const [ loaded, setLoaded ] = useState<boolean>(false);
-    const [ overlayAndPopUpVisibility, setOverlayAndPopUpVisibility ] = useState<OverlayVisibility>("invisible");
-    const [ currentRoom, setCurrentRoom ] = useState<string>("personal");
-    const [ groupData, setGroupData ] = useState<GroupData>({});
-    const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState<boolean>(false);
-    const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState<string>("notFound");
-    const [ currentGroupId, setCurrentGroupId ] = useState<string>("");
-    const [ popUpType, setPopUpType ] = useState<PopUpType>("join");
+    const [ name, setName ] = useState("");
+    const [ personal, setPersonal ] = useState<Data.PersonalData>(null);
+    const [ groups, setGroups ] = useState<Data.GroupList>(null);
+    const [ loaded, setLoaded ] = useState(false);
+    
+    const [ currentRoom, setCurrentRoom ] = useState("personal");
+    const [ groupData, setGroupData ] = useState<Data.GroupDataState>(null);
+    const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState(false);
+    const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState("notFound");
+    const [ currentGroupId, setCurrentGroupId ] = useState("");
+    const [ popUpType, setPopUpType ] = useState<Data.PopUpType>("join");
+    const [ okToLoad, setOkToLoad ] = useState(false);
+
+    const [ firstLayerOverlayVisibility, setFirstLayerOverlayVisibility ] = useState("invisible");
+    const [ secondLayerOverlayVisibility, setSecondLayerOverlayVisibility ] = useState("invisible");
+
+    const [ popUpStatusVisibility, setPopUpStatusVisibility ] = useState("invisible");
+    const [ popUpStatusContent, setpopUpStatusContent ] = useState("serverError");
+    const [ popUpStatusType, setPopUpStatusType ] = useState("error");
+
+    const [ createJoinGroupPopUpVisibility, setCreateJoinGroupPopUpVisibility ] = useState("invisible");
+    const [ addCardPopUpVisibility, setAddCardPopUpVisibility ] = useState("invisible");
+    const [ bigCardPopUpVisibility, setBigCardPopUpVisibility ] = useState("invisible");
+
+    const [ deleteCardPopUpVisibility, setDeleteCardPopUpVisibility ] = useState("invisible");
+    const [ moveCardPopUpVisibility, setMoveCardPopUpVisibility ] = useState("invisible");
+
+    const [ currentColumn, setCurrentColumn ] = useState("todo");
+    const [ currentCardIdToDelete, setCurrentCardIdToDelete ] = useState("");
+    const [ currentCardDataToMove, setCurrentCardDataToMove ] = useState({});
 
     const contextValues = {
-        name: name,
-        personal: personal,
-        groups: groups,
-        handlePopUpGroupState: handlePopUpGroupState,
-        overlayAndPopUpVisibility: overlayAndPopUpVisibility,
-        handleChangeRoom: handleChangeRoom,
-        currentRoom: currentRoom,
-        groupData: groupData,
-        getGroupWithSuccess: getGroupWithSuccess,
-        getGroupRequestStatusMessage: getGroupRequestStatusMessage,
-        currentGroupId: currentGroupId,
-        popUpType: popUpType,
-        setPopUpType: setPopUpType
+        name,
+        personal,
+        groups,
+        addCardPopUpVisibility,
+        bigCardPopUpVisibility,
+        createJoinGroupPopUpVisibility,
+        deleteCardPopUpVisibility,
+        moveCardPopUpVisibility,
+        changePopUpToVisible,
+        hideFirstLayerOverlayAndPopUps,
+        handleDeleteCardPopUpState, 
+        handleMoveCardPopUpState,
+        hideSecondLayerOverlayAndBigCardOptionPopUps,
+        handleDeleteCard,
+        handleMoveCard,
+        handleSaveCard,
+        handleChangeRoom,
+        currentRoom,
+        groupData,
+        okToLoad,
+        getGroupWithSuccess,
+        getGroupRequestStatusMessage,
+        currentGroupId,
+        popUpType,
+        setPopUpType,
+        updateOptions,
+        updatePersonalCards,
+        updateGroupCards,
+        popUpStatusVisibility,
+        popUpStatusContent,
+        popUpStatusType,
+        setPopUpStatusVisibility,
+        showStatusPopUp,
+        currentColumn
     };
 
-    const overlayProps = {
-        handlePopUpGroupState: handlePopUpGroupState,
-        visibility: overlayAndPopUpVisibility
+    const firstLayerOverlayProps = {
+        visibility: firstLayerOverlayVisibility,
+        hideFirstLayerOverlayAndPopUps
     };
+
+    const secondLayerOverlayProps = {
+        visibility: secondLayerOverlayVisibility,
+        hideSecondLayerOverlayAndBigCardOptionPopUps,
+    }
 
     let alreadyReloaded = false;
+
 
     useEffect(() => {
         if (!alreadyReloaded){
@@ -57,98 +125,367 @@ export default function Internal(){
         }
     }, []);
 
-    function handleClientEntry(): void {
-        const requestConfig = getFetchDataRequestConfig();
-        doFetchDataRequest(requestConfig);
-    }
+    async function handleClientEntry() {
+        const { status, responseObject } = await fetchUserInitialData();
+        const { name, rooms } = responseObject;
+        
+        const personalData = rooms.personal;
+        const userGroups = rooms.groups;
 
-    async function doFetchDataRequest(requestConfig: FetchDataRequestParameters) {
-        const response = await fetch("http://localhost:3001/internal-page", requestConfig);
-        const responseStringfied = await response.json();
-        const responseObject: FetchDataResponse = JSON.parse(responseStringfied);
-        console.log(responseObject)
-        handleFetchDataResponse(responseObject);
-    }
-
-    function handleFetchDataResponse(response: FetchDataResponse): void {
-        if (response.status === 200){
-            setName(response.name);
-            setPersonal(response.rooms.personal);
-            setGroups(response.rooms.groups);
-            setLoaded(true);
+        if (status === 200) {
+            setName(() => name);
+            setPersonal(() => personalData);
+            setGroups(() => userGroups);
+            setLoaded(() => true);
         }
         else {
             router.push("/login");
         }
     }
 
-    function handlePopUpGroupState(){
-        setPopUpType("join");
-        handleJoinGroupState();
+    function handleChangeRoom(roomId: string): void {
+        setCurrentRoom(() => roomId);
+        if (roomId !== "personal") {
+            setCurrentGroupId(() => roomId);
+            handleGetGroupContent(roomId);
+        }
     }
 
-    function handleJoinGroupState(){
-        if (overlayAndPopUpVisibility === "invisible"){
-            setOverlayAndPopUpVisibility("visible");
-            return;
-        }
-        setOverlayAndPopUpVisibility("invisible");
+    async function handleGetGroupContent(roomId: string) {
+        const { status, responseObject } = await getGroupContent(roomId);
+        const groupData = responseObject.group;
+        const { statusMessage, success, canLoadData } = getAppropriateGetGroupStatusMessage(status);
+
+        if (success && canLoadData) loadGroupData(groupData);
+        
+        setGetGroupRequestStatusMessage(() => statusMessage);
+        setGetGroupWithSuccess(() => success);
     }
 
-    function handleChangeRoom(roomId: string) {
-        if (roomId === "personal"){
-            setCurrentRoom("personal");
-            return;
-        }
-        setCurrentGroupId(roomId);
-        setCurrentRoom(roomId);
-        getGroupContent(roomId);
+    async function loadGroupData(groupData: Data.GroupData) {
+        setOkToLoad(() => false);
+        await delay(1);
+        setOkToLoad(() => true);
+        setGroupData(() => groupData);
     }
 
-    function getGroupContent(roomId: string) {
-        console.log(roomId)
-        console.log(localStorage.getItem("token"))
-        const requestConfig = getGroupContentRequestConfig(roomId);
-        doGetGroupContentRequest(requestConfig);
+    function updateOptions(name: string, hash: string): void {
+        setGroups(previous => [
+            ...previous as Array<Data.IGroup>, 
+            { name: name, hash: hash }
+        ]);
     }
 
-    async function doGetGroupContentRequest(requestConfig: GetGroupContentRequestParameters){
-        const response = await fetch("http://localhost:3001/get-group-content", requestConfig);
-        const responseStringfied = await response.json();
-        const responseObject: GetGroupContentResponse = JSON.parse(responseStringfied);
-        console.log(responseObject)
-        handleGetGroupContentResponse(responseObject);
+    function updatePersonalCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
+        const newCard: Data.ICard = {
+            content: contentValue,
+            priority: priorityValue,
+            timestamp: timestamp,
+            id: id,
+            creator: {
+                name: name,
+                roles: [ "admin" ]
+            }
+        };
+
+        setPersonal(previous => {
+            const deepCopy: Data.IPersonal = JSON.parse(JSON.stringify(previous));
+            deepCopy![destinationValue].cards.push(newCard);
+            return deepCopy;
+        });
+
+        hideFirstLayerOverlayAndPopUps();
     }
 
-    function handleGetGroupContentResponse(response: GetGroupContentResponse){
-        if (response.status === 200){
-            setGroupData(response.group);
-            setGetGroupWithSuccess(false);
-            setGetGroupWithSuccess(true);
-        }
-        else if (response.status === 404){
-            setGetGroupRequestStatusMessage("notFound");
-            setGetGroupWithSuccess(false);
-        }
-        else if (response.status === 400){
-            setGetGroupRequestStatusMessage("badRequest");
-            setGetGroupWithSuccess(false);
-        }
-        else if (response.status === 403){
-            setGetGroupRequestStatusMessage("forbidden");
-            setGetGroupWithSuccess(false);
+    function updateGroupCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
+        const newCard: Data.ICard = {
+            content: contentValue,
+            priority: priorityValue,
+            timestamp: timestamp,
+            id: id,
+            creator: {
+                name: name,
+                roles: [ "admin" ]
+            }
+        };
+
+        setGroupData(previous => {
+            const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(previous));
+            deepCopy.columns![destinationValue].cards.push(newCard);
+            return deepCopy;
+        });   
+
+        hideFirstLayerOverlayAndPopUps();
+    }
+
+    /*
+     * DELETE CARD
+     */
+
+    function handleDeleteCard(): void {
+        if (currentRoom === "personal") {
+            handleDeletePersonalCard();
         }
         else {
-            setGetGroupRequestStatusMessage("internalServerError");
-            setGetGroupWithSuccess(false);
+            handleDeleteGroupCard();
         }
+    }
+
+    async function handleDeletePersonalCard() {
+        const status = await deletePersonalCard(currentCardIdToDelete, currentColumn);
+
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized
+        } = getAppropriateDeletePersonalCardStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success) removeCardFromPersonalDOM();
+        }
+    }
+
+    function removeCardFromPersonalDOM(): void {
+        const personalData = personal as Data.IPersonal;
+        const personalCardsWithoutDeleteCard = getPersonalCardsWithoutDeletedCard(personalData, currentColumn);
+
+        setPersonal(() => personalCardsWithoutDeleteCard);
+        hideFirstLayerOverlayAndPopUps();
+        hideSecondLayerOverlayAndBigCardOptionPopUps();
+    }
+
+    async function handleDeleteGroupCard() {
+        const status = await deleteGroupCard(currentGroupId, currentColumn, currentCardIdToDelete);
+
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized
+        } = getAppropriateDeleteGroupCardStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success) removeCardFromGroupDOM();
+        }
+    }
+
+    function removeCardFromGroupDOM(): void {
+        const groupCardsWithoutDeleteCard = getGroupCardsWithoutDeletedCard(groupData as Data.GroupData, currentColumn);
+
+        setGroupData(() => groupCardsWithoutDeleteCard);
+        hideFirstLayerOverlayAndPopUps();
+        hideSecondLayerOverlayAndBigCardOptionPopUps();
+    }
+
+    /*
+     * MOVE CARD
+     */
+
+    function handleMoveCard(destinyColumn: string): void {
+        if (currentRoom === "personal") {
+            handleMovePersonalCard(destinyColumn);
+        }
+        else {
+            handleMoveGroupCard(destinyColumn);
+        }
+    }
+
+    async function handleMovePersonalCard(destinyColumn: string) {
+        const status = await movePersonalCard(
+            currentCardDataToMove as Data.ICard, 
+            currentColumn, 
+            destinyColumn
+        );
+
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized
+        } = getAppropriateMovePersonalCardStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success) moveCardFromPersonalDOM(destinyColumn);
+        }
+    }
+
+    function moveCardFromPersonalDOM(destinyColumn: string): void {
+        const personalData = personal as Data.IPersonal;
+        const personalCardsWithoutDeleteCard = getPersonalCardsWithMovedCard(
+            personalData, 
+            currentCardDataToMove as Data.ICard, 
+            currentColumn,
+            destinyColumn
+        );
+
+        setPersonal(() => personalCardsWithoutDeleteCard);
+        hideFirstLayerOverlayAndPopUps();
+        hideSecondLayerOverlayAndBigCardOptionPopUps();
+    }
+
+    async function handleMoveGroupCard(destinyColumn: string) {
+        const status = await moveGroupCard(
+            currentRoom, 
+            currentCardDataToMove as Data.ICard, 
+            currentColumn, 
+            destinyColumn
+        );
+        
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized
+        } = getAppropriateMoveGroupCardStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success) moveCardFromGroupDOM(destinyColumn);
+        }
+    }
+
+    function  moveCardFromGroupDOM(destinyColumn: string): void {
+        const personalCardsWithoutDeleteCard = getGroupCardsWithMovedCard(
+            groupData as Data.GroupData, 
+            currentCardIdToDelete,
+            currentCardDataToMove as Data.ICard, 
+            currentColumn,
+            destinyColumn
+        );
+
+        setGroupData(() => personalCardsWithoutDeleteCard);
+        hideFirstLayerOverlayAndPopUps();
+        hideSecondLayerOverlayAndBigCardOptionPopUps();
+    }
+
+    /* 
+     * SAVE CARD
+     */
+
+    function handleSaveCard(id: string, oldContent: string, currentContent: string) {
+        if (oldContent === currentContent) {
+            console.log("igual");
+        }
+        else if (currentRoom === "personal") {
+            handleChangePersonalCardContent(id, currentColumn, currentContent);
+        }
+        else {
+            handleChangeGroupCardContent(currentRoom, id, currentColumn, currentContent);
+        }
+    }
+
+    async function handleChangePersonalCardContent(cardId: string, currentColumn: string, currentContent: string) {
+        const status = await changePersonalCardContent(cardId, currentColumn, currentContent);
+    }
+
+    async function handleChangeGroupCardContent(groupId: string, cardId: string, currentColumn: string, currentContent: string) {
+        const status = await changeGroupCardContent(groupId, cardId, currentColumn, currentContent);
+    }
+
+    /*
+     * UPDATE OF CURRENT BIG CARD DATA
+     */
+
+    function handleDeleteCardPopUpState(id: string, column: string): void {
+        setCurrentCardIdToDelete(() => id);
+        setCurrentColumn(() => column);
+        changeBigCardOptionPopUpToVisible("deleteCard");
+    }
+
+    function handleMoveCardPopUpState(content: string, priority: string, timestamp: number, id: string, creator: Data.IMember, column: string): void {
+        const currentCardDataToMove = {
+            content: content, 
+            priority: priority, 
+            timestamp: timestamp, 
+            id: id, 
+            creator: creator
+        };
+
+        setCurrentCardDataToMove(() => currentCardDataToMove);
+        setCurrentColumn(() => column);
+        changeBigCardOptionPopUpToVisible("moveCard");
+    }
+    
+    /*
+     * POPUP MANIPULATION
+     */
+
+    async function showStatusPopUp(statusMessage: string, statusType: string){
+        setpopUpStatusContent(() => statusMessage);
+        setPopUpStatusType(() => statusType);
+        setPopUpStatusVisibility(() => "visible");
+        await delay(4000);
+        setPopUpStatusVisibility(() => "invisible");
+    }
+
+    function hideFirstLayerOverlayAndPopUps(): void {
+        setFirstLayerOverlayVisibility(() => "invisible");
+        hideAllPopUps();
+    }
+
+    function changePopUpToVisible(identifierString: string): void {
+        const { 
+            createJoinGroupVisibility, 
+            addCardVisibility, 
+            bigCardVisibility 
+        } = getAppropriatePopUpsVisibility(identifierString);
+
+        setPopUpType(() => "join");
+        setCreateJoinGroupPopUpVisibility(() => createJoinGroupVisibility as Data.CreateJoinGroupPopUpVisibility);
+        setAddCardPopUpVisibility(() => addCardVisibility as Data.AddCardPopUpVisibility);
+        setBigCardPopUpVisibility(() => bigCardVisibility as Data.BigCardPopUpVisibility);
+        setFirstLayerOverlayVisibility(() => "visible");
+    }
+
+    function hideAllPopUps(): void {
+        setCreateJoinGroupPopUpVisibility(() => "invisible");
+        setAddCardPopUpVisibility(() => "invisible");
+        setBigCardPopUpVisibility(() => "invisible");
+    }
+
+    function hideSecondLayerOverlayAndBigCardOptionPopUps(): void {
+        setSecondLayerOverlayVisibility(() => "invisible");
+        hideAllBigCardOptionPopUps();
+    }
+
+    function changeBigCardOptionPopUpToVisible(identifierString: string): void {
+        const { 
+            deleteCardVisibility, 
+            moveCardVisibility 
+        } = getAppropriateBigCardOptionPopUpsVisibility(identifierString);
+
+        setDeleteCardPopUpVisibility(() => deleteCardVisibility);
+        setMoveCardPopUpVisibility(() => moveCardVisibility);
+        setSecondLayerOverlayVisibility(() => "visible");
+    }
+
+    function hideAllBigCardOptionPopUps(): void {
+        setDeleteCardPopUpVisibility(() => "invisible");
+        setMoveCardPopUpVisibility(() => "invisible");
     }
 
     return (
         <div className={internalStyles.internal__background}>
+            <FirstLayerOverlay {...firstLayerOverlayProps}/>
+            <SecondLayerOverlay {...secondLayerOverlayProps}/>
             { loaded && (
                 <InternalPageContext.Provider value={contextValues}>
-                    <Overlay {...overlayProps}/>
                     <InternalHeader/>
                     <InternalMainContent/>
                 </InternalPageContext.Provider>

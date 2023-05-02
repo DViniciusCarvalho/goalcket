@@ -1,0 +1,21 @@
+.todo__area, .doing__area, .done__area {
+    min-width: 32%;
+    height: 560px;
+    background-color: transparent;
+}
+
+@media only screen and (max-width: 994px) and (min-width: 766px) {
+    .todo__area, .doing__area, .done__area {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 10px;
+    }
+}
+
+@media only screen and (max-width: 765px) {
+    .todo__area, .doing__area, .done__area {
+        width: 100%;
+        height: 250px;
+        margin-bottom: 10px;
+    }
+}

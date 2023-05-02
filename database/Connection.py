@@ -1,11 +1,11 @@
-import os
+from os import getenv
 from pathlib import Path
-import sys
+from sys import path
 from typing import Any, Dict, Union
 
 file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
-sys.path.append(str(root))
+path.append(str(root))
 
 from bson.objectid import ObjectId
 from dotenv import load_dotenv
@@ -13,15 +13,15 @@ from pydantic import validate_arguments
 from pymongo import MongoClient
 from pymongo.errors import OperationFailure
 
-from model.Group import Group
 
 load_dotenv()
 
+
 class Connection:
     
-    mongo_user = os.getenv("MONGO_USER")
-    mongo_password = os.getenv("MONGO_PASSWORD")
-    mongo_db = os.getenv("MONGO_DB")
+    mongo_user = getenv("MONGO_USER")
+    mongo_password = getenv("MONGO_PASSWORD")
+    mongo_db = getenv("MONGO_DB")
 
     client = MongoClient(f"mongodb://{mongo_user}:{mongo_password}@localhost:27017/{mongo_db}")
 
