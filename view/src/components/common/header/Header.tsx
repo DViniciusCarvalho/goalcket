@@ -7,17 +7,17 @@ import { Props } from "@/types/props";
 
 export default function Header({ needChangeBackground, headerPage }: Props.HeaderProps){
 
-    const [ headerBackgroundColor, setHeaderBackgroundColor ] = useState<string>("in--origin");
+    const [ headerBackgroundColor, setHeaderBackgroundColor ] = useState("in--origin");
 
     const menuProps: Props.MenuProps = {
         headerPosition: headerBackgroundColor
     }
 
-    function defineHeaderClass (scrollTop: number): void {
+    function defineHeaderClass(scrollTop: number): void {
         setHeaderBackgroundColor(() => scrollTop <= 300? "in--origin" : "out--origin");
     }
 
-    if(typeof window !== "undefined" && needChangeBackground){
+    if (typeof window !== "undefined" && needChangeBackground){
         window.addEventListener("scroll", debounce(() => {
             const html = document.documentElement!;
             const scrollTop = html.scrollTop || document.body.scrollTop;

@@ -58,8 +58,8 @@ export default function Internal(){
     const router = useRouter();
 
     const [ username, setUsername ] = useState("");
-    const [ personal, setPersonal ] = useState<Data.PersonalData>(null);
-    const [ groups, setGroups ] = useState<Data.GroupList>(null);
+    const [ personal, setPersonal ] = useState<Data.PersonalDataState>(null);
+    const [ groups, setGroups ] = useState<Data.GroupOptionDataList>(null);
     const [ loaded, setLoaded ] = useState(false);
     
     const [ currentRoom, setCurrentRoom ] = useState("personal");
@@ -67,7 +67,7 @@ export default function Internal(){
     const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState(false);
     const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState("notFound");
     const [ currentGroupId, setCurrentGroupId ] = useState("");
-    const [ popUpType, setPopUpType ] = useState<Data.PopUpType>("join");
+    const [ popUpType, setPopUpType ] = useState("join");
     const [ okToLoad, setOkToLoad ] = useState(false);
 
     const [ firstLayerOverlayVisibility, setFirstLayerOverlayVisibility ] = useState("invisible");
@@ -196,13 +196,13 @@ export default function Internal(){
 
     function updateOptions(name: string, hash: string): void {
         setGroups(previous => [
-            ...previous as Array<Data.IGroup>, 
+            ...previous as Array<Data.GroupOptionData>, 
             { name: name, hash: hash }
         ]);
     }
 
     function updatePersonalCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
-        const newCard: Data.ICard = {
+        const newCard: Data.CardData = {
             content: contentValue,
             priority: priorityValue,
             timestamp: timestamp,
@@ -214,7 +214,7 @@ export default function Internal(){
         };
 
         setPersonal(previous => {
-            const deepCopy: Data.IPersonal = JSON.parse(JSON.stringify(previous));
+            const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(previous));
             deepCopy![destinationValue].cards.push(newCard);
             return deepCopy;
         });
@@ -223,7 +223,7 @@ export default function Internal(){
     }
 
     function updateGroupCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
-        const newCard: Data.ICard = {
+        const newCard: Data.CardData = {
             content: contentValue,
             priority: priorityValue,
             timestamp: timestamp,
@@ -279,7 +279,7 @@ export default function Internal(){
     }
 
     function removeCardFromPersonalDOM(): void {
-        const personalData = personal as Data.IPersonal;
+        const personalData = personal as Data.PersonalData;
         const personalCardsWithoutDeleteCard = getPersonalCardsWithoutDeletedCard(
             personalData, 
             currentColumn
@@ -335,7 +335,7 @@ export default function Internal(){
 
     async function handleMovePersonalCard(destinyColumn: string) {
         const status = await movePersonalCard(
-            currentCardDataToMove as Data.ICard, 
+            currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
@@ -357,10 +357,10 @@ export default function Internal(){
     }
 
     function moveCardFromPersonalDOM(destinyColumn: string): void {
-        const personalData = personal as Data.IPersonal;
+        const personalData = personal as Data.PersonalData;
         const personalCardsWithoutDeleteCard = getPersonalCardsWithMovedCard(
             personalData, 
-            currentCardDataToMove as Data.ICard, 
+            currentCardDataToMove as Data.CardData, 
             currentColumn,
             destinyColumn
         );
@@ -373,7 +373,7 @@ export default function Internal(){
     async function handleMoveGroupCard(destinyColumn: string) {
         const status = await moveGroupCard(
             currentRoom, 
-            currentCardDataToMove as Data.ICard, 
+            currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
@@ -398,7 +398,7 @@ export default function Internal(){
         const personalCardsWithoutDeleteCard = getGroupCardsWithMovedCard(
             groupData as Data.GroupData, 
             currentCardIdToDelete,
-            currentCardDataToMove as Data.ICard, 
+            currentCardDataToMove as Data.CardData, 
             currentColumn,
             destinyColumn
         );
@@ -442,7 +442,7 @@ export default function Internal(){
         changeBigCardOptionPopUpToVisible("deleteCard");
     }
 
-    function handleMoveCardPopUpState(content: string, priority: string, timestamp: number, id: string, creator: Data.IMember, column: string): void {
+    function handleMoveCardPopUpState(content: string, priority: string, timestamp: number, id: string, creator: Data.MemberData, column: string): void {
         const currentCardDataToMove = {
             content: content, 
             priority: priority, 

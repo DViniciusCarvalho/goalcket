@@ -5,7 +5,7 @@ import memberStyle from "@/styles/internal/main/cards/Member.module.css";
 import { Data } from "@/types/data";
 
 
-export default function Member({ name, roles }: Data.IMember) {
+export default function Member({ name, roles }: Data.MemberData) {
     return (
         <div className={memberStyle.member__info}>
             <Image src={Profile} alt="user profile" className={memberStyle.member__profile__image}/>

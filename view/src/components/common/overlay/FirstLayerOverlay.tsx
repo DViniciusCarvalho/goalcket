@@ -5,6 +5,8 @@ import { Props } from "@/types/props";
 
 export default function FirstLayerOverlay({ visibility, hideFirstLayerOverlayAndPopUps }: Props.OverlayProps) {
     return (
-        <div className={`${overlayStyle.first__layer} ${overlayStyle[visibility]}`} onClick={hideFirstLayerOverlayAndPopUps}></div>
+        <div className={`${overlayStyle.first__layer} ${overlayStyle[visibility]}`} 
+         onClick={hideFirstLayerOverlayAndPopUps}
+        />
     );
 }

@@ -73,25 +73,25 @@ export namespace Props {
 
     interface ToDoProps {
         color: string;
-        cards: Data.ICard[];
+        cards: Data.CardData[];
         isGroup: boolean;
     }
 
     interface DoingProps {
         color: string;
-        cards: Data.ICard[];
+        cards: Data.CardData[];
         isGroup: boolean;
     }
 
     interface DoneProps {
         color: string;
-        cards: Data.ICard[];
+        cards: Data.CardData[];
         isGroup: boolean;
     }
 
     interface CardsAreaProps {
         column: string;
-        cards: Data.Card[];
+        cards: Data.CardData[];
     }
 
     interface KanbanCardProps {
@@ -100,12 +100,8 @@ export namespace Props {
 
     interface GroupContentProps {
         name: string;
-        members: Data.IMember[];
-        columns: {
-            todo: ToDoProps,
-            doing: DoingProps,
-            done: DoneProps
-        }
+        members: Data.MemberData[];
+        columns: Data.Columns;
     }
 
     interface ErrorProps {
@@ -121,8 +117,7 @@ export namespace Props {
         priority: string;
         timestamp: number;
         id: string;
-        creator: IMember;
+        creator: MemberData;
         column: string;
     }
-    
 }

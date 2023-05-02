@@ -7,7 +7,7 @@ export default function HeroSection(){
 
     const router = useRouter();
 
-    function goToLogon() {
+    function goToLogon(): void {
         router.push("/logon");
     }
 

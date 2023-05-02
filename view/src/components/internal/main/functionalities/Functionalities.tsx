@@ -20,7 +20,7 @@ export default function Functionalities({ isGroup }: Props.FunctionalitiesProps)
     const { currentGroupId, changePopUpToVisible } = useContext(InternalPageContext);
     const { hashTextRef } = useContext(InternalMainContentContext);
     
-    function copyHash() {
+    function copyHash(): void {
         const hashTextElement = hashTextRef.current! as HTMLParagraphElement;
         const hashValue = hashTextElement.innerText;
         navigator.clipboard.writeText(hashValue);

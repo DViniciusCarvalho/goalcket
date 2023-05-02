@@ -6,14 +6,14 @@ import { Request } from "@/types/requests";
 const requestController = new AbortController();
 const { signal } = requestController;
 
-export function movePersonalCard(currentCardDataToMove: Data.ICard, currentColumn: string, destinyColumn: string): Promise<number> {
+export function movePersonalCard(currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
     const requestConfig = getMovePersonalCardRequestConfig(currentColumn, destinyColumn, currentCardDataToMove);
     const promisedResponseData = doMovePersonalCardRequest(requestConfig);
     
     return promisedResponseData;
 }
 
-function getMovePersonalCardRequestConfig(currentColumn: string, destinyColumn: string, cardData: Data.ICard):
+function getMovePersonalCardRequestConfig(currentColumn: string, destinyColumn: string, cardData: Data.CardData):
 Request.MoveCardRequestParameters {
     const data = {
         token: localStorage.getItem("token") ?? "",
@@ -41,13 +41,13 @@ Promise<number> {
     return status;
 }
 
-export function getPersonalCardsWithMovedCard(personalData: Data.IPersonal, currentCardDataToMove: Data.ICard, currentColumn: string, destinyColumn: string): Data.IPersonal {
-    const deepCopy: Data.IPersonal = JSON.parse(JSON.stringify(personalData));
-    const cards: Data.ICard[] = deepCopy![currentColumn].cards;
+export function getPersonalCardsWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Data.PersonalData {
+    const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
+    const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
 
     deepCopy![currentColumn].cards.splice(cardIndex, 1);
-    deepCopy![destinyColumn].cards.push(currentCardDataToMove as Data.ICard);
+    deepCopy![destinyColumn].cards.push(currentCardDataToMove as Data.CardData);
 
     return deepCopy;
 }

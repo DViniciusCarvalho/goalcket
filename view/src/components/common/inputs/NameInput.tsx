@@ -5,7 +5,7 @@ import { Props } from "@/types/props";
 
 
 export default function NameInput({ changeValue, value }: Props.InputProps){
-    return(
+    return (
         <div className={inputStyle.name__block}>
             <label htmlFor="name__input" className={inputStyle.data__label}> Name: </label>
             <div className={inputStyle.name__area}>

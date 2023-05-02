@@ -60,11 +60,11 @@ export default function LoginComponent(){
         alreadyLoaded = true;
     }, []);
 
-    function changeEmail(event: React.ChangeEvent<HTMLInputElement>): void{
+    function changeEmail(event: React.ChangeEvent<HTMLInputElement>): void {
         setEmailValue(event.target.value);
     }
 
-    function changePassword(event: React.ChangeEvent<HTMLInputElement>): void{
+    function changePassword(event: React.ChangeEvent<HTMLInputElement>): void {
         setPasswordValue(event.target.value);
     }
 

@@ -5,7 +5,7 @@ import { Props } from "@/types/props";
 
 
 export default function EmailInput({ changeValue, value }: Props.InputProps){
-    return(
+    return (
         <div className={inputStyle.email__block}>
             <label htmlFor="email__input" className={inputStyle.data__label}> E-mail: </label>
             <div className={inputStyle.email__area}>

@@ -16,16 +16,16 @@ export default function Description({ area, color, isGroup }: Props.DescriptionP
     const [ descriptionBackground, setDescriptionBackground ] = useState<string>(color);
     const [ initialColor, setInitialColor ] = useState<string>(color);
 
-    function changeColor(event: React.ChangeEvent<HTMLInputElement>){
+    function changeColor(event: React.ChangeEvent<HTMLInputElement>): void {
         setDescriptionBackground(event.target.value);
     }   
 
-    function updateInitialColor(event: React.FocusEvent<HTMLInputElement>){
+    function updateInitialColor(event: React.FocusEvent<HTMLInputElement>): void {
         const currentValue = event.target.value;
         setInitialColor(currentValue);
     }
 
-    function updateFinalColor(event: React.FocusEvent<HTMLInputElement>){
+    function updateFinalColor(event: React.FocusEvent<HTMLInputElement>): void {
         const currentColorValue = event.target.value;
         if (currentColorValue !== initialColor){
             if (isGroup){
@@ -47,8 +47,10 @@ export default function Description({ area, color, isGroup }: Props.DescriptionP
         if (status === 403) router.push("/login");
     }
 
-    function getDescriptionTitle() {
-        if (area === "todo") return "To Do";
+    function getDescriptionTitle(): string {
+        if (area === "todo") {
+            return "To Do";
+        }
         return area.charAt(0).toUpperCase() + area.slice(1);
     }
 

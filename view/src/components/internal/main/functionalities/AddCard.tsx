@@ -3,6 +3,7 @@ import functStyle from "@/styles/internal/main/functionalities/Functionalities.m
 import { InternalPageContext } from "@/pages/internal";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
 
+
 export default function AddCard() {
     
     const { hideFirstLayerOverlayAndPopUps, addCardPopUpVisibility } = useContext(InternalPageContext);

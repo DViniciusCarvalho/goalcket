@@ -18,8 +18,12 @@ export default function GroupPopUp({
 }: Props.GroupPopUpProps) {
 
     const buttonElementsAnOr = [
-        <button className={groupPopUpStyle.confirm__entry__button} onClick={handleJoinClick} key={1}> Join </button>,
-        <span className={groupPopUpStyle.message__buttons__separator} key={2}> or </span>,
+        <button className={groupPopUpStyle.confirm__entry__button} onClick={handleJoinClick} key={1}> 
+            Join 
+        </button>,
+        <span className={groupPopUpStyle.message__buttons__separator} key={2}> 
+            or 
+        </span>,
         <button className={groupPopUpStyle.confirm__create__button} onClick={handleCreateClick} key={3}> 
             Create a group 
         </button>

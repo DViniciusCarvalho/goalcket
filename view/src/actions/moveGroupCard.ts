@@ -6,19 +6,20 @@ import { getCardIndex } from "@/lib/utils";
 const requestController = new AbortController();
 const { signal } = requestController;
 
-export function moveGroupCard(groupId: string, currentCardDataToMove: Data.ICard, currentColumn: string, destinyColumn: string): Promise<number> {
+export function moveGroupCard(groupId: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
     const requestConfig = getMoveGroupCardRequestConfig(
         groupId,
         currentColumn,
         destinyColumn,
-        currentCardDataToMove as Data.ICard
+        currentCardDataToMove as Data.CardData
     );
     const promisedResponseData = doMoveGroupCardRequest(requestConfig);
     
     return promisedResponseData;
 }
 
-function getMoveGroupCardRequestConfig(groupId: string, currentColumn: string, destinyColumn: string, cardData: Data.ICard): Request.MoveCardRequestParameters {
+function getMoveGroupCardRequestConfig(groupId: string, currentColumn: string, destinyColumn: string, 
+cardData: Data.CardData): Request.MoveCardRequestParameters {
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId,
@@ -45,9 +46,9 @@ async function doMoveGroupCardRequest(requestConfig: Request.MoveCardRequestPara
     return status;
 }
 
-export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.ICard, currentColumn: string, destinyColumn: string): Data.GroupData {
+export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Data.GroupData {
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
-    const cards: Data.ICard[] = groupData!.columns[currentColumn].cards;
+    const cards: Data.CardData[] = groupData!.columns[currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentCardIdToDelete);
 
     deepCopy!.columns[currentColumn].cards.splice(cardIndex, 1);

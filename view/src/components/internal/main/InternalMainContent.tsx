@@ -72,9 +72,6 @@ export default function InternalMainContent(){
     const firstInputElement = firstInputRef.current! as HTMLInputElement;
     const secondInputElement = secondInputRef.current! as HTMLInputElement;
 
-    const requestController = new AbortController();
-    const { signal } = requestController;
-
     const contextProps = {
         destinationRef: destinationOfCardSelectRef,
         priorityRef: priorityOfCardSelectRef,
@@ -289,7 +286,7 @@ export default function InternalMainContent(){
         contentElement.value = "";
     }
 
-    function openCard(content: string, priority: string, timestamp: number, id: string, creator: Data.IMember, column: string) {
+    function openCard(content: string, priority: string, timestamp: number, id: string, creator: Data.MemberData, column: string): void {
         const bigCardPartialProps: Props.BigCardProps = { content, priority, timestamp, id, creator, column };
 
         setBigCardProps(() => bigCardPartialProps);
@@ -303,11 +300,17 @@ export default function InternalMainContent(){
                 <DeleteCardPopUp/>
                 <MoveCardPopUp/>
                 {bigCardProps && (<BigCardPopUp {...bigCardProps as Props.BigCardProps}/>)}
-                <div className={`${groupPopUpStyle.pop__up__container} ${groupPopUpStyle[createJoinGroupPopUpVisibility]}`}>
-                    { popUpType === "join"? <GroupPopUp {...joinGroupProps}/> : <GroupPopUp {...createGroupProps}/>}
+                <div className={`${groupPopUpStyle.pop__up__container} 
+                  ${groupPopUpStyle[createJoinGroupPopUpVisibility]}`}
+                >
+                    { popUpType === "join"? 
+                        <GroupPopUp {...joinGroupProps}/> : <GroupPopUp {...createGroupProps}/>
+                    }
                 </div>
                 {(currentRoom === "personal")? <PersonalContent {...personalProps}/> : (
-                    okToLoad? (getGroupWithSuccess ? <GroupContent {...groupContentProps}/> : <ErrorContent {...errorProps}/>) : ""
+                    okToLoad? (getGroupWithSuccess ? 
+                        <GroupContent {...groupContentProps}/> : <ErrorContent {...errorProps}/>
+                    ) : ""
                 )}
             </InternalMainContentContext.Provider>
         </main>

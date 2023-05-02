@@ -1,35 +1,33 @@
-import { Props } from "./props";
+import { Props } from "@/types/props";
 
 export namespace Data {
 
-    interface IMember {
+    interface MemberData {
         name: string;
         id?: string;
         roles?: string[];
     }
 
-    interface ICard {
+    interface CardData {
         content: string;
         priority: string;
         timestamp: number;
         id: string;
-        creator: IMember;
+        creator: MemberData;
     }
 
     interface Column {
         [key: string]: string;
         color: string;
-        cards: ICard[];
+        cards: CardData[];
     }
 
-    interface IPersonal {
+    interface PersonalData {
         [key: string]: Column;
         todo: Column;
         doing: Column;
         done: Column;
     }
-
-    type PersonalData = null | IPersonal;
 
     interface Columns {
         [key: string]: ToDoProps | DoingProps | DoneProps;
@@ -38,30 +36,21 @@ export namespace Data {
         done: Props.DoneProps;
     }
 
-    interface IGroup {
+    interface GroupOptionData {
         name: string;
         hash: string;
     }
 
     type GroupData = {
-        [key: string]: string | IMember[] | Columns
+        [key: string]: string | MemberData[] | Columns
         name: string;
-        members: IMember[];
+        members: MemberData[];
         columns: Columns;
     }
 
-    type GroupList = null | IGroup[];
+    type GroupOptionDataList = GroupOptionData[] | null;
 
-    type OverlayVisibility = "visible" | "invisible";
-
-    type CreateJoinGroupPopUpVisibility = "visible" | "invisible";
-
-    type AddCardPopUpVisibility = "visible" | "invisible";
-
-    type BigCardPopUpVisibility = "visible" | "invisible";
-
+    type PersonalDataState = null | PersonalData;
+    
     type GroupDataState = GroupData | null;
-
-    type PopUpType = "join" | "create";
-
 }

@@ -4,11 +4,12 @@ import headerStyles from "@/styles/internal/header/InternalHeader.module.css";
 import { InternalPageContext } from "@/pages/internal";
 import { Data } from "@/types/data";
 
+
 export default function InternalHeader(){
 
     const { username, groups, changePopUpToVisible, handleChangeRoom } = useContext(InternalPageContext);
 
-    const [ userGroups, setUserGroups ] = useState<Data.IGroup[]>([]);
+    const [ userGroups, setUserGroups ] = useState<Data.GroupOptionData[]>([]);
 
     useEffect(() => {
         getUserGroups();
@@ -18,7 +19,7 @@ export default function InternalHeader(){
         setUserGroups(groups);
     }
 
-    function changeRoom(event: React.ChangeEvent<HTMLSelectElement>){
+    function changeRoom(event: React.ChangeEvent<HTMLSelectElement>): void {
         const selectedIndex = event.target!.selectedIndex;
         const selectedOption = event.target!.options[selectedIndex];
         const selectedOptionId = selectedOption.id;

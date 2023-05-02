@@ -1,4 +1,4 @@
-export const getAppropriatePopUpsVisibility = (identifier: string) => {
+export function getAppropriatePopUpsVisibility(identifier: string) {
     let createJoinGroupVisibility = "invisible";
     let addCardVisibility = "invisible";
     let bigCardVisibility = "invisible";
@@ -16,7 +16,7 @@ export const getAppropriatePopUpsVisibility = (identifier: string) => {
     return { createJoinGroupVisibility, addCardVisibility, bigCardVisibility };
 }
 
-export const getAppropriateBigCardOptionPopUpsVisibility = (identifier: string) => {
+export function getAppropriateBigCardOptionPopUpsVisibility(identifier: string) {
     let deleteCardVisibility = "invisible";
     let moveCardVisibility = "invisible";
 

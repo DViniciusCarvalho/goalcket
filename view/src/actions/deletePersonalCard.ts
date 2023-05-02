@@ -39,9 +39,10 @@ async function doDeletePersonalCardRequest(requestConfig: Request.DeleteCardRequ
     return status;
 }
 
-export function getPersonalCardsWithoutDeletedCard(personalData: Data.IPersonal, currentColumn: string): Data.IPersonal {
-    const deepCopy: Data.IPersonal = JSON.parse(JSON.stringify(personalData));
-    const cards: Data.ICard[] = deepCopy![currentColumn].cards;
+export function getPersonalCardsWithoutDeletedCard(personalData: Data.PersonalData, currentColumn: string): 
+Data.PersonalData {
+    const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
+    const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
     
     deepCopy![currentColumn].cards.splice(cardIndex, 1);

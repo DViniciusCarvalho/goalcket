@@ -43,7 +43,7 @@ async function doDeleteGroupCardRequest(requestConfig: Request.DeleteCardRequest
 
 export function getGroupCardsWithoutDeletedCard(groupData: Data.GroupData, currentColumn: string): Data.GroupData {
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
-    const cards: Data.ICard[] = deepCopy!.columns[currentColumn].cards;
+    const cards: Data.CardData[] = deepCopy!.columns[currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
 
     deepCopy!.columns[currentColumn].cards.splice(cardIndex, 1);

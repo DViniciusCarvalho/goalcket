@@ -6,6 +6,7 @@ import ContentThree from "@/components/homepage/main/cards/ContentThree";
 
 
 export default function MainContent(){
+    
     return (
         <main className={mainContentStyles.main__content__block}>
             <section className={mainContentStyles.main__content__cards__area}>

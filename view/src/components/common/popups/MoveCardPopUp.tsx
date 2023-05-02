@@ -23,25 +23,26 @@ export default function MoveCardPopUp() {
     const [ currentChecked, setCurrentChecked ] = useState("");
 
 
-    function getCapitalized(word: string) {
-        if (word === "todo") return "To Do";
+    function getCapitalized(word: string): string {
+        if (word === "todo") {
+            return "To Do";
+        }
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
 
-    function getCheckedClass(column: string) {
+    function getCheckedClass(column: string): string {
         return (column === currentChecked)? "checked" : "no-checked";
     }
 
-    function checkButton(column: string) {
-        console.log(column)
+    function checkButton(column: string): void {
         setCurrentChecked(() => column);
     }
 
-    function resetChecked() {
+    function resetChecked(): void {
         setCurrentChecked(() => "");
     }
 
-    function handleCloseAction() {
+    function handleCloseAction(): void {
         resetChecked();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }

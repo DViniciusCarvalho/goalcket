@@ -5,13 +5,13 @@ import { abbreviate, formatDate, getPriorityBackground } from "@/lib/utils";
 import { Data } from "@/types/data";
 
 
-export default function Card({ content, priority, timestamp, id, creator }: Data.ICard){
+export default function Card({ content, priority, timestamp, id, creator }: Data.CardData){
 
     const { openCard } = useContext(InternalMainContentContext);
 
     const cardRef = useRef(null);
 
-    function getParentColumn() {
+    function getParentColumn(): string {
         const cardElement = cardRef.current! as HTMLElement;
         const parent = cardElement.parentElement;
         const parentId = parent!.id;

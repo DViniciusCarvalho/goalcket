@@ -6,6 +6,7 @@ import { Props } from "@/types/props";
 
 
 export default function ContentTwo({ gridArea }: Props.CardProps){
+    
     return (
         <section className={`${cardStyles.card} ${cardStyles.card__two}`} style={{gridArea: gridArea}}>
             <Image src={Profit} alt="profit image" width={50}/>

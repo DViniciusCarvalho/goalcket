@@ -5,7 +5,7 @@ import { Props } from "@/types/props";
 
 
 export default function PasswordInput({ margin, changeValue, value }: Props.InputProps){
-    return(
+    return (
         <div className={inputStyle.password__block} style={{marginBottom: margin}}>
             <label htmlFor="password__input" className={inputStyle.data__label}> Password: </label>
             <div className={inputStyle.password__area}>

@@ -1,4 +1,4 @@
-import { Data } from "./data";
+import { Data } from "@/types/data";
 
 export namespace Response {
 
@@ -9,8 +9,8 @@ export namespace Response {
     interface FetchDataResponse {
         name: string;
         rooms: {
-            personal: IPersonal,
-            groups: IGroup[]
+            personal: Data.PersonalData,
+            groups: Data.GroupOptionData[]
         }
     }
     
