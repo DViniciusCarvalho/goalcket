@@ -1,8 +1,6 @@
 import { CHANGE_GROUP_CARD_CONTENT_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function changeGroupCardContent(groupId: string, cardId: string, currentColumn: string, currentContent: string): Promise<number> {
     const requestConfig = getChangeGroupCardContentRequestConfig(
@@ -33,11 +31,10 @@ function getChangeGroupCardContentRequestConfig(groupId: string, cardId: string,
     return parameters;
 }
 
-async function doChangeGroupCardContentRequest(requestConfig: Request.ChangeCardContentRequestParameters): Promise<number> {
-    const response = await fetch(CHANGE_GROUP_CARD_CONTENT_ENDPOINT, {...requestConfig, signal: signal });
+async function doChangeGroupCardContentRequest(requestConfig: Request.ChangeCardContentRequestParameters): 
+Promise<number> {
+    const response = await fetch(CHANGE_GROUP_CARD_CONTENT_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

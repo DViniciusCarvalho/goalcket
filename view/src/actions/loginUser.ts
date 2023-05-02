@@ -2,8 +2,6 @@ import { LOGIN_USER_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function loginUser(email: string, password: string): 
 Promise<{ status: number, responseObject: Response.LoginResponse }> {
@@ -30,11 +28,9 @@ function getLoginRequestConfig(email: string, password: string): Request.LoginRe
 
 async function doLoginRequest(requestConfig: Request.LoginRequestParameters): 
 Promise<{ status: number, responseObject: Response.LoginResponse }> {
-    const response = await fetch(LOGIN_USER_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(LOGIN_USER_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.LoginResponse = await response.json();
-
-    requestController.abort();
 
     return { status, responseObject };
 }

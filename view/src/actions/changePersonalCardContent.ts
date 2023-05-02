@@ -1,9 +1,6 @@
 import { CHANGE_PERSONAL_CARD_CONTENT_ENDPOINT } from "@/lib/endpoints";
-import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function changePersonalCardContent(cardId: string, currentColumn: string, newContent: string): Promise<number> {
     const requestConfig = getChangePersonalCardContentRequestConfig(
@@ -33,10 +30,8 @@ function getChangePersonalCardContentRequestConfig(cardId: string, currentColumn
 }
 
 async function doChangePersonalCardContentRequest(requestConfig: Request.ChangeCardContentRequestParameters): Promise<number> {
-    const response = await fetch(CHANGE_PERSONAL_CARD_CONTENT_ENDPOINT, {...requestConfig, signal: signal });
+    const response = await fetch(CHANGE_PERSONAL_CARD_CONTENT_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

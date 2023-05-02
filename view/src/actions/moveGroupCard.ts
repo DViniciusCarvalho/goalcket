@@ -3,8 +3,6 @@ import { Request } from "@/types/requests";
 import { Data } from "@/types/data";
 import { getCardIndex } from "@/lib/utils";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function moveGroupCard(groupId: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
     const requestConfig = getMoveGroupCardRequestConfig(
@@ -38,10 +36,8 @@ cardData: Data.CardData): Request.MoveCardRequestParameters {
 }
 
 async function doMoveGroupCardRequest(requestConfig: Request.MoveCardRequestParameters): Promise<number> {
-    const response = await fetch(MOVE_GROUP_CARD_ENDPOINT, {...requestConfig, signal: signal });
+    const response = await fetch(MOVE_GROUP_CARD_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

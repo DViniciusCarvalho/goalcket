@@ -2,8 +2,6 @@ import { CREATE_GROUP_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function createGroup(username: string, groupName: string, groupPassword: string): 
 Promise<{ status: number, responseObject: Response.CreateGroupResponse }> {
@@ -33,11 +31,9 @@ Request.CreateGroupRequestParameters {
 
 async function doCreateGroupRequest(requestConfig: Request.CreateGroupRequestParameters):
 Promise<{ status: number, responseObject: Response.CreateGroupResponse }> {
-    const response = await fetch(CREATE_GROUP_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(CREATE_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.CreateGroupResponse = await response.json();
-
-    requestController.abort();
 
     return { status, responseObject };
 }

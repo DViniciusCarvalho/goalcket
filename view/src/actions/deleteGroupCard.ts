@@ -2,10 +2,7 @@ import { DELETE_GROUP_CARD_ENDPOINT } from "@/lib/endpoints";
 import { getCardIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
-import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function deleteGroupCard(groupId: string, currentColumn: string, currentCardIdToDelete: string): Promise<number> {
     const requestConfig = getDeleteGroupCardRequestConfig(groupId, currentColumn, currentCardIdToDelete);
@@ -33,10 +30,8 @@ Request.DeleteCardRequestParameters {
 }
 
 async function doDeleteGroupCardRequest(requestConfig: Request.DeleteCardRequestParameters): Promise<number> {
-    const response = await fetch(DELETE_GROUP_CARD_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(DELETE_GROUP_CARD_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

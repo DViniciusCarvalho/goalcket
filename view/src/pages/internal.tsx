@@ -149,10 +149,10 @@ export default function Internal(){
         const { status, responseObject } = await fetchUserInitialData();
         const { name, rooms } = responseObject;
         
-        const personalData = rooms.personal;
-        const userGroups = rooms.groups;
-
         if (status === 200) {
+            const personalData = rooms.personal;
+            const userGroups = rooms.groups;
+            
             setUsername(() => name);
             setPersonal(() => personalData);
             setGroups(() => userGroups);

@@ -3,8 +3,6 @@ import { getCardIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function deletePersonalCard(currentCardIdToDelete: string, currentColumn: string): Promise<number> {
     const requestConfig = getDeletePersonalCardRequestConfig(currentCardIdToDelete, currentColumn);
@@ -31,10 +29,8 @@ Request.DeleteCardRequestParameters {
 }
 
 async function doDeletePersonalCardRequest(requestConfig: Request.DeleteCardRequestParameters): Promise<number> {
-    const response = await fetch(DELETE_PERSONAL_CARD_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(DELETE_PERSONAL_CARD_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

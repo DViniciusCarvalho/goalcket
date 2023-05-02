@@ -1,8 +1,6 @@
 import { CHANGE_GROUP_COLUMN_COLOR_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function changeGroupColumnColor(currentColorValue: string, currentGroupId: string, column: string): 
 Promise<number> {
@@ -31,10 +29,8 @@ Request.ChangeColorGroupRequestParameters {
 }
 
 async function doChangeGroupColumnColorRequest(requestConfig: Request.ChangeColorGroupRequestParameters): Promise<number> {
-    const response = await fetch(CHANGE_GROUP_COLUMN_COLOR_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(CHANGE_GROUP_COLUMN_COLOR_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

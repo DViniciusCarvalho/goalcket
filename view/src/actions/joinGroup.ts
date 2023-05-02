@@ -2,8 +2,6 @@ import { JOIN_GROUP_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function joinGroup(username: string, groupHash: string, groupPassword: string): 
 Promise<{ status: number, responseObject: Response.JoinGroupResponse }>{
@@ -33,11 +31,9 @@ Request.JoinGroupRequestParameters {
 
 async function doJoinGroupRequest(requestConfig: Request.JoinGroupRequestParameters): 
 Promise<{ status: number, responseObject: Response.JoinGroupResponse }> {
-    const response = await fetch(JOIN_GROUP_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(JOIN_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.JoinGroupResponse = await response.json();
-
-    requestController.abort();
 
     return { status, responseObject };
 }

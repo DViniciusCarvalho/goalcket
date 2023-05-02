@@ -33,7 +33,7 @@ class ClientController:
         if has_not_offensive_inputs and valid_inoffensive_inputs:
             sign_up_status_code = ClientOperations.sign_up(client)
             if sign_up_status_code == Http.created:
-                return JSONResponse(status_code=Http.created)
+                return JSONResponse(status_code=Http.created, content={})
             elif sign_up_status_code == Http.conflict:
                 raise HTTPException(status_code=Http.conflict)
             raise HTTPException(status_code=Http.internal_server_error)

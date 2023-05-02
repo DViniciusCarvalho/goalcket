@@ -3,8 +3,6 @@ import { getCardIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function movePersonalCard(currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
     const requestConfig = getMovePersonalCardRequestConfig(currentColumn, destinyColumn, currentCardDataToMove);
@@ -33,10 +31,8 @@ Request.MoveCardRequestParameters {
 
 async function doMovePersonalCardRequest(requestConfig: Request.MoveCardRequestParameters):
 Promise<number> {
-    const response = await fetch(MOVE_PERSONAL_CARD_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(MOVE_PERSONAL_CARD_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

@@ -2,8 +2,6 @@ import { ADD_CARD_TO_PERSONAL_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function addCardToPersonal(username: string, destination: string, priority: string, content: string):
 Promise<{ status: number, responseObject: Response.AddCardToPersonalResponse }> {
@@ -34,11 +32,9 @@ Request.AddCardRequestParameters {
 
 async function doAddCardToPersonalRequest(requestConfig: Request.AddCardRequestParameters):
 Promise<{ status: number, responseObject: Response.AddCardToPersonalResponse }> {
-    const response = await fetch(ADD_CARD_TO_PERSONAL_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(ADD_CARD_TO_PERSONAL_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.AddCardToPersonalResponse = await response.json();
-
-    requestController.abort();
 
     return { status, responseObject };
 }

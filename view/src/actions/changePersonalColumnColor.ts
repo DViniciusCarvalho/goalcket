@@ -1,8 +1,6 @@
 import { CHANGE_PERSONAL_COLUMN_COLOR_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function changePersonalColumnColor(currentColorValue: string, column: string): Promise<number> {
     const requestConfig = getChangeColorPersonalRequestConfig(currentColorValue, column);
@@ -29,10 +27,8 @@ Request.ChangeColorPersonalRequestParameters {
 }
 
 async function doChangeGroupColumnColorRequest(requestConfig: Request.ChangeColorGroupRequestParameters): Promise<number> {
-    const response = await fetch(CHANGE_PERSONAL_COLUMN_COLOR_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(CHANGE_PERSONAL_COLUMN_COLOR_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }

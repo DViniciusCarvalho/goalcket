@@ -1,8 +1,6 @@
 import { LOGON_USER_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
-const requestController = new AbortController();
-const { signal } = requestController;
 
 export function logonUser(name: string, email: string, password: string): Promise<number> {
     const requestConfig = getLogonRequestConfig(name, email, password);
@@ -28,10 +26,8 @@ function getLogonRequestConfig(name: string, email: string, password: string): R
 }
 
 async function doLogonRequest(requestConfig: Request.LogonRequestParameters): Promise<number> {
-    const response = await fetch(LOGON_USER_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(LOGON_USER_ENDPOINT, requestConfig);
     const { status } = response;
-
-    requestController.abort();
 
     return status;
 }
