@@ -8,18 +8,33 @@ User:
             "todo": { 
                 "color": "#4CB120", 
                 "cards": [
-                    {
-                        "content": "",
-                        "priority": ""
+                 {
+                    "content": "",
+                    "priority": "",
+                    "timestamp": "",
+                    "id": "",
+                    "creator": {
+                        "name": "",
+                        "id": "",
+                        "roles": []
                     }
+                }
                 ]
             },
             "doing": { 
                 "color": "#1F6B69", 
                 "cards": [
-                    {
-                        "id": 2
+                {
+                    "content": "",
+                    "priority": "",
+                    "timestamp": "",
+                    "id": "",
+                    "creator": {
+                        "name": "",
+                        "id": "",
+                        "roles": []
                     }
+                }
                 ]
             },
             "done":{ 

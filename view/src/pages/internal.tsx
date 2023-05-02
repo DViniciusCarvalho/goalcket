@@ -181,7 +181,9 @@ export default function Internal(){
             canLoadData 
         } = getAppropriateGetGroupStatusMessage(status);
 
-        if (success && canLoadData) loadGroupData(groupData);
+        if (success && canLoadData) {
+            loadGroupData(groupData);
+        }
         
         setGetGroupRequestStatusMessage(() => statusMessage);
         setGetGroupWithSuccess(() => success);
@@ -274,7 +276,9 @@ export default function Internal(){
         }
         else {
             showStatusPopUp(statusMessage, statusType);
-            if (success) removeCardFromPersonalDOM();
+            if (success) {
+                removeCardFromPersonalDOM();
+            }
         }
     }
 
@@ -305,7 +309,9 @@ export default function Internal(){
         }
         else {
             showStatusPopUp(statusMessage, statusType);
-            if (success) removeCardFromGroupDOM();
+            if (success) {
+                removeCardFromGroupDOM();
+            }
         }
     }
 
@@ -334,11 +340,13 @@ export default function Internal(){
     }
 
     async function handleMovePersonalCard(destinyColumn: string) {
-        const status = await movePersonalCard(
+        const { status, responseObject } = await movePersonalCard(
             currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
+
+        const { hash } = responseObject;
 
         const { 
             statusMessage, 
@@ -352,17 +360,20 @@ export default function Internal(){
         }
         else {
             showStatusPopUp(statusMessage, statusType);
-            if (success) moveCardFromPersonalDOM(destinyColumn);
+            if (success) {
+                moveCardFromPersonalDOM(destinyColumn, hash);
+            }
         }
     }
 
-    function moveCardFromPersonalDOM(destinyColumn: string): void {
+    function moveCardFromPersonalDOM(destinyColumn: string, newHash: string): void {
         const personalData = personal as Data.PersonalData;
         const personalCardsWithoutDeleteCard = getPersonalCardsWithMovedCard(
             personalData, 
             currentCardDataToMove as Data.CardData, 
             currentColumn,
-            destinyColumn
+            destinyColumn,
+            newHash
         );
 
         setPersonal(() => personalCardsWithoutDeleteCard);
@@ -371,13 +382,15 @@ export default function Internal(){
     }
 
     async function handleMoveGroupCard(destinyColumn: string) {
-        const status = await moveGroupCard(
+        const { status, responseObject } = await moveGroupCard(
             currentRoom, 
             currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
         
+        const { hash } = responseObject;
+
         const { 
             statusMessage, 
             statusType, 
@@ -390,20 +403,23 @@ export default function Internal(){
         }
         else {
             showStatusPopUp(statusMessage, statusType);
-            if (success) moveCardFromGroupDOM(destinyColumn);
+            if (success) {
+                moveCardFromGroupDOM(destinyColumn, hash);
+            }
         }
     }
 
-    function  moveCardFromGroupDOM(destinyColumn: string): void {
-        const personalCardsWithoutDeleteCard = getGroupCardsWithMovedCard(
+    function  moveCardFromGroupDOM(destinyColumn: string, newHash: string): void {
+        const groupCardsWithMovedCard = getGroupCardsWithMovedCard(
             groupData as Data.GroupData, 
             currentCardIdToDelete,
             currentCardDataToMove as Data.CardData, 
             currentColumn,
-            destinyColumn
+            destinyColumn,
+            newHash
         );
 
-        setGroupData(() => personalCardsWithoutDeleteCard);
+        setGroupData(() => groupCardsWithMovedCard);
         hideFirstLayerOverlayAndPopUps();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }

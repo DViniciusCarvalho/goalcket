@@ -37,4 +37,12 @@ export namespace Response {
         timestamp: number;
         id: string;
     }
+
+    interface MoveCardFromPersonalResponse {
+        hash: string;
+    }
+
+    interface MoveCardFromGroupResponse {
+        hash: string;
+    }
 }

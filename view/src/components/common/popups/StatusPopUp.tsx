@@ -22,7 +22,8 @@ export default function StatusPopUp({ content, visibilityClass, status }: Props.
         addCardWithSuccess: "Successful operation.",
         deletedWithSuccess: "Deleted with success.",
         cardNotFound: "Card not found.",
-        noColumnSpecified: "The destination column must be selected."
+        noColumnSpecified: "The destination column must be selected.",
+        movedWithSuccess: "Moved with success."
     };
 
     return (

@@ -1,10 +1,11 @@
 import { MOVE_GROUP_CARD_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
+import { Response } from "@/types/responses";
 import { Data } from "@/types/data";
 import { getCardIndex } from "@/lib/utils";
 
 
-export function moveGroupCard(groupId: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
+export function moveGroupCard(groupId: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<{ status: number, responseObject: Response.MoveCardFromGroupResponse }> {
     const requestConfig = getMoveGroupCardRequestConfig(
         groupId,
         currentColumn,
@@ -35,18 +36,20 @@ cardData: Data.CardData): Request.MoveCardRequestParameters {
     return parameters;
 }
 
-async function doMoveGroupCardRequest(requestConfig: Request.MoveCardRequestParameters): Promise<number> {
+async function doMoveGroupCardRequest(requestConfig: Request.MoveCardRequestParameters): 
+Promise<{ status: number, responseObject: Response.MoveCardFromGroupResponse }> {
     const response = await fetch(MOVE_GROUP_CARD_ENDPOINT, requestConfig);
     const { status } = response;
+    const responseObject: Response.MoveCardFromGroupResponse = await response.json();
 
-    return status;
+    return { status, responseObject };
 }
 
-export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Data.GroupData {
+export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.GroupData {
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
     const cards: Data.CardData[] = groupData!.columns[currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentCardIdToDelete);
-
+    currentCardDataToMove.id = newHash;
     deepCopy!.columns[currentColumn].cards.splice(cardIndex, 1);
     deepCopy!.columns[destinyColumn].cards.push(currentCardDataToMove);
 
@@ -61,7 +64,7 @@ export function getAppropriateMoveGroupCardStatusMessage(httpStatus: number) {
     let isAuthorized = true;
 
     if (httpStatus === 200) {
-        statusMessage = "deletedWithSuccess";
+        statusMessage = "movedWithSuccess";
         statusType = "success";
         success = true;
     }

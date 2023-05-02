@@ -2,9 +2,10 @@ import { MOVE_PERSONAL_CARD_ENDPOINT } from "@/lib/endpoints";
 import { getCardIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
+import { Response } from "@/types/responses";
 
 
-export function movePersonalCard(currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<number> {
+export function movePersonalCard(currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse }> {
     const requestConfig = getMovePersonalCardRequestConfig(currentColumn, destinyColumn, currentCardDataToMove);
     const promisedResponseData = doMovePersonalCardRequest(requestConfig);
     
@@ -19,7 +20,7 @@ Request.MoveCardRequestParameters {
         destinyColumn,
         cardData
     };
-
+    console.log(data)
     const parameters: Request.MoveCardRequestParameters = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -30,18 +31,19 @@ Request.MoveCardRequestParameters {
 }
 
 async function doMovePersonalCardRequest(requestConfig: Request.MoveCardRequestParameters):
-Promise<number> {
+Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse }> {
     const response = await fetch(MOVE_PERSONAL_CARD_ENDPOINT, requestConfig);
     const { status } = response;
+    const responseObject: Response.MoveCardFromPersonalResponse = await response.json();
 
-    return status;
+    return { status, responseObject };
 }
 
-export function getPersonalCardsWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Data.PersonalData {
+export function getPersonalCardsWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.PersonalData {
     const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
     const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
-
+    currentCardDataToMove.id = newHash;
     deepCopy![currentColumn].cards.splice(cardIndex, 1);
     deepCopy![destinyColumn].cards.push(currentCardDataToMove as Data.CardData);
 
@@ -56,7 +58,7 @@ export function getAppropriateMovePersonalCardStatusMessage(httpStatus: number) 
     let isAuthorized = true;
 
     if (httpStatus === 200) {
-        statusMessage = "deletedWithSuccess";
+        statusMessage = "movedWithSuccess";
         statusType = "success";
         success = true;
     }

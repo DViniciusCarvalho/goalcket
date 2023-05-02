@@ -103,7 +103,7 @@ class ClientOperations:
         delete_card_from_current_column_query = {
             "$pull": {
                 f"rooms.personal.{card_current_column}.cards": { 
-                    "id": card_id
+                    "id": card_id 
                 }
             }
         }
