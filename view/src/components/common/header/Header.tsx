@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import headerStyle from "../../../styles/common/header/Header.module.css";
 import Menu from "./Menu";
-import { debounce } from "@/lib/debounce";
+import { debounce } from "@/lib/utils";
 import { Props } from "@/types/props";
+
 
 export default function Header({ needChangeBackground, headerPage }: Props.HeaderProps){
 

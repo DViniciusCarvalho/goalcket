@@ -5,6 +5,7 @@ import MainContent from "@/components/homepage/main/MainContent";
 import Footer from "@/components/common/footer/Footer";
 import { Props } from "@/types/props";
 
+
 export default function Home() {
 
     const homepageHeaderProps: Props.HeaderProps = {

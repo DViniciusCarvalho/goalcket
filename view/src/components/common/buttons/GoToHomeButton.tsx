@@ -1,6 +1,7 @@
 import goToHomeStyle from "@/styles/common/buttons/GoToHomeButton.module.css";
 import Link from "next/link";
 
+
 export default function GoToHomeButton({ }){
     return(
         <Link href={"/"} className={goToHomeStyle.go__to__home}>

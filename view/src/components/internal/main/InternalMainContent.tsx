@@ -19,29 +19,13 @@ import PersonalContent from "@/components/internal/main/content/PersonalContent"
 import GroupContent from "@/components/internal/main/content/GroupContent";
 import ErrorContent from "@/components/internal/main/content/ErrorContent";
 
-import { 
-    JOIN_GROUP_ENDPOINT, 
-    CREATE_GROUP_ENDPOINT,
-    ADD_CARD_TO_PERSONAL_ENDPOINT,
-    ADD_CARD_TO_GROUP_ENDPOINT
-} from "@/lib/endpoints";
-import { 
-    getCreateGroupRequestConfig, 
-    getJoinGroupRequestConfig, 
-    getAddCardPersonalRequestConfig,
-    getAddCardGroupRequestConfig
-} from "@/lib/requests";
-import { 
-    getAppropriateCreateGroupStatusMessage, 
-    getAppropriateJoinGroupStatusMessage, 
-    getAppropriateAddCardPersonalStatusMessage, 
-    getAppropriateAddCardGroupStatusMessage 
-} from "@/lib/validation";
+import { joinGroup, getAppropriateJoinGroupStatusMessage } from "@/actions/joinGroup";
+import { createGroup, getAppropriateCreateGroupStatusMessage } from "@/actions/createGroup";
+import { addCardToPersonal, getAppropriateAddCardPersonalStatusMessage } from "@/actions/addCardToPersonal";
+import { addCardToGroup, getAppropriateAddCardToGroupStatusMessage } from "@/actions/addCardToGroup";
 
 import { Data } from "@/types/data";
 import { Props } from "@/types/props";
-import { Request } from "@/types/requests";
-import { Response } from "@/types/responses";
 
 
 export const InternalMainContentContext = createContext<any>(null);
@@ -59,7 +43,7 @@ export default function InternalMainContent(){
     const hashTextRef = useRef(null);
 
     const { 
-        name, 
+        username, 
         personal, 
         createJoinGroupPopUpVisibility, 
         hideFirstLayerOverlayAndPopUps,
@@ -147,71 +131,35 @@ export default function InternalMainContent(){
     };
 
 
-    function searchMatches() {
+    function searchMatches(): void {
         const searchInput = searchInputRef.current! as HTMLInputElement;
         const searchValue = searchInput.value;
         setSearchCardFilterString(() => searchValue);
     }
 
-    function handleJoinClick() {
+    function handleJoinClick(): void {
         const firstInputValue = firstInputElement.value;
         const secondInputValue = secondInputElement.value;
 
         if (popUpType === "create") {
             setPopUpType(() => "join");
             clearInputs();
-            return 0;
         }
-
-        const requestConfig = getJoinGroupRequestConfig(name, firstInputValue, secondInputValue);
-        doJoinGroupRequest(requestConfig);
-    }
-
-    async function doJoinGroupRequest(requestConfig: Request.JoinGroupRequestParameters){
-        const response = await fetch(JOIN_GROUP_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        const responseObject: Response.JoinGroupResponse = await response.json();
-        requestController.abort();
-        handleJoinGroupResponse(status, responseObject);
-    }
-
-    function handleJoinGroupResponse(httpStatus: number, response: Response.JoinGroupResponse){
-        const { name, hash } = response;
-        const { statusMessage, statusType, isAuthorized, success } = getAppropriateJoinGroupStatusMessage(httpStatus);
-
-        if (!isAuthorized) router.push("/login");
-
-        showStatusPopUp(statusMessage, statusType);
-        clearInputs();
-
-        if (success) updateOptions(name, hash);
-    }
-
-    function handleCreateClick() {
-        const groupName = firstInputElement.value;
-        const groupPassword = secondInputElement.value;
-
-        if (popUpType === "join") {
-            setPopUpType(() => "create");
-            clearInputs();
-            return 0;
+        else {
+            handleJoinGroup(firstInputValue, secondInputValue);
         }
-
-        const requestConfig = getCreateGroupRequestConfig(name, groupName, groupPassword);
-        doCreateGroupRequest(requestConfig);
     }
 
-    async function doCreateGroupRequest(requestConfig: Request.CreateGroupRequestParameters){
-        const response = await fetch(CREATE_GROUP_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        const responseObject: Response.CreateGroupResponse = await response.json();
-        requestController.abort();
-        handleCreateGroupResponse(status, responseObject);
-    }
+    async function handleJoinGroup(groupHash: string, groupPassword: string) {
+        const { status, responseObject } = await joinGroup(username, groupHash, groupPassword);
+        const { name, hash } = responseObject;
 
-    function handleCreateGroupResponse(httpStatus: number, response: Response.CreateGroupResponse) {
-        const { name, hash } = response;
-        const { statusMessage, statusType, isAuthorized, success } = getAppropriateCreateGroupStatusMessage(httpStatus);
+        const { 
+            statusMessage, 
+            statusType, 
+            isAuthorized, 
+            success 
+        } = getAppropriateJoinGroupStatusMessage(status);
 
         if (!isAuthorized) {
             router.push("/login");
@@ -219,12 +167,49 @@ export default function InternalMainContent(){
         else {
             showStatusPopUp(statusMessage, statusType);
             clearInputs();
-    
-            if (success) updateOptions(name, hash);
+            if (success) {
+                updateOptions(name, hash);
+            }
         }
     }
 
-    function addCard(){
+    function handleCreateClick(): void {
+        const groupName = firstInputElement.value;
+        const groupPassword = secondInputElement.value;
+
+        if (popUpType === "join") {
+            setPopUpType(() => "create");
+            clearInputs();
+        }
+        else {
+            handleCreateGroup(username, groupName, groupPassword);
+        }
+    }
+
+    async function handleCreateGroup(username: string, groupName: string, groupPassword: string) {
+        const { status, responseObject } = await createGroup(username, groupName, groupPassword);
+        const { name, hash } = responseObject;
+
+        const { 
+            statusMessage, 
+            statusType, 
+            isAuthorized, 
+            success 
+        } = getAppropriateCreateGroupStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            clearInputs();
+            if (success) {
+                updateOptions(name, hash);
+            }
+        }
+    }
+
+    function addCard(): void {
         const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
         const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
         const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;
@@ -234,37 +219,25 @@ export default function InternalMainContent(){
         const contentValue = contentElement.value;
 
         if (currentRoom === "personal") {
-            const requestConfig = getAddCardPersonalRequestConfig(name, destinationValue, priorityValue, contentValue);
-            doAddCardPersonalRequest(requestConfig);
+            handleAddCardToPersonal(username, destinationValue, priorityValue, contentValue);
         }
         else {
             const groupHash = hashTextRef.current! as HTMLParagraphElement;
             const groupHashValue = groupHash.innerText;
-            const requestConfig = getAddCardGroupRequestConfig(groupHashValue, destinationValue, priorityValue, contentValue);
-            doAddCardGroupRequest(requestConfig);
+            handleAddCardToGroup(username, groupHashValue, destinationValue, priorityValue, contentValue);
         }
     }
 
-    async function doAddCardPersonalRequest(requestConfig: Request.AddCardRequestParameters){
-        const response = await fetch(ADD_CARD_TO_PERSONAL_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        const responseObject: Response.AddCardToPersonalResponse = await response.json();
-        requestController.abort();
-        handleAddCardToPersonalResponse(status, responseObject);
-    }
+    async function handleAddCardToPersonal(username: string, destination: string, priority: string, content: string) {
+        const { status, responseObject } = await addCardToPersonal(username, destination, priority, content);
+        const { timestamp, id } = responseObject;
 
-    function handleAddCardToPersonalResponse(httpStatus: number, response: Response.AddCardToPersonalResponse) {
-        const { timestamp, id } = response;
-
-        const { statusMessage, statusType, isAuthorized, success } = getAppropriateAddCardPersonalStatusMessage(httpStatus);
-
-        const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
-        const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
-        const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;
-
-        const destinationValue = destinationElement.value;
-        const priorityValue = priorityElement.value;
-        const contentValue = contentElement.value;
+        const {
+            statusMessage, 
+            statusType, 
+            isAuthorized, 
+            success 
+        } = getAppropriateAddCardPersonalStatusMessage(status);
 
         if (!isAuthorized) {
             router.push("/login");
@@ -272,46 +245,41 @@ export default function InternalMainContent(){
         else {
             showStatusPopUp(statusMessage, statusType);
             clearAddCardInputs();
-    
-            if (success) updatePersonalCards(name, timestamp, id, destinationValue, priorityValue, contentValue);
+            if (success) {
+                updatePersonalCards(username, timestamp, id, destination, priority, content);
+            }
         }
     }
 
-    async function doAddCardGroupRequest(requestConfig: Request.AddCardRequestParameters){
-        const response = await fetch(ADD_CARD_TO_GROUP_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        const responseObject: Response.AddCardToGroupResponse = await response.json();
-        requestController.abort();
-        handleAddCardToGroupResponse(status, responseObject);
+    async function handleAddCardToGroup(username: string, groupHash: string, destination: string, priority: string, content: string) {
+        const { status, responseObject } = await addCardToGroup(groupHash, destination, priority, content);
+        const { timestamp, id } = responseObject;
+
+        const { 
+            statusMessage, 
+            statusType, 
+            isAuthorized, 
+            success 
+        } = getAppropriateAddCardToGroupStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            clearAddCardInputs();
+            if (success) {
+                updateGroupCards(username, timestamp, id, destination, priority, content);
+            }
+        }
     }
 
-    function handleAddCardToGroupResponse(httpStatus: number, response: Response.AddCardToGroupResponse) {
-        const { timestamp, id } = response;
-
-        const { statusMessage, statusType, isAuthorized, success } = getAppropriateAddCardGroupStatusMessage(httpStatus);
-
-        const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
-        const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
-        const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;
-
-        const destinationValue = destinationElement.value;
-        const priorityValue = priorityElement.value;
-        const contentValue = contentElement.value;
-
-        if (!isAuthorized) router.push("/login");
-
-        showStatusPopUp(statusMessage, statusType);
-        clearAddCardInputs();
-
-        if (success) updateGroupCards(name, timestamp, id, destinationValue, priorityValue, contentValue);
-    }
-
-    function clearInputs(){
+    function clearInputs(): void {
         firstInputElement.value = "";
         secondInputElement.value = "";
     }
 
-    function clearAddCardInputs() {
+    function clearAddCardInputs(): void {
         const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
         const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
         const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;

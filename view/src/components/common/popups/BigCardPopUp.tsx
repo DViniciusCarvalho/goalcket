@@ -1,12 +1,19 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
+
 import bigCardStyle from "@/styles/common/popups/BigCardPopUp.module.css";
+
 import DeleteIcon from "../../../../public/assets/delete.png";
 import MoveIcon from "../../../../public/assets/move.png";
 import SaveIcon from "../../../../public/assets/save.png";
-import Image from "next/image";
+
 import { InternalPageContext } from "@/pages/internal";
+
+import Image from "next/image";
+
 import { formatDate, getPriorityBackground } from "@/lib/utils";
+
 import { Props } from "@/types/props";
+
 
 export default function BigCard({ content, priority, timestamp, id, creator, column }: Props.BigCardProps) {
 

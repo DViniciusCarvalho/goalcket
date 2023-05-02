@@ -4,6 +4,7 @@ import SearchIcon from "../../../../../public/assets/search.png";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
 import Image from "next/image";
 
+
 export default function SearchCard() {
 
     const { searchMatches, searchInputRef } = useContext(InternalMainContentContext);

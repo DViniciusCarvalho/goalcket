@@ -4,6 +4,7 @@ import WarningIcon from "../../../../public/assets/attention.png";
 import Image from "next/image";
 import { InternalPageContext } from "@/pages/internal";
 
+
 export default function DeleteCardPopUp() {
 
     const { 

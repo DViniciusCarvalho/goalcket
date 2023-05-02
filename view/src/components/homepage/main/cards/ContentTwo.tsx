@@ -4,6 +4,7 @@ import Profit from "../../../../../public/assets/profits.png";
 import Image from "next/image";
 import { Props } from "@/types/props";
 
+
 export default function ContentTwo({ gridArea }: Props.CardProps){
     return (
         <section className={`${cardStyles.card} ${cardStyles.card__two}`} style={{gridArea: gridArea}}>

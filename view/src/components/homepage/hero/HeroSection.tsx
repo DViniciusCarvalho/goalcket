@@ -2,6 +2,7 @@ import React from "react";
 import heroSectionStyles from "@/styles/homepage/hero/HeroSection.module.css";
 import { useRouter } from "next/router";
 
+
 export default function HeroSection(){
 
     const router = useRouter();

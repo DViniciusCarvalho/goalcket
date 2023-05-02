@@ -6,7 +6,7 @@ import { Data } from "@/types/data";
 
 export default function InternalHeader(){
 
-    const { name, groups, changePopUpToVisible, handleChangeRoom } = useContext(InternalPageContext);
+    const { username, groups, changePopUpToVisible, handleChangeRoom } = useContext(InternalPageContext);
 
     const [ userGroups, setUserGroups ] = useState<Data.IGroup[]>([]);
 
@@ -28,7 +28,7 @@ export default function InternalHeader(){
     return (
         <header className={headerStyles.internal__header}>
             <div className={headerStyles.user__area}>
-                Hi, {name}!
+                Hi, {username}!
             </div>
             <div className={headerStyles.nav__area}>
                 <select onChange={changeRoom} className={headerStyles.group__select}>

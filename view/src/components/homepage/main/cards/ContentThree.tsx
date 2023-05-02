@@ -4,6 +4,7 @@ import ClipBoard from "../../../../../public/assets/clipboards.png";
 import Image from "next/image";
 import { Props } from "@/types/props";
 
+
 export default function ContentFour({ gridArea }: Props.CardProps){
     return (
         <section className={`${cardStyles.card} ${cardStyles.card__three}`} style={{gridArea: gridArea}}>

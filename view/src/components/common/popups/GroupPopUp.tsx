@@ -3,6 +3,7 @@ import groupPopUpStyle from "@/styles/common/popups/GroupPopUp.module.css";
 import Image from "next/image";
 import { Props } from "@/types/props";
 
+
 export default function GroupPopUp({ 
     firstImage, 
     secondImage, 

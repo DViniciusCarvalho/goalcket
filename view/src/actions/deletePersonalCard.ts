@@ -49,4 +49,29 @@ export function getPersonalCardsWithoutDeletedCard(personalData: Data.IPersonal,
     return deepCopy;
 }
 
+export function getAppropriateDeletePersonalCardStatusMessage(httpStatus: number) {
+    let statusMessage = "";
+    let statusType = "error";
+
+    let success = false;
+    let isAuthorized = true;
+
+    if (httpStatus === 200) {
+        statusMessage = "deletedWithSuccess";
+        statusType = "success";
+        success = true;
+    }
+    else if (httpStatus === 403) {
+        isAuthorized = false;
+    }
+    else if (httpStatus === 404) {
+        statusMessage = "cardNotFound";
+    }
+    else if (httpStatus === 500) {
+        statusMessage = "serverError";
+    }
+
+    return { statusMessage, statusType, success, isAuthorized };
+}
+
 

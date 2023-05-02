@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 
 import logonStyle from "@/styles/logon/Logon.module.css";
 
@@ -10,35 +10,29 @@ import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
 import Button from "@/components/common/buttons/Button";
 
-import { delay } from "@/lib/delay";
-import { LOGON_USER_ENDPOINT } from "@/lib/endpoints";
-import { getLogonRequestConfig } from "@/lib/requests";
-import { getAppropriateLogonUserStatusMessage } from "@/lib/validation";
+import { delay } from "@/lib/utils";
+
+import { logonUser, getAppropriateLogonUserStatusMessage } from "@/actions/logonUser";
 
 import { Props } from "@/types/props";
-import { Request } from "@/types/requests";
-import { Response } from "@/types/responses";
-
 
 
 export default function logonComponent(){
     
-    const [ nameValue, setNameValue ] = useState<string>("");
-    const [ emailValue, setEmailValue ] = useState<string>("");
-    const [ passwordValue, setPasswordValue ] = useState<string>("");
+    const [ nameValue, setNameValue ] = useState("");
+    const [ emailValue, setEmailValue ] = useState("");
+    const [ passwordValue, setPasswordValue ] = useState("");
 
-    const [ popUpVisibility, setPopUpVisibility ] = useState<string>("invisible");
-    const [ loadClass, setLoadClass ] = useState<string>("");
-    const [ httpStatusContent, setHttpStatusContent ] = useState<string>("");
-    const [ requestStatus, setRequestStatus ] = useState<string>("error");
+    const [ loadClass, setLoadClass ] = useState("");
 
-    const requestController = new AbortController();
-    const { signal } = requestController;
-    
+    const [ popUpVisibility, setPopUpVisibility ] = useState("invisible");
+    const [ popUpStatusContent, setpopUpStatusContent ] = useState("");
+    const [ popUpStatusType, setPopUpStatusType ] = useState("error");
+
     const statusPopUpProps: Props.StatusPopUpProps = {
-        content: httpStatusContent,
+        content: popUpStatusContent,
         visibilityClass: popUpVisibility,
-        status: requestStatus
+        status: popUpStatusType
     };
 
     const nameInputProps: Props.InputProps = {
@@ -82,40 +76,32 @@ export default function logonComponent(){
         setPasswordValue(event.target.value);
     }
 
-    function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>): void {
+    async function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
         event.preventDefault();
-        const logonRequestParameters = getLogonRequestConfig(nameValue, emailValue, passwordValue);
-        doLogonRequest(logonRequestParameters);
-    }
 
-    async function doLogonRequest(requestConfig: Request.LogonRequestParameters) {
-        const response = await fetch(LOGON_USER_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        requestController.abort();
-        handleLogonResponse(status);
-    }
-
-    async function handleLogonResponse(httpStatus: number) {
-        const { statusMessage, statusType } = getAppropriateLogonUserStatusMessage(httpStatus);
+        const status = await logonUser(nameValue, emailValue, passwordValue);
+        const { 
+            statusMessage, 
+            statusType 
+        } = getAppropriateLogonUserStatusMessage(status);
 
         showPopUp(statusMessage, statusType);
         clearInputs();
     }
 
     async function showPopUp(statusMessage: string, statusType: string) {
-        setRequestStatus(statusType);
-        setHttpStatusContent(statusMessage);
-        setPopUpVisibility("visible");
+        setPopUpStatusType(() => statusType);
+        setpopUpStatusContent(() => statusMessage);
+        setPopUpVisibility(() => "visible");
         await delay(5000);
-        setPopUpVisibility("invisible");
+        setPopUpVisibility(() => "invisible");
     }
 
     function clearInputs(): void {
-        setNameValue("");
-        setEmailValue("");
-        setPasswordValue("");
+        setNameValue(() => "");
+        setEmailValue(() => "");
+        setPasswordValue(() => "");
     }
-
 
     return (
         <div className={`${logonStyle.form__background} ${logonStyle[loadClass]}`}>

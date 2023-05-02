@@ -4,6 +4,7 @@ import Productivity from "../../../../../public/assets/productivity.png";
 import Image from "next/image";
 import { Props } from "@/types/props";
 
+
 export default function ContentOne({ gridArea }: Props.CardProps){
 
     return (

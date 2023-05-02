@@ -10,32 +10,27 @@ import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
 import Button from "../common/buttons/Button";
 
-import { delay } from "@/lib/delay";
-import { LOGIN_USER_ENDPOINT } from "@/lib/endpoints";
-import { getLoginRequestConfig } from "@/lib/requests";
+import { delay } from "@/lib/utils";
+
+import { loginUser, getAppropriateLoginUserStatusMessage } from "@/actions/loginUser";
 
 import { Props } from "@/types/props";
-import { Request } from "@/types/requests";
-import { Response } from "@/types/responses";
-import { getAppropriateLoginUserStatusMessage } from "@/lib/validation";
 
 
 export default function LoginComponent(){
 
     const router = useRouter();
 
-    const [ emailValue, setEmailValue ] = useState<string>("");
-    const [ passwordValue, setPasswordValue ] = useState<string>("");
+    const [ emailValue, setEmailValue ] = useState("");
+    const [ passwordValue, setPasswordValue ] = useState("");
 
-    const [ loadClass, setLoadClass ] = useState<string>("");
-    const [ popUpVisibility, setPopUpVisibility ] = useState<string>("invisible");
-    const [ httpStatusContent, setHttpStatusContent ] = useState<string>("");
-
-    const requestController = new AbortController();
-    const { signal } = requestController;
+    const [ loadClass, setLoadClass ] = useState("");
+    
+    const [ popUpVisibility, setPopUpVisibility ] = useState("invisible");
+    const [ popUpStatusContent, setpopUpStatusContent ] = useState("");
 
     const popUpProps: Props.StatusPopUpProps = {
-        content: httpStatusContent,
+        content: popUpStatusContent,
         visibilityClass: popUpVisibility,
         status: "error"
     };
@@ -73,23 +68,13 @@ export default function LoginComponent(){
         setPasswordValue(event.target.value);
     }
 
-    function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>): void{
+    async function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
         event.preventDefault();
-        const loginRequestParameters = getLoginRequestConfig(emailValue, passwordValue);
-        doLoginRequest(loginRequestParameters);
-    }
 
-    async function doLoginRequest(requestConfig: Request.LoginRequestParameters) {
-        const response = await fetch(LOGIN_USER_ENDPOINT, { ...requestConfig, signal: signal });
-        const { status } = response;
-        const responseObjectfied: Response.LoginResponse = await response.json();
-        requestController.abort();
-        handleLoginResponse(status, responseObjectfied);
-    }
+        const { status, responseObject } = await loginUser(emailValue, passwordValue);
 
-    function handleLoginResponse(httpStatus: number, response: Response.LoginResponse): void {
-        const { token } = response;
-        const { statusMessage, isAuthenticated } = getAppropriateLoginUserStatusMessage(httpStatus);
+        const { token } = responseObject;
+        const { statusMessage, isAuthenticated } = getAppropriateLoginUserStatusMessage(status);
 
         if (isAuthenticated) {
             localStorage.setItem("token", token);
@@ -102,15 +87,15 @@ export default function LoginComponent(){
     }
 
     async function showPopUp(statusMessage: string) {
-        setHttpStatusContent(statusMessage);
-        setPopUpVisibility("visible");
+        setpopUpStatusContent(() => statusMessage);
+        setPopUpVisibility(() => "visible");
         await delay(5000);
-        setPopUpVisibility("invisible");
+        setPopUpVisibility(() => "invisible");
     }
 
     function clearInputs(): void {
-        setEmailValue("");
-        setPasswordValue("");
+        setEmailValue(() => "");
+        setPasswordValue(() => "");
     }
 
     return (

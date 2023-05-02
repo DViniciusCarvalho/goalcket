@@ -4,6 +4,7 @@ import Description from "@/components/internal/main/columns/Description";
 import CardsArea from "@/components/internal/main/card/CardsArea";
 import { Props } from "@/types/props";
 
+
 export default function Doing({ color, cards, isGroup }: Props.DoingProps){
 
     const doingDescriptionProps: Props.DescriptionProps = {

@@ -4,6 +4,7 @@ import menuStyles from "../../../styles/common/header/Menu.module.css";
 import Link from "next/link";
 import { Props } from "@/types/props";
 
+
 export default function Menu({ headerPosition }: Props.MenuProps){
 
     const router = useRouter();

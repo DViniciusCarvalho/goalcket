@@ -4,6 +4,7 @@ import { InternalMainContentContext } from "@/components/internal/main/InternalM
 import Card from "@/components/internal/main/card/Card";
 import { Props } from "@/types/props";
 
+
 export default function CardsArea({ column, cards }: Props.CardsAreaProps){
 
     const { searchCardFilterString } = useContext(InternalMainContentContext);

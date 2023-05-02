@@ -3,6 +3,7 @@ import Image from "next/image";
 import UserImage from "../../../../public/assets/user.png";
 import { Props } from "@/types/props";
 
+
 export default function NameInput({ changeValue, value }: Props.InputProps){
     return(
         <div className={inputStyle.name__block}>

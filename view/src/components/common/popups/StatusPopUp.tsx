@@ -1,9 +1,9 @@
 import React from "react";
 import statusPopUpstyle from "@/styles/common/popups/StatusPopUp.module.css";
-import { Props } from "@/types/props";
 import ErrorIcon from "../../../../public/assets/warning.png";
 import SuccessIcon from "../../../../public/assets/successful.png";
 import Image from "next/image";
+import { Props } from "@/types/props";
  
 
 export default function StatusPopUp({ content, visibilityClass, status }: Props.StatusPopUpProps) {

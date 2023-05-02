@@ -8,23 +8,43 @@ import SecondLayerOverlay from "@/components/common/overlay/SecondLayerOverlay";
 import InternalHeader from "@/components/internal/header/InternalHeader";
 import InternalMainContent from "@/components/internal/main/InternalMainContent";
 
-import { delay } from "@/lib/delay";
-import { 
-    getAppropriateGetGroupStatusMessage, 
+import { delay } from "@/lib/utils";
+import {  
     getAppropriatePopUpsVisibility, 
     getAppropriateBigCardOptionPopUpsVisibility,
-    getAppropriateDeletePersonalCardStatusMessage,
-    getAppropriateDeleteGroupCardStatusMessage,
-    getAppropriateMovePersonalCardStatusMessage,
-    getAppropriateMoveGroupCardStatusMessage
 } from "@/lib/validation";
 
 import { fetchUserInitialData } from "@/actions/fetchInitialData";
-import { getGroupContent } from "@/actions/getGroupContent";
-import { deletePersonalCard, getPersonalCardsWithoutDeletedCard } from "@/actions/deletePersonalCard";
-import { deleteGroupCard, getGroupCardsWithoutDeletedCard } from "@/actions/deleteGroupCard";
-import { getPersonalCardsWithMovedCard, movePersonalCard } from "@/actions/movePersonalCard";
-import { getGroupCardsWithMovedCard, moveGroupCard } from "@/actions/moveGroupCard";
+
+import { 
+    getGroupContent, 
+    getAppropriateGetGroupStatusMessage 
+} from "@/actions/getGroupContent";
+
+import { 
+    deletePersonalCard, 
+    getPersonalCardsWithoutDeletedCard, 
+    getAppropriateDeletePersonalCardStatusMessage 
+} from "@/actions/deletePersonalCard";
+
+import { 
+    deleteGroupCard, 
+    getGroupCardsWithoutDeletedCard, 
+    getAppropriateDeleteGroupCardStatusMessage 
+} from "@/actions/deleteGroupCard";
+
+import { 
+    getPersonalCardsWithMovedCard, 
+    movePersonalCard, 
+    getAppropriateMovePersonalCardStatusMessage 
+} from "@/actions/movePersonalCard";
+
+import { 
+    getGroupCardsWithMovedCard, 
+    moveGroupCard, 
+    getAppropriateMoveGroupCardStatusMessage 
+} from "@/actions/moveGroupCard";
+
 import { changePersonalCardContent } from "@/actions/changePersonalCardContent";
 import { changeGroupCardContent } from "@/actions/changeGroupCardContent";
 
@@ -37,7 +57,7 @@ export default function Internal(){
 
     const router = useRouter();
 
-    const [ name, setName ] = useState("");
+    const [ username, setUsername ] = useState("");
     const [ personal, setPersonal ] = useState<Data.PersonalData>(null);
     const [ groups, setGroups ] = useState<Data.GroupList>(null);
     const [ loaded, setLoaded ] = useState(false);
@@ -69,7 +89,7 @@ export default function Internal(){
     const [ currentCardDataToMove, setCurrentCardDataToMove ] = useState({});
 
     const contextValues = {
-        name,
+        username,
         personal,
         groups,
         addCardPopUpVisibility,
@@ -133,7 +153,7 @@ export default function Internal(){
         const userGroups = rooms.groups;
 
         if (status === 200) {
-            setName(() => name);
+            setUsername(() => name);
             setPersonal(() => personalData);
             setGroups(() => userGroups);
             setLoaded(() => true);
@@ -154,7 +174,12 @@ export default function Internal(){
     async function handleGetGroupContent(roomId: string) {
         const { status, responseObject } = await getGroupContent(roomId);
         const groupData = responseObject.group;
-        const { statusMessage, success, canLoadData } = getAppropriateGetGroupStatusMessage(status);
+
+        const { 
+            statusMessage, 
+            success, 
+            canLoadData 
+        } = getAppropriateGetGroupStatusMessage(status);
 
         if (success && canLoadData) loadGroupData(groupData);
         
@@ -232,7 +257,10 @@ export default function Internal(){
     }
 
     async function handleDeletePersonalCard() {
-        const status = await deletePersonalCard(currentCardIdToDelete, currentColumn);
+        const status = await deletePersonalCard(
+            currentCardIdToDelete, 
+            currentColumn
+        );
 
         const { 
             statusMessage, 
@@ -252,7 +280,10 @@ export default function Internal(){
 
     function removeCardFromPersonalDOM(): void {
         const personalData = personal as Data.IPersonal;
-        const personalCardsWithoutDeleteCard = getPersonalCardsWithoutDeletedCard(personalData, currentColumn);
+        const personalCardsWithoutDeleteCard = getPersonalCardsWithoutDeletedCard(
+            personalData, 
+            currentColumn
+        );
 
         setPersonal(() => personalCardsWithoutDeleteCard);
         hideFirstLayerOverlayAndPopUps();
@@ -279,7 +310,10 @@ export default function Internal(){
     }
 
     function removeCardFromGroupDOM(): void {
-        const groupCardsWithoutDeleteCard = getGroupCardsWithoutDeletedCard(groupData as Data.GroupData, currentColumn);
+        const groupCardsWithoutDeleteCard = getGroupCardsWithoutDeletedCard(
+            groupData as Data.GroupData, 
+            currentColumn
+        );
 
         setGroupData(() => groupCardsWithoutDeleteCard);
         hideFirstLayerOverlayAndPopUps();
@@ -380,7 +414,7 @@ export default function Internal(){
 
     function handleSaveCard(id: string, oldContent: string, currentContent: string) {
         if (oldContent === currentContent) {
-            console.log("igual");
+            return;
         }
         else if (currentRoom === "personal") {
             handleChangePersonalCardContent(id, currentColumn, currentContent);
@@ -447,9 +481,9 @@ export default function Internal(){
         } = getAppropriatePopUpsVisibility(identifierString);
 
         setPopUpType(() => "join");
-        setCreateJoinGroupPopUpVisibility(() => createJoinGroupVisibility as Data.CreateJoinGroupPopUpVisibility);
-        setAddCardPopUpVisibility(() => addCardVisibility as Data.AddCardPopUpVisibility);
-        setBigCardPopUpVisibility(() => bigCardVisibility as Data.BigCardPopUpVisibility);
+        setCreateJoinGroupPopUpVisibility(() => createJoinGroupVisibility);
+        setAddCardPopUpVisibility(() => addCardVisibility);
+        setBigCardPopUpVisibility(() => bigCardVisibility);
         setFirstLayerOverlayVisibility(() => "visible");
     }
 

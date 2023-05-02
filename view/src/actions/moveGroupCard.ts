@@ -55,3 +55,28 @@ export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCar
 
     return deepCopy;
 }
+
+export function getAppropriateMoveGroupCardStatusMessage(httpStatus: number) {
+    let statusMessage = "";
+    let statusType = "error";
+
+    let success = false;
+    let isAuthorized = true;
+
+    if (httpStatus === 200) {
+        statusMessage = "deletedWithSuccess";
+        statusType = "success";
+        success = true;
+    }
+    else if (httpStatus === 400) {
+        statusMessage = "noColumnSpecified";
+    }
+    else if (httpStatus === 403) {
+        isAuthorized = false;
+    }
+    else if (httpStatus === 500) {
+        statusMessage = "serverError";
+    }
+
+    return { statusMessage, statusType, success, isAuthorized };
+}

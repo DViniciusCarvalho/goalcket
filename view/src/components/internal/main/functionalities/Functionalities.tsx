@@ -1,13 +1,19 @@
 import React, { useContext } from "react";
+
 import functStyle from "@/styles/internal/main/functionalities/Functionalities.module.css";
+
 import ClipIcon from "../../../../../public/assets/clip.png";
 import AddIcon from "../../../../../public/assets/add.png";
+
 import { InternalPageContext } from "@/pages/internal";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
+
 import Image from "next/image";
 import SearchCard from "@/components/internal/main/functionalities/SearchCard";
 import AddCard from "@/components/internal/main/functionalities/AddCard";
+
 import { Props } from "@/types/props";
+
 
 export default function Functionalities({ isGroup }: Props.FunctionalitiesProps){
 

@@ -4,6 +4,7 @@ import SadCatIcon from "../../../../../public/assets/sad_cat.png";
 import Image from "next/image";
 import { Props } from "@/types/props";
 
+
 export default function Error({ getGroupRequestStatusMessage }: Props.ErrorProps) {
 
     const errorMessage: {[key: string]: { statusCode: number, message: string}} = {

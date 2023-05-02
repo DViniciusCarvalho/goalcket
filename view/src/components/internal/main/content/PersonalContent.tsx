@@ -1,9 +1,12 @@
 import React from "react";
+
 import mainStyles from "@/styles/internal/main/Main.module.css";
+
 import ToDo from "@/components/internal/main/columns/ToDo";
 import Doing from "@/components/internal/main/columns/Doing";
 import Done from "@/components/internal/main/columns/Done";
 import Functionalities from "@/components/internal/main/functionalities/Functionalities";
+
 
 export default function Personal({ todo, doing, done }: any) {
     

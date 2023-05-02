@@ -1,6 +1,7 @@
 import React from "react";
 import aboutStyles from "../../styles/about/About.module.css";
 
+
 export default function AboutMainContent(){
     return(
         <main className={aboutStyles.main__content__block}>

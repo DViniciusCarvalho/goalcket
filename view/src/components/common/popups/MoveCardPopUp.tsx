@@ -1,10 +1,15 @@
 import React, { useContext, useState } from "react";
+
 import moveCardPopUpStyle from "@/styles/common/popups/MoveCardPopUp.module.css";
+
 import ToDoIcon from "../../../../public/assets/todolist.png";
 import DoingIcon from "../../../../public/assets/doinglist.png";
 import DoneIcon from "../../../../public/assets/donelist.png";
-import Image, { StaticImageData } from "next/image";
+
 import { InternalPageContext } from "@/pages/internal";
+
+import Image, { StaticImageData } from "next/image";
+
 
 export default function MoveCardPopUp() {
     

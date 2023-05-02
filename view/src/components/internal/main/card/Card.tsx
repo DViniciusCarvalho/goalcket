@@ -1,8 +1,9 @@
 import React, { useContext, useRef } from "react";
 import cardStyle from "@/styles/internal/main/cards/Card.module.css";
+import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
 import { abbreviate, formatDate, getPriorityBackground } from "@/lib/utils";
 import { Data } from "@/types/data";
-import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
+
 
 export default function Card({ content, priority, timestamp, id, creator }: Data.ICard){
 

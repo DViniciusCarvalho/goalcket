@@ -2,10 +2,6 @@ import { GET_GROUP_CONTENT_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-const requestController = new AbortController();
-const { signal } = requestController;
-
-
 export function getGroupContent(roomId: string) {
     const requestConfig = getGroupContentRequestConfig(roomId);
     const promisedResponseData = doGetGroupContentRequest(requestConfig);
@@ -28,23 +24,37 @@ function getGroupContentRequestConfig (roomId: string) {
     return requestConfig;
 }
 
-
 async function doGetGroupContentRequest(requestConfig: Request.GetGroupContentRequestParameters){
-    const response = await fetch(GET_GROUP_CONTENT_ENDPOINT, { ...requestConfig, signal: signal });
+    const response = await fetch(GET_GROUP_CONTENT_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.GetGroupContentResponse = await response.json();
-
-    requestController.abort();
 
     return { status, responseObject };
 }
 
-// function handleGetGroupContentResponse(httpStatus: number, response: Response.GetGroupContentResponse): void {
-//     const { group } = response;
-//     const { statusMessage, success, canLoadData } = getAppropriateGetGroupStatusMessage(httpStatus);
+export function getAppropriateGetGroupStatusMessage(httpStatus: number) {
+    let statusMessage = "";
 
-//     if (success && canLoadData) loadGroupData(group);
-    
-//     setGetGroupRequestStatusMessage(() => statusMessage);
-//     setGetGroupWithSuccess(() => success);
-// }
+    let success = false;
+
+    let canLoadData = false;
+
+    if (httpStatus === 200){
+        success = true;
+        canLoadData = true;
+    }
+    else if (httpStatus === 400){
+        statusMessage = "badRequest";
+    }
+    else if (httpStatus === 403){
+        statusMessage = "forbidden";
+    }
+    else if (httpStatus === 404){
+        statusMessage = "notFound";
+    }
+    else if (httpStatus === 500){
+        statusMessage = "internalServerError";
+    }
+
+    return { statusMessage, success, canLoadData };
+}

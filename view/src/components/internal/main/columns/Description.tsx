@@ -6,6 +6,7 @@ import { changeGroupColumnColor } from "@/actions/changeGroupColumnColor";
 import { changePersonalColumnColor } from "@/actions/changePersonalColumnColor";
 import { Props } from "@/types/props";
 
+
 export default function Description({ area, color, isGroup }: Props.DescriptionProps) {
 
     const router = useRouter();
