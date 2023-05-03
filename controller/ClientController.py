@@ -22,7 +22,7 @@ class ClientController:
 
     @staticmethod
     @router.post("/logon-user")
-    async def logon(request: Request):
+    async def logon(request: Request) -> JSONResponse:
         data = await request.json()  
         name = data["name"]
         email = data["email"]
@@ -41,7 +41,7 @@ class ClientController:
 
     @staticmethod
     @router.post("/login-user")
-    async def login(request: Request):
+    async def login(request: Request) -> JSONResponse:
         data = await request.json()
         email = data["email"]
         password = data["password"]
@@ -60,7 +60,7 @@ class ClientController:
     
     @staticmethod
     @router.post("/internal-page")
-    async def internal(request: Request):
+    async def internal(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)

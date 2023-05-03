@@ -68,6 +68,7 @@ export default function BigCard({ content, priority, timestamp, id, creator, col
                     <button onClick={
                         () => handleSaveCard(
                             id,
+                            column,
                             content, 
                             (cardContentRef.current! as HTMLParagraphElement).innerText
                         )}

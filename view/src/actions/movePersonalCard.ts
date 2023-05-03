@@ -39,7 +39,7 @@ Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse 
     return { status, responseObject };
 }
 
-export function getPersonalCardsWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.PersonalData {
+export function getPersonalDataWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.PersonalData {
     const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
     const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);

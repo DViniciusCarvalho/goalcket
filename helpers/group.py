@@ -7,7 +7,6 @@ file = Path(__file__).resolve()
 parent, root = file.parent, file.parents[1]
 path.append(str(root))
 
-
 from model.Group import Group
 
 
@@ -40,4 +39,3 @@ def create_group_card_hash(group_hash: str, column_destination: str, timestamp: 
     column_name_hash_string = column_name_hash_bytes.hex()
     card_hash = group_hash + column_name_hash_string + str(timestamp)
     return card_hash
-

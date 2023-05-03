@@ -23,30 +23,30 @@ import {
 
 import { 
     deletePersonalCard, 
-    getPersonalCardsWithoutDeletedCard, 
+    getPersonalDataWithoutDeletedCard, 
     getAppropriateDeletePersonalCardStatusMessage 
 } from "@/actions/deletePersonalCard";
 
 import { 
     deleteGroupCard, 
-    getGroupCardsWithoutDeletedCard, 
+    getGroupDataWithoutDeletedCard, 
     getAppropriateDeleteGroupCardStatusMessage 
 } from "@/actions/deleteGroupCard";
 
 import { 
-    getPersonalCardsWithMovedCard, 
+    getPersonalDataWithMovedCard, 
     movePersonalCard, 
     getAppropriateMovePersonalCardStatusMessage 
 } from "@/actions/movePersonalCard";
 
 import { 
-    getGroupCardsWithMovedCard, 
+    getGroupDataWithMovedCard, 
     moveGroupCard, 
     getAppropriateMoveGroupCardStatusMessage 
 } from "@/actions/moveGroupCard";
 
-import { changePersonalCardContent } from "@/actions/changePersonalCardContent";
-import { changeGroupCardContent } from "@/actions/changeGroupCardContent";
+import { changePersonalCardContent, getPersonalDataWithModifiedCardContent } from "@/actions/changePersonalCardContent";
+import { changeGroupCardContent, getGroupDataWithModifiedCard } from "@/actions/changeGroupCardContent";
 
 import { Data } from "@/types/data";
 
@@ -284,7 +284,7 @@ export default function Internal(){
 
     function removeCardFromPersonalDOM(): void {
         const personalData = personal as Data.PersonalData;
-        const personalCardsWithoutDeleteCard = getPersonalCardsWithoutDeletedCard(
+        const personalCardsWithoutDeleteCard = getPersonalDataWithoutDeletedCard(
             personalData, 
             currentColumn
         );
@@ -316,7 +316,7 @@ export default function Internal(){
     }
 
     function removeCardFromGroupDOM(): void {
-        const groupCardsWithoutDeleteCard = getGroupCardsWithoutDeletedCard(
+        const groupCardsWithoutDeleteCard = getGroupDataWithoutDeletedCard(
             groupData as Data.GroupData, 
             currentColumn
         );
@@ -368,7 +368,7 @@ export default function Internal(){
 
     function moveCardFromPersonalDOM(destinyColumn: string, newHash: string): void {
         const personalData = personal as Data.PersonalData;
-        const personalCardsWithoutDeleteCard = getPersonalCardsWithMovedCard(
+        const personalCardsWithoutDeleteCard = getPersonalDataWithMovedCard(
             personalData, 
             currentCardDataToMove as Data.CardData, 
             currentColumn,
@@ -410,7 +410,7 @@ export default function Internal(){
     }
 
     function  moveCardFromGroupDOM(destinyColumn: string, newHash: string): void {
-        const groupCardsWithMovedCard = getGroupCardsWithMovedCard(
+        const groupCardsWithMovedCard = getGroupDataWithMovedCard(
             groupData as Data.GroupData, 
             currentCardIdToDelete,
             currentCardDataToMove as Data.CardData, 
@@ -428,24 +428,46 @@ export default function Internal(){
      * SAVE CARD
      */
 
-    function handleSaveCard(id: string, oldContent: string, currentContent: string) {
-        if (oldContent === currentContent) {
+    function handleSaveCard(id: string, column: string, oldContent: string, newContent: string) {
+        if (oldContent === newContent) {
             return;
         }
         else if (currentRoom === "personal") {
-            handleChangePersonalCardContent(id, currentColumn, currentContent);
+            handleChangePersonalCardContent(id, column, newContent);
         }
         else {
-            handleChangeGroupCardContent(currentRoom, id, currentColumn, currentContent);
+            handleChangeGroupCardContent(currentRoom, id, column, newContent);
         }
     }
 
-    async function handleChangePersonalCardContent(cardId: string, currentColumn: string, currentContent: string) {
-        const status = await changePersonalCardContent(cardId, currentColumn, currentContent);
+    async function handleChangePersonalCardContent(cardId: string, currentColumn: string, newContent: string) {
+        const status = await changePersonalCardContent(cardId, currentColumn, newContent);
+        if (status === 200) updatePersonalCardContentInTheDOM(cardId, currentColumn, newContent);
+    }
+
+    function updatePersonalCardContentInTheDOM(cardId: string, currentColumn: string, newContent: string): void {
+        const personalDataWithModifiedCard = getPersonalDataWithModifiedCardContent(
+            personal as Data.PersonalData,
+            cardId, 
+            currentColumn,
+            newContent
+        );
+        setPersonal(() => personalDataWithModifiedCard);
     }
 
     async function handleChangeGroupCardContent(groupId: string, cardId: string, currentColumn: string, currentContent: string) {
         const status = await changeGroupCardContent(groupId, cardId, currentColumn, currentContent);
+        if (status === 200) updateGroupCardContentInTheDOM(groupData, currentColumn, cardId, currentContent);
+    }
+
+    function updateGroupCardContentInTheDOM(groupData: Data.GroupDataState, currentColumn: string, cardId: string, newContent: string): void {
+        const groupDataWithModifiedCard = getGroupDataWithModifiedCard(
+            groupData as Data.GroupData,
+            currentColumn,
+            cardId,
+            newContent
+        );
+        setGroupData(() => groupDataWithModifiedCard);
     }
 
     /*

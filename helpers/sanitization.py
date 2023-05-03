@@ -15,4 +15,3 @@ def input_valid(*inputs: str) -> bool:
     if some_input_is_dirty:
         return False
     return True
-

@@ -1,4 +1,6 @@
 import { CHANGE_GROUP_CARD_CONTENT_ENDPOINT } from "@/lib/endpoints";
+import { getCardIndex } from "@/lib/utils";
+import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
 
@@ -19,6 +21,7 @@ function getChangeGroupCardContentRequestConfig(groupId: string, cardId: string,
         token: localStorage.getItem("token") ?? "",
         groupId: groupId,
         currentColumn: currentColumn,
+        cardId: cardId,
         newContent: newContent
     };
 
@@ -37,4 +40,14 @@ Promise<number> {
     const { status } = response;
 
     return status;
+}
+
+export function getGroupDataWithModifiedCard(groupData: Data.GroupData, currentColumn: string, cardId: string, newContent: string): Data.GroupData {
+    const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
+    const cards: Data.CardData[] = deepCopy!.columns[currentColumn].cards;
+    const cardIndex = getCardIndex(cards, cardId);
+
+    deepCopy!.columns[currentColumn].cards[cardIndex].content = newContent;
+
+    return deepCopy;
 }

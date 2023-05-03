@@ -8,6 +8,7 @@ path.append(str(root))
 from hashlib import sha256
 from pydantic import validate_arguments
 
+
 @validate_arguments
 def create_personal_card_hash(user_id: str, column_destination: str, timestamp: int) -> str:
     column_name_hash_object = sha256(column_destination.encode())

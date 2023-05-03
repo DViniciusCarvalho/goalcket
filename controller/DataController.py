@@ -24,7 +24,7 @@ class DataController:
 
     @staticmethod
     @router.post("/create-group")
-    async def create_group(request: Request):
+    async def create_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         group_admin_id = decode_token(token)
@@ -51,7 +51,7 @@ class DataController:
 
     @staticmethod
     @router.post("/join-group")
-    async def join_group(request: Request):
+    async def join_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         username = data["username"]
@@ -84,7 +84,7 @@ class DataController:
     
     @staticmethod
     @router.post("/get-group-content")
-    async def get_group(request: Request):
+    async def get_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         group_hash = data["roomId"]
@@ -108,7 +108,7 @@ class DataController:
 
     @staticmethod
     @router.put("/change-group-color")
-    async def change_group_color(request: Request):
+    async def change_group_color(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         new_column_color = data["color"]
@@ -131,7 +131,7 @@ class DataController:
 
     @staticmethod
     @router.put("/change-personal-color")
-    async def change_personal_color(request: Request):
+    async def change_personal_color(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         column_to_update_color = data["area"]
@@ -150,7 +150,7 @@ class DataController:
     
     @staticmethod
     @router.put("/add-card-group")
-    async def add_card_group(request: Request):
+    async def add_card_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -184,7 +184,7 @@ class DataController:
 
     @staticmethod
     @router.put("/add-card-personal")
-    async def add_card_personal(request: Request):
+    async def add_card_personal(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -208,7 +208,7 @@ class DataController:
     
     @staticmethod
     @router.put("/move-personal-card")
-    async def move_card_personal(request: Request):
+    async def move_card_personal(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -232,7 +232,7 @@ class DataController:
     
     @staticmethod
     @router.put("/move-group-card")
-    async def move_card_group(request: Request):
+    async def move_card_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -257,7 +257,7 @@ class DataController:
 
     @staticmethod
     @router.delete("/delete-personal-card")
-    async def delete_card_personal(request: Request):
+    async def delete_card_personal(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -274,7 +274,7 @@ class DataController:
     
     @staticmethod
     @router.delete("/delete-group-card")
-    async def delete_card_group(request: Request):
+    async def delete_card_group(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -288,4 +288,51 @@ class DataController:
             elif delete_group_card_status_code == Http.not_found:
                 raise HTTPException(status_code=Http.not_found)
             raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)
+    
+    @staticmethod
+    @router.put("/change-personal-card-content")
+    async def change_personal_card_content(request: Request) -> JSONResponse:
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            current_card_column = data["currentColumn"]
+            card_id = data["cardId"]
+            new_card_content = data["newContent"]
+            change_personal_card_content_status_code = ClientOperations.change_personal_card_content(
+                user_id,
+                current_card_column,
+                card_id,
+                new_card_content
+            )
+            if change_personal_card_content_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif change_personal_card_content_status_code == Http.not_found:
+                raise HTTPException(status_code=Http.not_found)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)
+    
+    @staticmethod
+    @router.put("/change-group-card-content")
+    async def change_group_card_content(request: Request) -> JSONResponse:
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            group_hash = data["groupId"]
+            current_card_column = data["currentColumn"]
+            card_id = data["cardId"]
+            new_card_content = data["newContent"]
+            change_group_card_content_status_code = DataOperations.change_group_card_content(
+                group_hash,
+                current_card_column,
+                card_id,
+                new_card_content
+            )
+            if change_group_card_content_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif change_group_card_content_status_code == Http.not_found:
+                return HTTPException(status_code=Http.not_found)
+            return HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)

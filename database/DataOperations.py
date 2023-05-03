@@ -28,7 +28,11 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def get_group_info(group_hash: str):
-        filter_query = { "hash": group_hash }
+
+        filter_query = { 
+            "hash": group_hash 
+        }
+
         result = Connection.find_group_collection(filter_query)
         if result:
             del result["_id"]
@@ -42,8 +46,11 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def has_group_permission(user_id: str, group_hash: str) -> int:
-        object_id = ObjectId(user_id)
-        filter_query = { "_id": object_id }
+
+        filter_query = { 
+            "_id": ObjectId(user_id) 
+        }
+
         result = Connection.find_user_collection(filter_query)
         if result:
             groups = result["rooms"]["groups"]
@@ -58,13 +65,17 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def update_personal_column_color(user_id: str, column_to_update: str, color: str) -> int:
-        object_id = ObjectId(user_id)
-        filter_query = { "_id": object_id }
+
+        filter_query = { 
+            "_id": ObjectId(user_id) 
+        }
+
         change_personal_column_color_query = { 
             "$set": { 
                 f"rooms.personal.{column_to_update}.color": color 
             } 
         }
+
         result = Connection.update_user_collection(filter_query, change_personal_column_color_query)
         if result:
             return Http.ok
@@ -73,12 +84,17 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def update_group_column_color(user_id: str, column_to_update: str, color: str, hash: str) -> int:
-        filter_query = { "hash": hash }
+
+        filter_query = { 
+            "hash": hash 
+        }
+
         change_group_column_color_query = { 
             "$set": { 
                 f"columns.{column_to_update}.color": color 
             } 
         }
+
         group_info = Connection.find_group_collection(filter_query)
         if group_info:
             admin = user_is_admin(group_info, user_id)
@@ -93,7 +109,12 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def group_exists(group_hash: str, group_password: str) -> Tuple[int, Union[str, None]]:
-        filter_query = { "hash": group_hash, "password": group_password }
+
+        filter_query = { 
+            "hash": group_hash, 
+            "password": group_password 
+        }
+
         group_info = Connection.find_group_collection(filter_query)
         if group_info:
             group_name = group_info["name"]
@@ -105,7 +126,11 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def verify_if_member_exists(user_id: str, group_hash: str) -> bool:
-        filter_query = { "hash": group_hash }
+
+        filter_query = { 
+            "hash": group_hash 
+        }
+
         group_info = Connection.find_group_collection(filter_query)
         group_members = group_info["members"]
         for member in group_members:
@@ -116,7 +141,11 @@ class DataOperations:
     @validate_arguments
     @staticmethod
     def add_member_to_group(group_hash: str, user_id: str, username: str) -> int:
-        filter_query = { "hash": group_hash }
+
+        filter_query = { 
+            "hash": group_hash 
+        }
+
         add_member_to_group_query = { 
             "$push": { 
                 "members": { 
@@ -135,10 +164,16 @@ class DataOperations:
 
     @validate_arguments
     @staticmethod
-    def add_card_to_group(group_hash: str, column_destination: str, card_priority: str, card_content: str, member_info: Any) -> Tuple[int, Union[int, None], Union[str, None]]:
+    def add_card_to_group(group_hash: str, column_destination: str, card_priority: str, card_content: str, 
+                          member_info: Any) -> Tuple[int, Union[int, None], Union[str, None]]:
+        
         timestamp = int(datetime.now().timestamp() * 1000)
         card_hash = create_group_card_hash(group_hash, column_destination, timestamp)
-        filter_query = { "hash": group_hash }
+
+        filter_query = { 
+            "hash": group_hash 
+        }
+
         add_card_to_group_query = { 
             "$push": { 
                 f"columns.{column_destination}.cards": { 
@@ -150,6 +185,7 @@ class DataOperations:
                 }
             }
         }
+
         result = Connection.update_group_collection(filter_query, add_card_to_group_query)
         if result:
             if result.matched_count > 0:
@@ -159,8 +195,12 @@ class DataOperations:
     
     @validate_arguments
     @staticmethod
-    def move_card_group(group_hash: str, card_data: Any, card_current_column: str, card_destiny_column:str):
-        move_card_group_filter_query = { "hash": group_hash }
+    def move_card_group(group_hash: str, card_data: Any, card_current_column: str, 
+                        card_destiny_column: str) -> Tuple[int, Union[str, None]]:
+
+        move_card_group_filter_query = { 
+            "hash": group_hash 
+        }
 
         card_id = card_data["id"]
         delete_card_from_current_column_query = {
@@ -196,11 +236,14 @@ class DataOperations:
             return Http.internal_server_error, None
         return Http.internal_server_error, None
 
-
     @validate_arguments
     @staticmethod
-    def delete_card_group(group_hash: str, card_id: str, card_column: str):
-        filter_query = { "hash": group_hash }
+    def delete_card_group(group_hash: str, card_id: str, card_column: str) -> int:
+
+        filter_query = { 
+            "hash": group_hash 
+        }
+
         delete_group_card_query = {
             "$pull": {
                 f"columns.{card_column}.cards": {
@@ -208,7 +251,34 @@ class DataOperations:
                 }
             }
         }
+
         result = Connection.update_group_collection(filter_query, delete_group_card_query)
+        if result:
+            if result.matched_count > 0:
+                return Http.ok
+            return Http.not_found
+        return Http.internal_server_error
+
+    @validate_arguments
+    @staticmethod
+    def change_group_card_content(group_hash: str, card_column: str, card_id: str, new_card_content: str) -> int:
+
+        change_group_card_content_filter_query =  { 
+            "hash": group_hash, 
+            f"columns.{card_column}.cards.id": card_id 
+        }     
+
+        change_group_card_content_query = {
+            "$set": {
+                f"columns.{card_column}.cards.$.content": new_card_content
+            } 
+        }
+
+        result = Connection.update_group_collection(
+            change_group_card_content_filter_query, 
+            change_group_card_content_query
+        )
+                
         if result:
             if result.matched_count > 0:
                 return Http.ok

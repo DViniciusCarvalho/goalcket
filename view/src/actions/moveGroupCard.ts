@@ -45,7 +45,7 @@ Promise<{ status: number, responseObject: Response.MoveCardFromGroupResponse }> 
     return { status, responseObject };
 }
 
-export function getGroupCardsWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.GroupData {
+export function getGroupDataWithMovedCard(groupData: Data.GroupData, currentCardIdToDelete: string, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.GroupData {
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
     const cards: Data.CardData[] = groupData!.columns[currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentCardIdToDelete);
