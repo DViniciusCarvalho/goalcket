@@ -2,6 +2,7 @@ export function getAppropriatePopUpsVisibility(identifier: string) {
     let createJoinGroupVisibility = "invisible";
     let addCardVisibility = "invisible";
     let bigCardVisibility = "invisible";
+    let memberInfoVisibility = "invisible";
 
     if (identifier === "createJoinGroup"){
         createJoinGroupVisibility = "visible";
@@ -12,8 +13,11 @@ export function getAppropriatePopUpsVisibility(identifier: string) {
     else if (identifier === "bigCard"){
         bigCardVisibility = "visible";
     }
+    else if (identifier === "memberInfo"){
+        memberInfoVisibility = "visible";
+    }
 
-    return { createJoinGroupVisibility, addCardVisibility, bigCardVisibility };
+    return { createJoinGroupVisibility, addCardVisibility, bigCardVisibility, memberInfoVisibility };
 }
 
 export function getAppropriateBigCardOptionPopUpsVisibility(identifier: string) {

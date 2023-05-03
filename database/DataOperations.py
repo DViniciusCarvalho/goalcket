@@ -284,3 +284,48 @@ class DataOperations:
                 return Http.ok
             return Http.not_found
         return Http.internal_server_error
+    
+    @validate_arguments
+    @staticmethod
+    def kick_user(user_id: str, group_hash: str, user_id_to_kick: str) -> int:
+        user_filter_query = {
+            "_id": ObjectId(user_id_to_kick)
+        }
+
+        group_filter_query = { 
+            "hash": group_hash 
+        }
+
+        kick_user_query = {
+            "$pull": {
+                "members": {
+                    "id": user_id_to_kick
+                }
+            }
+        }
+
+        remove_hash_from_user_data_query = {
+            "$pull": {
+                "rooms.groups": {
+                    "hash": group_hash
+                }
+            }
+        }
+
+        group_info = Connection.find_group_collection(group_filter_query)
+        if group_info:
+            admin = user_is_admin(group_info, user_id)
+            if admin:
+                kick_result = Connection.update_group_collection(group_filter_query, kick_user_query)
+                if kick_result:
+                    if kick_result.matched_count > 0:
+                        remove_hash_from_user_data = Connection.update_user_collection(
+                            user_filter_query, 
+                            remove_hash_from_user_data_query
+                        )
+                        if remove_hash_from_user_data:
+                            return Http.ok
+                        return Http.internal_server_error
+                return Http.internal_server_error
+            return Http.bad_request
+        return Http.internal_server_error

@@ -66,7 +66,6 @@ export default function InternalMainContent(){
 
     const [ searchCardFilterString, setSearchCardFilterString ] = useState("");
 
-
     const [ bigCardProps, setBigCardProps ] = useState<Props.BigCardProps | null>(null);
 
     const firstInputElement = firstInputRef.current! as HTMLInputElement;
@@ -287,7 +286,14 @@ export default function InternalMainContent(){
     }
 
     function openCard(content: string, priority: string, timestamp: number, id: string, creator: Data.MemberData, column: string): void {
-        const bigCardPartialProps: Props.BigCardProps = { content, priority, timestamp, id, creator, column };
+        const bigCardPartialProps: Props.BigCardProps = { 
+            content, 
+            priority, 
+            timestamp, 
+            id, 
+            creator, 
+            column 
+        };
 
         setBigCardProps(() => bigCardPartialProps);
         changePopUpToVisible("bigCard");

@@ -9,8 +9,9 @@ import SaveIcon from "../../../../public/assets/save.png";
 import { InternalPageContext } from "@/pages/internal";
 
 import Image from "next/image";
+import CloseButton from "../buttons/CloseButton";
 
-import { formatDate, getPriorityBackground } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 import { Props } from "@/types/props";
 
@@ -27,15 +28,17 @@ export default function BigCard({ content, priority, timestamp, id, creator, col
         handleSaveCard
     } = useContext(InternalPageContext);
 
+    const origin = "big--card";
+    
+    const closeButtonProps: Props.ExitButtonProps = {
+        origin: origin,
+        actionFunction: hideFirstLayerOverlayAndPopUps
+    };
+
     return (
         <div className={`${bigCardStyle.big__card__container} ${bigCardStyle[bigCardPopUpVisibility]}`}>
             <div className={bigCardStyle.big__card__header}>
-                <div className={bigCardStyle.big__card__close__block}>
-                    <button className={bigCardStyle.close__button} onClick={hideFirstLayerOverlayAndPopUps}>
-                        <div className={bigCardStyle.close__button__line}/>
-                        <div className={bigCardStyle.close__button__line}/>
-                    </button>
-                </div>
+                <CloseButton {...closeButtonProps}/>
                 <div className={bigCardStyle.big__card__info__block}>
                     <div className={bigCardStyle.big__card__info__creator__and__date}>
                         <p className={bigCardStyle.big__card__info__creator}> 
@@ -47,8 +50,8 @@ export default function BigCard({ content, priority, timestamp, id, creator, col
                     </div>
                     <div className={bigCardStyle.big__card__info__priority}>
                         <p className={bigCardStyle.big__card__info__priority__text}> Priority: { priority }</p>
-                        <div className={bigCardStyle.big__card__info__priority__colorization}
-                            style={{backgroundImage: getPriorityBackground(priority)}}
+                        <div className={`${bigCardStyle.big__card__info__priority__colorization} 
+                          ${bigCardStyle[priority]}`}
                         />
                     </div>
                 </div>

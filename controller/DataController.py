@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 
 from database.ClientOperations import ClientOperations
 from database.DataOperations import DataOperations
-from helpers.group import create_group_hash, get_member_info
+from helpers.group import create_group_hash, get_member_info, user_is_admin
 from helpers.sanitization import input_valid
 from helpers.tokenjwt import decode_token
 from helpers.validation import valid_group_data
@@ -94,7 +94,11 @@ class DataController:
             if has_group_permission_status_code == Http.ok:
                 get_group_info_status_code, group_info = DataOperations.get_group_info(group_hash)
                 if get_group_info_status_code == Http.ok:
-                    content = { "group": group_info }
+                    admin = user_is_admin(group_info, user_id)
+                    content = { 
+                        "group": group_info,
+                        "isAdmin": admin
+                    }
                     return JSONResponse(status_code=Http.ok, content=content)
                 elif get_group_info_status_code == Http.not_found:
                     raise HTTPException(status_code=Http.not_found)
@@ -336,3 +340,24 @@ class DataController:
                 return HTTPException(status_code=Http.not_found)
             return HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)
+
+    @staticmethod
+    @router.delete("/kick-user")
+    async def kick_user(request: Request):
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            group_hash = data["groupId"]
+            user_id_to_kick = data["userIdToKick"]
+            kick_user_status_code = DataOperations.kick_user(user_id, group_hash, user_id_to_kick)
+            if kick_user_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif kick_user_status_code == Http.bad_request:
+                raise HTTPException(status_code=Http.bad_request)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)
+    
+    # token: localStorage.getItem("token") ?? "",
+    # groupId: groupId,
+    # userId: userId

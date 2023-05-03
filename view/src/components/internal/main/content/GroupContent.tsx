@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import groupContentStyle from "@/styles/internal/main/content/GroupContent.module.css";
 import mainStyles from "@/styles/internal/main/Main.module.css";
@@ -9,11 +9,22 @@ import Doing from "@/components/internal/main/columns/Doing";
 import Done from "@/components/internal/main/columns/Done";
 import Functionalities from "@/components/internal/main/functionalities/Functionalities";
 
+import { Data } from "@/types/data";
 import { Props } from "@/types/props";
+import MemberInfoPopUp from "@/components/common/popups/MemberInfoPopUp";
+import { InternalPageContext } from "@/pages/internal";
 
 
 export default function GroupContent({ name, members, columns }: Props.GroupContentProps){
     
+    const { currentMemberData } = useContext(InternalPageContext);
+
+    const memberInfoPopUpProps: Data.MemberData = {
+        name: currentMemberData.name,
+        id: currentMemberData.id,
+        roles: currentMemberData.roles
+    };
+
     const toDoProps = { 
         ...columns.todo, 
         isGroup: true 
@@ -29,12 +40,12 @@ export default function GroupContent({ name, members, columns }: Props.GroupCont
         isGroup: true 
     };
 
- 
     return (
         <div className={groupContentStyle.group__area__block}>
+            <MemberInfoPopUp {...memberInfoPopUpProps}/>
             <div className={groupContentStyle.group__members__block}>
-                { members.map((element, index) => (
-                    <Member key={index} name={element.name} roles={element.roles}/>
+                { members.map(member => (
+                    <Member key={member.id} name={member.name} id={member.id} roles={member.roles}/>
                 ))}
             </div>
             <h1 className={groupContentStyle.group__name}>{ name }</h1>

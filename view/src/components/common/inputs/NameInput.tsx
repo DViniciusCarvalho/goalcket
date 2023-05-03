@@ -4,9 +4,9 @@ import UserImage from "../../../../public/assets/user.png";
 import { Props } from "@/types/props";
 
 
-export default function NameInput({ changeValue, value }: Props.InputProps){
+export default function NameInput({ origin, changeValue, value }: Props.InputProps){
     return (
-        <div className={inputStyle.name__block}>
+        <div className={`${inputStyle.name__block} ${inputStyle[origin]}`}>
             <label htmlFor="name__input" className={inputStyle.data__label}> Name: </label>
             <div className={inputStyle.name__area}>
                 <div className={inputStyle.name__image__area}>

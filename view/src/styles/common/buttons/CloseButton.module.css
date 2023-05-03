@@ -1,0 +1,88 @@
+.close__button__block {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 1%;
+    width: 100%;
+}
+
+.close__button__block.big--card {
+    height: 34%;
+}
+
+.close__button__block.delete--card {
+    height: 14%;
+}
+
+.close__button__block.create--join--group {
+    height: 50px;
+    padding-right: 12.5px;
+}
+
+.close__button__block.move--card {
+    height: 12%;
+}
+
+.close__button__block.add--card {
+    height: 50px;
+    padding: 0;
+    display: none;
+}
+
+.close__button__block.member--info {
+    height: 14%;
+}
+
+.close__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: none;
+    transition: background-color .5s;
+}
+
+.close__button:hover {
+    background-color: rgb(237, 251, 253);
+}
+
+.close__button__block.big--card > .close__button:hover {
+    background-color: rgb(71, 63, 68);
+}
+
+.close__button__line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: 3px;
+    border-radius: 2px;
+    background-color: black;
+    transition: background-color .5s;
+}
+
+.close__button:hover .close__button__line {
+    background-color: rgb(48, 45, 85);
+}
+
+.close__button__block.big--card > .close__button:hover .close__button__line {
+    background-color: rgb(130, 140, 172);
+}
+
+.close__button__line:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close__button__line:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+@media only screen and (max-width: 765px) {
+    .close__button__block.add--card {
+        display: flex;
+    }
+}

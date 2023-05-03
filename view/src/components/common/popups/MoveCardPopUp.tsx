@@ -8,7 +8,12 @@ import DoneIcon from "../../../../public/assets/donelist.png";
 
 import { InternalPageContext } from "@/pages/internal";
 
+import CloseButton from "../buttons/CloseButton";
+
 import Image, { StaticImageData } from "next/image";
+import ActionButton from "../buttons/ActionButton";
+
+import { Props } from "@/types/props";
 
 
 export default function MoveCardPopUp() {
@@ -22,7 +27,26 @@ export default function MoveCardPopUp() {
 
     const [ currentChecked, setCurrentChecked ] = useState("");
 
+    const origin = "move--card";
 
+    const closeButtonProps: Props.ExitButtonProps = {
+        origin: origin,
+        actionFunction: handleCloseAction
+    };
+
+    const confirmMoveButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Confirm",
+        actionFunction: () => handleMoveCard(currentChecked)
+    }
+
+    const cancelMoveButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Cancel",
+        actionFunction: handleCloseAction
+    };
+    
+    
     function getCapitalized(word: string): string {
         if (word === "todo") {
             return "To Do";
@@ -47,7 +71,7 @@ export default function MoveCardPopUp() {
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }
 
-    function getOtherColumns() {
+    function getOtherColumns(): JSX.Element[] {
         const columns = [ "todo", "doing", "done" ];
         const buttonsFiltered: JSX.Element[] = [];
         const icons: {[key: string]: StaticImageData} = {
@@ -59,7 +83,11 @@ export default function MoveCardPopUp() {
         for (let column of columns) {
             if (column !== currentColumn) {
                 buttonsFiltered.push(
-                    <button className={`${moveCardPopUpStyle.column__button} ${moveCardPopUpStyle[getCheckedClass(column)]}`} key={column} onClick={() => checkButton(column)}>
+                    <button className={`${moveCardPopUpStyle.column__button} 
+                      ${moveCardPopUpStyle[getCheckedClass(column)]}`} 
+                      key={column} 
+                      onClick={() => checkButton(column)}
+                    >
                         <Image src={icons[column]} alt={`${column} icon`} className={moveCardPopUpStyle.column__icon}/>
                         {getCapitalized(column)}
                     </button>
@@ -73,32 +101,16 @@ export default function MoveCardPopUp() {
         <div className={`${moveCardPopUpStyle.move__card__pop__up__container} 
           ${moveCardPopUpStyle[moveCardPopUpVisibility]}`}
         >
-            <div className={moveCardPopUpStyle.close__button__block}>
-                <button className={moveCardPopUpStyle.close__button} 
-                   onClick={handleCloseAction}>
-                    <div className={moveCardPopUpStyle.close__button__line}/>
-                    <div className={moveCardPopUpStyle.close__button__line}/>
-                </button>
-            </div>
+            <CloseButton {...closeButtonProps}/>
             <h3 className={moveCardPopUpStyle.ask__text} onClick={getOtherColumns}>Where do you want to move?</h3>
             <div className={moveCardPopUpStyle.columns__button__area}>
                 {
-                    getOtherColumns().map(element => (
-                        element
-                    ))
+                    getOtherColumns().map(column => column)
                 }
             </div>
             <div className={moveCardPopUpStyle.decision__buttons__block}>
-                <button className={moveCardPopUpStyle.confirm__delete__button} 
-                  onClick={() => handleMoveCard(currentChecked)}
-                >
-                    Confirm
-                </button>
-                <button className={moveCardPopUpStyle.cancel__delete__button} 
-                  onClick={handleCloseAction}
-                >
-                    Cancel
-                </button>
+                <ActionButton {...confirmMoveButtonProps}/>
+                <ActionButton {...cancelMoveButtonProps}/>
             </div>
         </div>
     );

@@ -19,49 +19,6 @@
     transform: translate(-50%, -50%) scale(0); 
 }
 
-.exit__button__section {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: 50px;
-    padding-right: 12.5px;
-}
-
-.exit__button {
-    padding: 14px;
-    display: flex;
-    position: relative;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    border: none;
-    background-color: transparent;
-}
-
-.exit__button:hover .exit__button__line{
-    background-color: rgb(118, 134, 172);
-}
-
-.exit__button__line {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 20px;
-    height: 3px;
-    border-radius: 5px;
-    background-color: black;
-    transition: background-color .3s;
-}
-
-.exit__button__line:nth-child(1) {
-    transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.exit__button__line:nth-child(2) {
-    transform: translate(-50%, -50%) rotate(-45deg);
-}
-
 .inputs__block {
     width: 100%;
     padding: 26px 24px 0 24px;
@@ -115,24 +72,6 @@
     width: 100%;
     height: 56px; 
     margin-top: 46px;
-}
-
-.confirm__entry__button, .confirm__create__button {
-    width: 46%;
-    height: 100%;
-    border-radius: 10px;
-    border: none;
-    color: white;
-    font-size: 1.1em;
-    background-color:rgb(0, 0, 0);
-    transition: background-color .5s, transform .5s;
-}
-
-.confirm__entry__button:hover, .confirm__create__button:hover {
-    cursor: pointer;
-    background-color: rgb(32, 30, 46);
-    transform: scale(1.009);
-    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
 }
 
 .message__buttons__separator {

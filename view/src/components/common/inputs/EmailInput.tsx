@@ -4,9 +4,9 @@ import Image from "next/image";
 import { Props } from "@/types/props";
 
 
-export default function EmailInput({ changeValue, value }: Props.InputProps){
+export default function EmailInput({ origin, changeValue, value }: Props.InputProps){
     return (
-        <div className={inputStyle.email__block}>
+        <div className={`${inputStyle.email__block} ${inputStyle[origin]}`}>
             <label htmlFor="email__input" className={inputStyle.data__label}> E-mail: </label>
             <div className={inputStyle.email__area}>
                 <div className={inputStyle.email__image__area}>

@@ -1,6 +1,8 @@
 import React from "react";
 import groupPopUpStyle from "@/styles/common/popups/GroupPopUp.module.css";
 import Image from "next/image";
+import CloseButton from "../buttons/CloseButton";
+import ActionButton from "../buttons/ActionButton";
 import { Props } from "@/types/props";
 
 
@@ -17,26 +19,34 @@ export default function GroupPopUp({
     handleCreateClick
 }: Props.GroupPopUpProps) {
 
+    const origin = "create--join--group";
+
+    const closeButtonProps: Props.ExitButtonProps = {
+        origin: origin,
+        actionFunction: hideFirstLayerOverlayAndPopUps
+    };
+
+    const joinGroupButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Join",
+        actionFunction: handleJoinClick
+    };
+
+    const createGroupButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Create a group",
+        actionFunction: handleCreateClick
+    };
+
     const buttonElementsAnOr = [
-        <button className={groupPopUpStyle.confirm__entry__button} onClick={handleJoinClick} key={1}> 
-            Join 
-        </button>,
-        <span className={groupPopUpStyle.message__buttons__separator} key={2}> 
-            or 
-        </span>,
-        <button className={groupPopUpStyle.confirm__create__button} onClick={handleCreateClick} key={3}> 
-            Create a group 
-        </button>
+        <ActionButton {...joinGroupButtonProps} key={1}/>,
+        <span className={groupPopUpStyle.message__buttons__separator} key={2}> or </span>,
+        <ActionButton {...createGroupButtonProps} key={3}/>
     ];
 
     return (
         <React.Fragment>
-            <div className={groupPopUpStyle.exit__button__section}>
-                <button className={groupPopUpStyle.exit__button} onClick={hideFirstLayerOverlayAndPopUps}>
-                    <div className={groupPopUpStyle.exit__button__line}/>
-                    <div className={groupPopUpStyle.exit__button__line}/>
-                </button>
-            </div>
+            <CloseButton {...closeButtonProps}/>
             <div className={groupPopUpStyle.inputs__block}>
                 <label htmlFor="first__input__id" className={groupPopUpStyle.input__label}>{ firstLabelMessage }</label>
                 <div className={groupPopUpStyle.first__input__block}>
@@ -54,8 +64,9 @@ export default function GroupPopUp({
                 </div>
                 <div className={groupPopUpStyle.confirmation__area}>
                     {
-                        (popUpType === "join")? (buttonElementsAnOr.map(element => element)) : 
-                        (buttonElementsAnOr.reverse().map(element => element))
+                        (popUpType === "join")
+                        ? (buttonElementsAnOr.map(element => element)) 
+                        : (buttonElementsAnOr.reverse().map(element => element))
                     }
                 </div>
             </div>

@@ -42,18 +42,6 @@ export const formatDate = (timestamp: number): string => {
     return `${month}/${day}/${year}`;
 }
 
-export const getPriorityBackground = (priority: string): string => {
-    if (priority === "low") {
-        return "linear-gradient(to right, green, yellow)";
-    }
-    else if (priority === "medium") {
-        return "linear-gradient(to right, yellow, rgb(255, 136, 0))"
-    }
-    else {
-        return "linear-gradient(to right, rgb(255, 153, 0), rgb(223, 7, 7))";
-    }
-}
-
 export function getCardIndex(cards: Data.CardData[], id: string): number {
     let cardIndex = 0;
     for (let i = 0; i < cards.length; i++) {
@@ -62,4 +50,14 @@ export function getCardIndex(cards: Data.CardData[], id: string): number {
         }
     }
     return cardIndex;
+}
+
+export function getMemberIndex(members: Data.MemberData[], id: string): number {
+    let memberIndex = 0;
+    for (let i = 0; i < members.length; i++) {
+        if (members[i].id === id) {
+            memberIndex = i;
+        }
+    }
+    return memberIndex;
 }

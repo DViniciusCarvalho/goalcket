@@ -49,6 +49,18 @@
     
 }
 
+.card__header__priority__icon__block.low {
+    background-image: linear-gradient(to right, green, yellow);
+}
+
+.card__header__priority__icon__block.medium {
+    background-image: linear-gradient(to right, yellow, rgb(255, 136, 0));
+}
+
+.card__header__priority__icon__block.high {
+    background-image: linear-gradient(to right, rgb(255, 153, 0), rgb(223, 7, 7));
+}
+
 .card__content {
     background-color: rgb(241, 241, 241);
     width: 100%;

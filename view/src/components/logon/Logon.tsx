@@ -8,7 +8,7 @@ import GoToHomeButton from "../common/buttons/GoToHomeButton";
 import NameInput from "../common/inputs/NameInput";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
-import Button from "@/components/common/buttons/Button";
+import SubmitButton from "@/components/common/buttons/SubmitButton";
 
 import { delay } from "@/lib/utils";
 
@@ -36,21 +36,24 @@ export default function logonComponent(){
     };
 
     const nameInputProps: Props.InputProps = {
+        origin: "logon",
         changeValue: changeName,
         value: nameValue
     };
 
     const emailInputProps: Props.InputProps = {
+        origin: "logon",
         changeValue: changeEmail,
         value: emailValue
     };
 
     const passwordInputProps: Props.InputProps = {
+        origin: "logon",
         changeValue: changePassword,
         value: passwordValue
     };
 
-    const logonButtonProps: Props.ButtonProps = {
+    const logonButtonProps: Props.SubmitButtonProps = {
         message: "Sign up",
         handleSubmitButtonClick: handleSubmitButtonClick
     };
@@ -114,7 +117,7 @@ export default function logonComponent(){
                     <NameInput {...nameInputProps}/>
                     <EmailInput {...emailInputProps}/>
                     <PasswordInput {...passwordInputProps}/>
-                    <Button {...logonButtonProps}/>   
+                    <SubmitButton {...logonButtonProps}/>   
                     <p className={logonStyle.logon__link}> Already have an account? <Link href="/login">Sign in</Link></p>
                 </form>
             </div>

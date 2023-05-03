@@ -3,11 +3,21 @@ import functStyle from "@/styles/internal/main/functionalities/Functionalities.m
 import SearchIcon from "../../../../../public/assets/search.png";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
 import Image from "next/image";
+import ActionButton from "@/components/common/buttons/ActionButton";
+import { Props } from "@/types/props";
 
 
 export default function SearchCard() {
 
     const { searchMatches, searchInputRef } = useContext(InternalMainContentContext);
+
+    const origin = "search--card";
+
+    const searchCardButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Search",
+        actionFunction: searchMatches
+    };
 
     return (
         <div className={functStyle.search__card__container}>
@@ -17,7 +27,7 @@ export default function SearchCard() {
             </div>
             <input type="text" className={functStyle.search__input} ref={searchInputRef}/>
             </div>
-            <button className={functStyle.search__button} onClick={searchMatches}> Search </button>
+            <ActionButton {...searchCardButtonProps}/>
         </div>
     )
 }

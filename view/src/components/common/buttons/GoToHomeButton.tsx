@@ -2,7 +2,7 @@ import goToHomeStyle from "@/styles/common/buttons/GoToHomeButton.module.css";
 import Link from "next/link";
 
 
-export default function GoToHomeButton({ }){
+export default function GoToHomeButton(){
     return(
         <Link href={"/"} className={goToHomeStyle.go__to__home}>
             <div className={goToHomeStyle.arrow__button__line__one}/>

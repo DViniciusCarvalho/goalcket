@@ -8,7 +8,7 @@ import StatusPopUp from "../common/popups/StatusPopUp";
 import GoToHomeButton from "../common/buttons/GoToHomeButton";
 import EmailInput from "../common/inputs/EmailInput";
 import PasswordInput from "../common/inputs/PasswordInput";
-import Button from "../common/buttons/Button";
+import SubmitButton from "../common/buttons/SubmitButton";
 
 import { delay } from "@/lib/utils";
 
@@ -36,17 +36,18 @@ export default function LoginComponent(){
     };
 
     const emailInputProps: Props.InputProps = {
+        origin: "login",
         changeValue: changeEmail,
         value: emailValue
     };
 
     const passwordInputProps: Props.InputProps = {
-        margin: "6%",
+        origin: "login",
         changeValue: changePassword,
         value: passwordValue
     };
 
-    const loginButtonProps: Props.ButtonProps = {
+    const loginButtonProps: Props.SubmitButtonProps = {
         message: "Sign in",
         handleSubmitButtonClick: handleSubmitButtonClick
     };
@@ -108,7 +109,7 @@ export default function LoginComponent(){
                     <hr className={loginStyle.separation__line}/>
                     <EmailInput {...emailInputProps}/>
                     <PasswordInput {...passwordInputProps}/>
-                    <Button {...loginButtonProps}/>       
+                    <SubmitButton {...loginButtonProps}/>       
                     <p className={loginStyle.login__link}> Doesn't have an account? <Link href="/logon">Sign up</Link></p>
                 </form>
             </div>

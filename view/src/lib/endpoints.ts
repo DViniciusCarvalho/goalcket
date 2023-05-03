@@ -32,3 +32,5 @@ export const MOVE_GROUP_CARD_ENDPOINT = API_ENDPOINT + "move-group-card";
 export const CHANGE_PERSONAL_CARD_CONTENT_ENDPOINT = API_ENDPOINT + "change-personal-card-content";
 
 export const CHANGE_GROUP_CARD_CONTENT_ENDPOINT = API_ENDPOINT + "change-group-card-content";
+
+export const KICK_USER_ENDPOINT = API_ENDPOINT + "kick-user";

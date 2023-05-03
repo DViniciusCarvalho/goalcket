@@ -49,6 +49,7 @@ import { changePersonalCardContent, getPersonalDataWithModifiedCardContent } fro
 import { changeGroupCardContent, getGroupDataWithModifiedCard } from "@/actions/changeGroupCardContent";
 
 import { Data } from "@/types/data";
+import { getGroupDataWithoutKickedUser, kickUser } from "@/actions/kickUserFromGroup";
 
 
 export const InternalPageContext = createContext<any>(null);
@@ -58,6 +59,8 @@ export default function Internal(){
     const router = useRouter();
 
     const [ username, setUsername ] = useState("");
+    const [ userIsAdmin, setUserIsAdmin ] = useState(false);
+
     const [ personal, setPersonal ] = useState<Data.PersonalDataState>(null);
     const [ groups, setGroups ] = useState<Data.GroupOptionDataList>(null);
     const [ loaded, setLoaded ] = useState(false);
@@ -84,9 +87,17 @@ export default function Internal(){
     const [ deleteCardPopUpVisibility, setDeleteCardPopUpVisibility ] = useState("invisible");
     const [ moveCardPopUpVisibility, setMoveCardPopUpVisibility ] = useState("invisible");
 
+    const [ memberPopUpVisibility, setMemberPopUpVisibility ] = useState("invisible");
+
     const [ currentColumn, setCurrentColumn ] = useState("todo");
     const [ currentCardIdToDelete, setCurrentCardIdToDelete ] = useState("");
     const [ currentCardDataToMove, setCurrentCardDataToMove ] = useState({});
+
+    const [ currentMemberData, setCurrentMemberData ] = useState<Data.MemberData>({
+        name: "",
+        id: "",
+        roles: []
+    });
 
     const contextValues = {
         username,
@@ -97,10 +108,12 @@ export default function Internal(){
         createJoinGroupPopUpVisibility,
         deleteCardPopUpVisibility,
         moveCardPopUpVisibility,
+        memberPopUpVisibility,
         changePopUpToVisible,
         hideFirstLayerOverlayAndPopUps,
         handleDeleteCardPopUpState, 
         handleMoveCardPopUpState,
+        handleMemberInfoPopUpState,
         hideSecondLayerOverlayAndBigCardOptionPopUps,
         handleDeleteCard,
         handleMoveCard,
@@ -122,7 +135,10 @@ export default function Internal(){
         popUpStatusType,
         setPopUpStatusVisibility,
         showStatusPopUp,
-        currentColumn
+        currentColumn,
+        currentMemberData,
+        userIsAdmin,
+        handleKickUser
     };
 
     const firstLayerOverlayProps = {
@@ -173,7 +189,7 @@ export default function Internal(){
 
     async function handleGetGroupContent(roomId: string) {
         const { status, responseObject } = await getGroupContent(roomId);
-        const groupData = responseObject.group;
+        const { group, isAdmin } = responseObject;
 
         const { 
             statusMessage, 
@@ -182,7 +198,8 @@ export default function Internal(){
         } = getAppropriateGetGroupStatusMessage(status);
 
         if (success && canLoadData) {
-            loadGroupData(groupData);
+            loadGroupData(group);
+            setUserIsAdmin(() => isAdmin);
         }
         
         setGetGroupRequestStatusMessage(() => statusMessage);
@@ -470,6 +487,12 @@ export default function Internal(){
         setGroupData(() => groupDataWithModifiedCard);
     }
 
+    async function handleKickUser(userIdToKick: string) {
+        const status = await kickUser(currentGroupId, userIdToKick);
+
+        const groupDataWithoutKickedUser = getGroupDataWithoutKickedUser(groupData as Data.GroupData, userIdToKick);
+        setGroupData(() => groupDataWithoutKickedUser);
+    }
     /*
      * UPDATE OF CURRENT BIG CARD DATA
      */
@@ -515,13 +538,15 @@ export default function Internal(){
         const { 
             createJoinGroupVisibility, 
             addCardVisibility, 
-            bigCardVisibility 
+            bigCardVisibility,
+            memberInfoVisibility
         } = getAppropriatePopUpsVisibility(identifierString);
 
         setPopUpType(() => "join");
         setCreateJoinGroupPopUpVisibility(() => createJoinGroupVisibility);
         setAddCardPopUpVisibility(() => addCardVisibility);
         setBigCardPopUpVisibility(() => bigCardVisibility);
+        setMemberPopUpVisibility(() => memberInfoVisibility);
         setFirstLayerOverlayVisibility(() => "visible");
     }
 
@@ -529,6 +554,7 @@ export default function Internal(){
         setCreateJoinGroupPopUpVisibility(() => "invisible");
         setAddCardPopUpVisibility(() => "invisible");
         setBigCardPopUpVisibility(() => "invisible");
+        setMemberPopUpVisibility(() => "invisible");
     }
 
     function hideSecondLayerOverlayAndBigCardOptionPopUps(): void {
@@ -550,6 +576,18 @@ export default function Internal(){
     function hideAllBigCardOptionPopUps(): void {
         setDeleteCardPopUpVisibility(() => "invisible");
         setMoveCardPopUpVisibility(() => "invisible");
+    }
+
+    function handleMemberInfoPopUpState(name: string, id: string, roles: string[]) {
+        console.log(name, id, roles)
+        setCurrentMemberData(() => { 
+            return {
+                name: name,
+                id: id,
+                roles: roles
+            }
+        });
+        changePopUpToVisible("memberInfo");
     }
 
     return (

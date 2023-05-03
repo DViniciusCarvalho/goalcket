@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from "react";
 import cardStyle from "@/styles/internal/main/cards/Card.module.css";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
-import { abbreviate, formatDate, getPriorityBackground } from "@/lib/utils";
+import { abbreviate, formatDate } from "@/lib/utils";
 import { Data } from "@/types/data";
 
 
@@ -36,8 +36,7 @@ export default function Card({ content, priority, timestamp, id, creator }: Data
                 </div>
                 <div className={cardStyle.card__header__priority}>
                     <p className={cardStyle.card__header__priority__text}> { priority }</p>
-                    <div className={cardStyle.card__header__priority__icon__block} 
-                      style={{backgroundImage: getPriorityBackground(priority)}}/>
+                    <div className={`${cardStyle.card__header__priority__icon__block} ${cardStyle[priority]}`} />
                 </div>
             </div>
             <div className={cardStyle.card__content}>

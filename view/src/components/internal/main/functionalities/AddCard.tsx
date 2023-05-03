@@ -2,21 +2,31 @@ import React, { useContext } from "react";
 import functStyle from "@/styles/internal/main/functionalities/Functionalities.module.css";
 import { InternalPageContext } from "@/pages/internal";
 import { InternalMainContentContext } from "@/components/internal/main/InternalMainContent";
-
+import CloseButton from "@/components/common/buttons/CloseButton";
+import ActionButton from "@/components/common/buttons/ActionButton";
+import { Props } from "@/types/props";
 
 export default function AddCard() {
     
     const { hideFirstLayerOverlayAndPopUps, addCardPopUpVisibility } = useContext(InternalPageContext);
     const { destinationRef, priorityRef, contentRef, addCard } = useContext(InternalMainContentContext);
 
+    const origin = "add--card";
+
+    const closeButtonProps: Props.ExitButtonProps = {
+        origin: origin,
+        actionFunction: hideFirstLayerOverlayAndPopUps
+    };
+
+    const addCardButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Add",
+        actionFunction: addCard
+    };
+
     return (
         <div className={`${functStyle.add__card__container} ${functStyle[addCardPopUpVisibility]}`}>
-            <div className={functStyle.exit__button__section}>
-                <button className={functStyle.exit__button} onClick={hideFirstLayerOverlayAndPopUps}>
-                    <div className={functStyle.exit__button__line}/>
-                    <div className={functStyle.exit__button__line}/>
-                </button>
-            </div>
+            <CloseButton {...closeButtonProps}/>
             <div className={functStyle.new__card__info}>
                 <div className={functStyle.destination__block}>
                     <label htmlFor="c__destination" className={functStyle.destination__label}>Destination</label>
@@ -39,7 +49,7 @@ export default function AddCard() {
                 <label htmlFor="content__text" className={functStyle.context__text__label}>Content:</label>
                 <textarea id="content__text" className={functStyle.content__textarea} ref={contentRef}></textarea>
             </div>
-            <button className={functStyle.add__button} onClick={addCard}> Add </button>
+            <ActionButton {...addCardButtonProps}/>
       </div>
     )
 }

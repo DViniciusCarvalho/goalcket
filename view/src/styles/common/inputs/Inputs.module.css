@@ -5,6 +5,10 @@
     flex-direction: column;
 }
 
+.password__block.login {
+    margin-bottom: 6%;
+}
+
 .login__password__block {
     margin-bottom: 0%;
 }

@@ -70,4 +70,10 @@ export namespace Request {
         headers: {[key: string]: string};
         body: string;
     }
+
+    interface KickUserRequestParameters {
+        method: "DELETE";
+        headers: {[key: string]: string};
+        body: string;
+    }
 }

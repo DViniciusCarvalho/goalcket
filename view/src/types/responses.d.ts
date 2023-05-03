@@ -26,6 +26,7 @@ export namespace Response {
     
     interface GetGroupContentResponse {
         group: Data.GroupData;
+        isAdmin: boolean;
     }
     
     interface AddCardToPersonalResponse {

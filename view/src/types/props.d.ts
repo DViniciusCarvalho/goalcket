@@ -20,9 +20,20 @@ export namespace Props {
         gridArea: string;
     }
 
-    interface ButtonProps {
+    interface SubmitButtonProps {
         message: string;
         handleSubmitButtonClick: (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
+    }
+ 
+    interface ActionButtonProps {
+        origin: string;
+        message: string; 
+        actionFunction: (event: MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    }
+
+    interface ExitButtonProps {
+        origin: string;
+        actionFunction: (event: MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     }
 
     interface StatusPopUpProps {
@@ -32,7 +43,7 @@ export namespace Props {
     }
 
     interface InputProps {
-        margin?: string;
+        origin: string;
         changeValue: (event: React.ChangeEvent<HTMLInputElement>) => void;
         value: string;
     }

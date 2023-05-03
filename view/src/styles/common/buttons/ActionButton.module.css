@@ -1,0 +1,58 @@
+.action__button {
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.03em;
+    width: 45%;
+    height: 58%;
+    transition: background-color .5s, transform .5s;
+}
+
+.action__button.create--join--group {
+    width: 46%;
+    height: 100%;
+    font-size: 1.1em;
+}
+
+.action__button.add--card {
+    width: 90%;
+    height: 40px;
+    font-size: 1.01em;
+    margin-left: 5%;
+}
+
+.action__button.delete--card {
+    font-size: 1.03em;
+    width: 45%;
+    height: 58%;
+}
+
+.action__button.move--card {
+    font-size: 1.03em;
+    width: 45%;
+    height: 58%;
+}
+
+.action__button.search--card {
+    height: 40px;
+    width: 80%;
+    font-size: 1.01em;
+}
+
+.action__button.member--info {
+    height: 100%;
+}
+
+.action__button:hover {
+    cursor: pointer;
+    background-color:rgb(32, 30, 46);
+    transform: scale(1.009);
+    box-shadow: 0px 0px 4px rgba(32, 32, 34, 0.555);
+}
+
+@media only screen and (max-width: 470px) {
+    .action__button.member--info {
+        height: 60px;
+    }
+}
