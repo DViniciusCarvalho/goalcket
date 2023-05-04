@@ -33,6 +33,10 @@
     height: 14%;
 }
 
+.close__button__block.group--info {
+    height: 40px;
+}
+
 .close__button {
     display: flex;
     align-items: center;
@@ -47,6 +51,7 @@
 }
 
 .close__button:hover {
+    cursor: pointer;
     background-color: rgb(237, 251, 253);
 }
 

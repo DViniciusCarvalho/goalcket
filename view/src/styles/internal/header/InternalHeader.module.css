@@ -59,7 +59,7 @@
     color: white;
 }
 
-@media only screen and (max-width: 766px){
+@media only screen and (max-width: 766px) and (min-width: 500px) {
     .user__area {
         display: none;
     }
@@ -69,5 +69,22 @@
         justify-content: space-between;
         width: 100%;
         margin: 0;
+    }
+}
+
+@media only screen and (max-width: 499px) {
+    .user__area {
+        display: none;
+    }
+
+    .nav__area {
+        padding: 0px 10px;
+        justify-content: space-between;
+        width: 100%;
+        margin: 0;
+    }
+
+    .group__select {
+        width: 50%;
     }
 }

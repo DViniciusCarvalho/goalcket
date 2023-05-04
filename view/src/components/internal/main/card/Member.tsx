@@ -8,10 +8,10 @@ import { InternalPageContext } from "@/pages/internal";
 
 export default function Member({ name, id, roles }: Data.MemberData) {
 
-    const { handleMemberInfoPopUpState } = useContext(InternalPageContext);
+    const { openMemberInfo } = useContext(InternalPageContext);
 
     return (
-        <div className={memberStyle.member__info} onDoubleClick={() => handleMemberInfoPopUpState(name, id, roles)}>
+        <div className={memberStyle.member__info} onDoubleClick={() => openMemberInfo(name, id, roles)}>
             <Image src={Profile} alt="user profile" className={memberStyle.member__profile__image}/>
             <div className={memberStyle.member__name__role__block}>
                 <p className={memberStyle.member__name}>{ name }</p>

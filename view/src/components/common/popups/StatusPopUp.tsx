@@ -23,7 +23,9 @@ export default function StatusPopUp({ content, visibilityClass, status }: Props.
         deletedWithSuccess: "Deleted with success.",
         cardNotFound: "Card not found.",
         noColumnSpecified: "The destination column must be selected.",
-        movedWithSuccess: "Moved with success."
+        movedWithSuccess: "Moved with success.",
+        kickedWithSuccess: "User kicked with success.",
+        notAdmin: "Just administrators can do this."
     };
 
     return (

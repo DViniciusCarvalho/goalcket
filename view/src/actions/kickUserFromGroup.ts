@@ -54,9 +54,15 @@ export function getAppropriateKickUserStatusMessage(httpStatus: number) {
     if (httpStatus === 200) {
         success = true;
         statusType = "success";
+        statusMessage = "kickedWithSuccess";
+        statusType = "success";
     }
-    else if (httpStatus) {
-
+    else if (httpStatus === 400) {
+        statusMessage = "notAdmin";
+        statusType = "error";
+    }
+    else if (httpStatus === 403) {
+        isAuthorized = false;
     }
 
     return { 

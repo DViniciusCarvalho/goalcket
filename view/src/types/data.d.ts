@@ -53,4 +53,6 @@ export namespace Data {
     type PersonalDataState = null | PersonalData;
     
     type GroupDataState = GroupData | null;
+
+    type PopUpVisibility = "invisible" | "visible";
 }
