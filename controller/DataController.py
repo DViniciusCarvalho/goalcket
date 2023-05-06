@@ -94,7 +94,7 @@ class DataController:
         if user_id:
             has_group_permission_status_code = DataOperations.has_group_permission(user_id, group_hash)
             if has_group_permission_status_code == Http.ok:
-                get_group_info_status_code, group_info = DataOperations.get_group_info(group_hash)
+                get_group_info_status_code, group_info = DataOperations.get_group_info(user_id, group_hash)
                 if get_group_info_status_code == Http.ok:
                     admin = user_is_admin(group_info, user_id)
                     content = { 

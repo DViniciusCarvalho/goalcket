@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Props } from "@/types/props";
 
 
-export default function Menu({ headerPosition }: Props.MenuProps){
+export default function Menu({ headerPosition, headerPage }: Props.MenuProps){
 
     const router = useRouter();
 
@@ -22,7 +22,7 @@ export default function Menu({ headerPosition }: Props.MenuProps){
     }
 
     return(            
-        <nav className={`${menuStyles.header__menu__navigation} ${menuStyles[headerPosition]}`}>
+        <nav className={`${menuStyles.header__menu__navigation} ${menuStyles[headerPosition]} ${menuStyles[headerPage]}`}>
             <button className={`${menuStyles.header__menu__button} ${menuStyles[buttonStatus]}`} onClick={changeMenuVisibility}>
                 <div className={`${menuStyles.header__menu__button__line} ${menuStyles.top__line}`}></div>
                 <div className={`${menuStyles.header__menu__button__line} ${menuStyles.middle__line}`}></div>

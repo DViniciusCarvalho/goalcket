@@ -29,9 +29,13 @@ class DataOperations:
 
     @validate_arguments
     @staticmethod
-    def get_group_info(group_hash: str):
+    def get_group_info(user_id: str, group_hash: str):
 
-        filter_query = { 
+        user_filter_query = {
+            "_id": ObjectId(user_id)
+        }
+
+        group_filter_query = { 
             "hash": group_hash 
         }
 
@@ -43,14 +47,14 @@ class DataOperations:
             }
         }
 
-        result = Connection.find_group_collection(filter_query)
+        result = Connection.find_group_collection(group_filter_query)
         if result:
             del result["_id"]
             del result["hash"]
             del result["password"]
             return Http.ok, result
         elif result == None:
-            delete_result = Connection.update_user_collection(filter_query, remove_group_query)
+            delete_result = Connection.update_user_collection(user_filter_query, remove_group_query)
             if delete_result:
                 if delete_result.matched_count > 0:
                     return Http.not_found, None

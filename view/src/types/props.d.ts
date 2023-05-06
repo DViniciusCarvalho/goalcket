@@ -14,6 +14,7 @@ export namespace Props {
 
     interface MenuProps {
         headerPosition: string;
+        headerPage: string;
     }
 
     interface CardProps {

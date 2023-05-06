@@ -10,7 +10,8 @@ export default function Header({ needChangeBackground, headerPage }: Props.Heade
     const [ headerBackgroundColor, setHeaderBackgroundColor ] = useState("in--origin");
 
     const menuProps: Props.MenuProps = {
-        headerPosition: headerBackgroundColor
+        headerPosition: headerBackgroundColor,
+        headerPage: headerPage
     }
 
     function defineHeaderClass(scrollTop: number): void {
