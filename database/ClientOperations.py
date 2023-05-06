@@ -41,6 +41,7 @@ class ClientOperations:
             return Http.internal_server_error
         return Http.internal_server_error 
 
+
     @staticmethod
     def sign_in(client: Client) -> Tuple[int, Union[int, None]]:
         validate_data_and_get_id_filter_query = { 
@@ -57,7 +58,8 @@ class ClientOperations:
         elif result == None:
             return Http.not_found, None
         return Http.internal_server_error, None
-        
+
+
     @validate_arguments
     @staticmethod
     def fetch_data(user_id: str):
@@ -74,7 +76,8 @@ class ClientOperations:
             rooms = result["rooms"]
             return Http.ok, user_name, rooms
         return Http.internal_server_error, None, None
-        
+
+
     @validate_arguments
     @staticmethod
     def add_group(user_id: str, group_name: str, group_hash: str) -> int:
@@ -101,7 +104,8 @@ class ClientOperations:
         if result:
             return Http.ok
         return Http.internal_server_error
-    
+
+
     @validate_arguments
     @staticmethod
     def add_card_to_personal(user_id: str, username: str, column_destination: str, card_priority: str, 
@@ -135,7 +139,8 @@ class ClientOperations:
         if result:
             return Http.ok, timestamp, card_hash
         return Http.internal_server_error, None, None
-    
+
+
     @validate_arguments
     @staticmethod
     def move_card_personal(user_id: str, card_data: Any, card_current_column: str, card_destiny_column:str):
@@ -179,6 +184,7 @@ class ClientOperations:
             return Http.internal_server_error, None
         return Http.internal_server_error, None
 
+
     @validate_arguments
     @staticmethod
     def delete_card_personal(user_id: str, card_id: str, card_column: str) -> int:
@@ -206,6 +212,7 @@ class ClientOperations:
                 return Http.ok
             return Http.not_found
         return Http.internal_server_error
+
 
     @validate_arguments
     @staticmethod

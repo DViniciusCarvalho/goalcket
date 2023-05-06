@@ -7,3 +7,4 @@ class Http:
     not_found = 404
     conflict = 409
     internal_server_error = 500
+    unprocessable_entity = 422

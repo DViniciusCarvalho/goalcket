@@ -5,13 +5,15 @@ from typing import Dict, List, Union
 class Group:
     hash: str
     name: str
+    creation: int
     password: str
     members: List[Dict[str, Union[str, list]]] = field(default_factory=list)
     columns: Dict[str, Dict[str, Union[str, List[str]]]] = field(default_factory=Dict)
 
-    def __init__(self, hash: str = "", name: str = "", password: str = "", admin_name: str = "", admin_id: str = ""):
+    def __init__(self, hash = "", name = "", creation = 0, password = "", admin_name = "", admin_id = ""):
         object.__setattr__(self, "hash", hash)
         object.__setattr__(self, "name", name)
+        object.__setattr__(self, "creation", creation)
         object.__setattr__(self, "password", password)
         object.__setattr__(
             self, 

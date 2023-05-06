@@ -61,3 +61,17 @@ export function getMemberIndex(members: Data.MemberData[], id: string): number {
     }
     return memberIndex;
 }
+
+export function getGroupOptionIndex(groupsList: Data.GroupOptionData[], id: string): number {
+    let groupOptionIndex = 0;
+    for (let i = 0; i < groupsList.length; i++) {
+        if (groupsList[i].hash === id) {
+            groupOptionIndex = i;
+        }
+    }
+    return groupOptionIndex;
+}
+
+export function getAdminsNumber(members: Data.MemberData[]): number {
+    return members.filter(member => member.roles?.indexOf("admin") !== -1).length;
+}

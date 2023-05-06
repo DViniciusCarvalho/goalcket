@@ -76,4 +76,22 @@ export namespace Request {
         headers: {[key: string]: string};
         body: string;
     }
+
+    interface LeaveGroupRequestParameters {
+        method: "DELETE";
+        headers: {[key: string]: string};
+        body: string;
+    }
+
+    interface DeleteGroupRequestParameters {
+        method: "DELETE";
+        headers: {[key: string]: string};
+        body: string;
+    }
+
+    interface PromoteMemberRequestParameters {
+        method: "PUT";
+        headers: {[key: string]: string};
+        body: string;
+    }
 }

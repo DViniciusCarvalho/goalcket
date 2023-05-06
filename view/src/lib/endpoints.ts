@@ -34,3 +34,9 @@ export const CHANGE_PERSONAL_CARD_CONTENT_ENDPOINT = API_ENDPOINT + "change-pers
 export const CHANGE_GROUP_CARD_CONTENT_ENDPOINT = API_ENDPOINT + "change-group-card-content";
 
 export const KICK_USER_ENDPOINT = API_ENDPOINT + "kick-user";
+
+export const LEAVE_GROUP_ENDPOINT = API_ENDPOINT + "leave-group";
+
+export const DELETE_GROUP_ENDPOINT = API_ENDPOINT + "delete-group";
+
+export const PROMOTE_MEMBER_ENDPOINT = API_ENDPOINT + "promote-member";

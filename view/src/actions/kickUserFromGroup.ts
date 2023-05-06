@@ -51,6 +51,8 @@ export function getAppropriateKickUserStatusMessage(httpStatus: number) {
     let success = false;
     let isAuthorized = true;
 
+    let groupExists = true;
+
     if (httpStatus === 200) {
         success = true;
         statusType = "success";
@@ -64,11 +66,16 @@ export function getAppropriateKickUserStatusMessage(httpStatus: number) {
     else if (httpStatus === 403) {
         isAuthorized = false;
     }
+    else if (httpStatus === 404) {
+        statusMessage = "groupNotFound";
+        groupExists = false;
+    }
 
     return { 
         statusMessage, 
         statusType, 
         success, 
-        isAuthorized
+        isAuthorized,
+        groupExists
     };
 }

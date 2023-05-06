@@ -56,6 +56,14 @@ class Connection:
             return False
         
     @staticmethod
+    def delete_group_collection(filter_query: Dict[str, str]):
+        try:
+            result = Connection.group_collection.delete_one(filter_query)
+            return result
+        except OperationFailure:
+            return False
+        
+    @staticmethod
     def find_group_collection(filter_query: Dict[str, str]):
         try:
             result = Connection.group_collection.find_one(filter_query)

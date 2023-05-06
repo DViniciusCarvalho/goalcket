@@ -61,6 +61,7 @@
 
 .buttons__block {
     display: flex;
+    justify-content: space-between;
     height: 36%;
     width: 100%;
     padding: 20px;

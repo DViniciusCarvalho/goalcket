@@ -53,6 +53,8 @@ export function getAppropriateDeleteGroupCardStatusMessage(httpStatus: number) {
     let success = false;
     let isAuthorized = true;
 
+    let groupExists = true;
+
     if (httpStatus === 200) {
         statusMessage = "deletedWithSuccess";
         statusType = "success";
@@ -68,5 +70,5 @@ export function getAppropriateDeleteGroupCardStatusMessage(httpStatus: number) {
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, success, isAuthorized };
+    return { statusMessage, statusType, success, isAuthorized, groupExists };
 }

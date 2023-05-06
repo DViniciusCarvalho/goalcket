@@ -11,7 +11,7 @@ export default function Description({ area, color, isGroup }: Props.DescriptionP
 
     const router = useRouter();
 
-    const { currentGroupId } = useContext(InternalPageContext);
+    const { currentGroupId, removeGroupFromGroupOptionList, showStatusPopUp } = useContext(InternalPageContext);
 
     const [ descriptionBackground, setDescriptionBackground ] = useState<string>(color);
     const [ initialColor, setInitialColor ] = useState<string>(color);
@@ -40,6 +40,10 @@ export default function Description({ area, color, isGroup }: Props.DescriptionP
     async function handleChangePersonalColumnColor(currentColorValue: string) {
         const status = await changeGroupColumnColor(currentColorValue, currentGroupId, area);
         if (status === 403) router.push("/login");
+        else if (status === 404) {
+            showStatusPopUp("groupNotFound", "error");
+            removeGroupFromGroupOptionList();
+        }
     }
 
     async function handleChangeGroupColumnColor(currentColorValue: string) {
@@ -56,7 +60,7 @@ export default function Description({ area, color, isGroup }: Props.DescriptionP
 
     return (
         <div className={descriptionStyles.description} style={{backgroundColor: descriptionBackground}}>
-            <label htmlFor={area}>{ getDescriptionTitle()}</label>
+            <label htmlFor={area}>{ getDescriptionTitle() }</label>
             <input type="color" id={area} style={{position: "absolute", zIndex: -9999, backgroundColor: descriptionBackground}} onChange={(event) => changeColor(event)} onFocus={(event) => updateInitialColor(event)} onBlur={(event) => updateFinalColor(event)}/>
         </div>
     );

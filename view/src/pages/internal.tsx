@@ -45,11 +45,40 @@ import {
     getAppropriateMoveGroupCardStatusMessage 
 } from "@/actions/moveGroupCard";
 
-import { changePersonalCardContent, getPersonalDataWithModifiedCardContent } from "@/actions/changePersonalCardContent";
-import { changeGroupCardContent, getGroupDataWithModifiedCard } from "@/actions/changeGroupCardContent";
+import { 
+    changePersonalCardContent, 
+    getPersonalDataWithModifiedCardContent 
+} from "@/actions/changePersonalCardContent";
+
+import { 
+    changeGroupCardContent, 
+    getGroupDataWithModifiedCard 
+} from "@/actions/changeGroupCardContent";
+
+import {
+    leaveGroup,
+    getAppropriateLeaveGroupStatusMessage,
+    getUpdatedGroupOptionsList
+} from "@/actions/leaveGroup";
+
+import { 
+    getAppropriateKickUserStatusMessage, 
+    getGroupDataWithoutKickedUser, 
+    kickUser 
+} from "@/actions/kickUserFromGroup";
+
+import { 
+    deleteGroup, 
+    getAppropriateDeleteGroupStatusMessage 
+} from "@/actions/deleteGroup";
+
+import { 
+    getAppropriatePromoteMemberStatusMessage, 
+    promoteMember, 
+    getGroupDataWithMemberRoleUpdated 
+} from "@/actions/promoteMembers";
 
 import { Data } from "@/types/data";
-import { getAppropriateKickUserStatusMessage, getGroupDataWithoutKickedUser, kickUser } from "@/actions/kickUserFromGroup";
 
 
 export const InternalPageContext = createContext<any>(null);
@@ -141,7 +170,11 @@ export default function Internal(){
         currentMemberData,
         userIsAdmin,
         handleKickUser,
-        openGroupSettings
+        openGroupSettings,
+        handleLeaveGroup,
+        removeGroupFromGroupOptionList,
+        handleDeleteGroup,
+        handlePromoteMember
     };
 
     const firstLayerOverlayProps = {
@@ -197,12 +230,16 @@ export default function Internal(){
         const { 
             statusMessage, 
             success, 
-            canLoadData 
+            canLoadData,
+            groupExists 
         } = getAppropriateGetGroupStatusMessage(status);
 
         if (success && canLoadData) {
             loadGroupData(group);
             setUserIsAdmin(() => isAdmin);
+        }
+        else if (!groupExists) {
+            removeGroupFromGroupOptionList();
         }
         
         setGetGroupRequestStatusMessage(() => statusMessage);
@@ -321,7 +358,8 @@ export default function Internal(){
             statusMessage, 
             statusType, 
             success, 
-            isAuthorized
+            isAuthorized,
+            groupExists
         } = getAppropriateDeleteGroupCardStatusMessage(status);
 
         if (!isAuthorized) {
@@ -331,6 +369,9 @@ export default function Internal(){
             showStatusPopUp(statusMessage, statusType);
             if (success) {
                 removeCardFromGroupDOM();
+            }
+            else if (!groupExists) {
+                removeGroupFromGroupOptionList();
             }
         }
     }
@@ -415,7 +456,8 @@ export default function Internal(){
             statusMessage, 
             statusType, 
             success, 
-            isAuthorized
+            isAuthorized,
+            groupExists
         } = getAppropriateMoveGroupCardStatusMessage(status);
 
         if (!isAuthorized) {
@@ -425,6 +467,9 @@ export default function Internal(){
             showStatusPopUp(statusMessage, statusType);
             if (success) {
                 moveCardFromGroupDOM(destinyColumn, hash);
+            }
+            else if (!groupExists) {
+                removeGroupFromGroupOptionList();
             }
         }
     }
@@ -501,7 +546,8 @@ export default function Internal(){
             statusMessage, 
             statusType, 
             success, 
-            isAuthorized 
+            isAuthorized,
+            groupExists
         } = getAppropriateKickUserStatusMessage(status);
 
         if (!isAuthorized) {
@@ -511,6 +557,9 @@ export default function Internal(){
             showStatusPopUp(statusMessage, statusType);
             if (success) {
                 removeMemberFromDOM(userIdToKick);
+            }
+            else if (!groupExists) {
+                removeGroupFromGroupOptionList();
             }
         }
 
@@ -522,6 +571,85 @@ export default function Internal(){
             userIdToKick
         );
         setGroupData(() => groupDataWithoutKickedUser);
+    }
+
+    /*
+     * LEAVE GROUP
+     */
+
+    async function handleLeaveGroup() {
+        const status = await leaveGroup(currentGroupId);
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized,
+            groupExists
+        } = getAppropriateLeaveGroupStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success || !groupExists) {
+                removeGroupFromGroupOptionList();
+            }
+        }
+    }
+
+    /*
+     * DELETE GROUP
+     */
+
+    async function handleDeleteGroup() {
+        const status = await deleteGroup(currentGroupId);
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized,
+            groupExists
+        } = getAppropriateDeleteGroupStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success || !groupExists) {
+                removeGroupFromGroupOptionList();
+            }
+        }
+    }
+
+    /*
+     * PROMOTE MEMBER TO ADMIN
+     */ 
+
+    async function handlePromoteMember(userIdToPromote: string) {
+        const status = await promoteMember(currentGroupId, userIdToPromote);
+
+        const { 
+            statusMessage, 
+            statusType, 
+            success, 
+            isAuthorized,
+            groupExists
+        } = getAppropriatePromoteMemberStatusMessage(status);
+
+        if (!isAuthorized) {
+            router.push("/login");
+        }
+        else {
+            showStatusPopUp(statusMessage, statusType);
+            if (success) {
+                promoteUserToAdminInTheDOM(userIdToPromote);
+            }
+            else if (!groupExists) {
+                removeGroupFromGroupOptionList();
+            }
+        }
     }
 
     /*
@@ -624,9 +752,32 @@ export default function Internal(){
         changePopUpToVisible("memberInfo");
     }
 
-    function openGroupSettings(groupName: string, members: Data.MemberData[], columns: Data.Columns): void {
-        console.log(groupName, members, columns);
-        changePopUpToVisible("groupInfo")
+    function openGroupSettings(): void {
+        changePopUpToVisible("groupInfo");
+    }
+
+    function removeGroupFromGroupOptionList(): void {
+        const groupOptionsListUpdated = getUpdatedGroupOptionsList(
+            groups as Data.GroupOptionData[], 
+            currentGroupId
+        );
+        setGroups(() => groupOptionsListUpdated);
+        hideFirstLayerOverlayAndPopUps();
+        setCurrentRoom(() => "personal");
+    }
+
+    function promoteUserToAdminInTheDOM(userIdToPromote: string): void {
+        const groupDataWithUpdatedMemberRoles = getGroupDataWithMemberRoleUpdated(
+            groupData as Data.GroupData,
+            userIdToPromote
+        );
+        
+        setGroupData(() => groupDataWithUpdatedMemberRoles);
+        setCurrentMemberData(previous => {
+            const deepCopy = JSON.parse(JSON.stringify(previous));
+            deepCopy.roles.push("admin");
+            return deepCopy;
+        });
     }
 
     return (

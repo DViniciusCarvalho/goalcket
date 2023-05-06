@@ -63,6 +63,8 @@ export function getAppropriateMoveGroupCardStatusMessage(httpStatus: number) {
     let success = false;
     let isAuthorized = true;
 
+    let groupExists = true;
+
     if (httpStatus === 200) {
         statusMessage = "movedWithSuccess";
         statusType = "success";
@@ -74,9 +76,13 @@ export function getAppropriateMoveGroupCardStatusMessage(httpStatus: number) {
     else if (httpStatus === 403) {
         isAuthorized = false;
     }
+    else if (httpStatus === 404) {
+        groupExists = false;
+        statusMessage = "groupNotFound";
+    }
     else if (httpStatus === 500) {
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, success, isAuthorized };
+    return { statusMessage, statusType, success, isAuthorized, groupExists };
 }

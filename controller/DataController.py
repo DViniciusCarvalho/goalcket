@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from sys import path
 
@@ -36,7 +37,8 @@ class DataController:
             has_not_offensive_inputs = input_valid(group_name, group_password)
             if group_data_is_valid and has_not_offensive_inputs:
                 hash = create_group_hash(group_name)
-                group = Group(hash, group_name, group_password, group_admin_name, group_admin_id)
+                group_creation = int(datetime.now().timestamp() * 1000)
+                group = Group(hash, group_name, group_creation, group_password, group_admin_name, group_admin_id)
                 group_dict_format = group.__dict__
                 create_group_status_code = DataOperations.create_group(group_dict_format)
                 if create_group_status_code == Http.created:
@@ -84,7 +86,7 @@ class DataController:
     
     @staticmethod
     @router.post("/get-group-content")
-    async def get_group(request: Request) -> JSONResponse:
+    async def get_group_content(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         group_hash = data["roomId"]
@@ -130,6 +132,8 @@ class DataController:
                 return JSONResponse(status_code=Http.ok, content={})
             elif update_group_column_status_code == Http.bad_request:
                 raise HTTPException(status_code=Http.bad_request)
+            elif update_group_column_status_code == Http.not_found:
+                raise HTTPException(status_code=Http.not_found)
             raise HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)
 
@@ -246,7 +250,7 @@ class DataController:
             card_destiny_column = data["destinyColumn"]
             card_data = data["cardData"]
             if card_destiny_column != "":
-                move_card_personal_status_code, new_card_hash = DataOperations.move_card_group(
+                move_card_personal_status_code, new_card_hash, group_exists = DataOperations.move_card_group(
                     group_hash,
                     card_data, 
                     card_current_column, 
@@ -255,6 +259,9 @@ class DataController:
                 if move_card_personal_status_code == Http.ok:
                     content = { "hash": new_card_hash }
                     return JSONResponse(status_code=Http.ok, content=content)
+                elif move_card_personal_status_code == Http.not_found:
+                    detail = { "groupExists": group_exists }
+                    raise HTTPException(status_code=Http.not_found, detail=detail)
                 raise HTTPException(status_code=Http.internal_server_error)
             raise HTTPException(status_code=Http.bad_request)
         raise HTTPException(status_code=Http.forbidden)
@@ -286,11 +293,15 @@ class DataController:
             card_id = data["cardId"]
             card_column = data["column"]
             group_hash = data["groupId"]
-            delete_group_card_status_code = DataOperations.delete_card_group(group_hash, card_id, card_column)
+            delete_group_card_status_code, group_exists = DataOperations.delete_card_group(
+                group_hash, card_id, 
+                card_column
+            )
             if delete_group_card_status_code == Http.ok:
                 return JSONResponse(status_code=Http.ok, content={})
             elif delete_group_card_status_code == Http.not_found:
-                raise HTTPException(status_code=Http.not_found)
+                detail = { "groupExists": group_exists }
+                raise HTTPException(status_code=Http.not_found, detail=detail)
             raise HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)
     
@@ -328,7 +339,7 @@ class DataController:
             current_card_column = data["currentColumn"]
             card_id = data["cardId"]
             new_card_content = data["newContent"]
-            change_group_card_content_status_code = DataOperations.change_group_card_content(
+            change_group_card_content_status_code, group_exists = DataOperations.change_group_card_content(
                 group_hash,
                 current_card_column,
                 card_id,
@@ -337,13 +348,14 @@ class DataController:
             if change_group_card_content_status_code == Http.ok:
                 return JSONResponse(status_code=Http.ok, content={})
             elif change_group_card_content_status_code == Http.not_found:
-                return HTTPException(status_code=Http.not_found)
+                detail = { "groupExists": group_exists }
+                return HTTPException(status_code=Http.not_found, detail=detail)
             return HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)
 
     @staticmethod
     @router.delete("/kick-user")
-    async def kick_user(request: Request):
+    async def kick_user(request: Request) -> JSONResponse:
         data = await request.json()
         token = data["token"]
         user_id = decode_token(token)
@@ -358,6 +370,55 @@ class DataController:
             raise HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)
     
-    # token: localStorage.getItem("token") ?? "",
-    # groupId: groupId,
-    # userId: userId
+    @staticmethod
+    @router.delete("/leave-group")
+    async def leave_group(request: Request) -> JSONResponse:
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            group_hash = data["groupId"]
+            leave_group_status_code = DataOperations.leave_group(group_hash, user_id)
+            if leave_group_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif leave_group_status_code == Http.not_found:
+                raise HTTPException(status_code=Http.not_found)
+            elif leave_group_status_code == Http.unprocessable_entity:
+                raise HTTPException(status_code=Http.unprocessable_entity)
+            return HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)
+
+    @staticmethod
+    @router.delete("/delete-group")
+    async def delete_group(request: Request) -> JSONResponse:
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            group_hash = data["groupId"]
+            delete_group_status_code = DataOperations.delete_group(user_id, group_hash)
+            if delete_group_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif delete_group_status_code == Http.bad_request:
+                raise HTTPException(status_code=Http.bad_request)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)
+    
+    @staticmethod
+    @router.put("/promote-member")
+    async def promote_member(request: Request) -> JSONResponse:
+        data = await request.json()
+        token = data["token"]
+        user_id = decode_token(token)
+        if user_id:
+            group_hash = data["groupId"]
+            user_id_to_promote = data["userIdToPromove"]
+            promotion_status_code = DataOperations.promote_member(user_id, group_hash, user_id_to_promote)
+            if promotion_status_code == Http.ok:
+                return JSONResponse(status_code=Http.ok, content={})
+            elif promotion_status_code == Http.bad_request:
+                raise HTTPException(status_code=Http.bad_request)
+            elif promotion_status_code == Http.not_found:
+                raise HTTPException(status_code=Http.not_found)
+            raise HTTPException(status_code=Http.internal_server_error)
+        raise HTTPException(status_code=Http.forbidden)

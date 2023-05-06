@@ -41,6 +41,8 @@ export function getAppropriateGetGroupStatusMessage(httpStatus: number) {
 
     let canLoadData = false;
 
+    let groupExists = true;
+
     if (httpStatus === 200){
         success = true;
         canLoadData = true;
@@ -53,10 +55,11 @@ export function getAppropriateGetGroupStatusMessage(httpStatus: number) {
     }
     else if (httpStatus === 404){
         statusMessage = "notFound";
+        groupExists = false;
     }
     else if (httpStatus === 500){
         statusMessage = "internalServerError";
     }
 
-    return { statusMessage, success, canLoadData };
+    return { statusMessage, success, canLoadData, groupExists };
 }

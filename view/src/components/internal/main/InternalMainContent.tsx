@@ -61,7 +61,8 @@ export default function InternalMainContent(){
         showStatusPopUp,
         popUpStatusContent,
         popUpStatusType,
-        popUpStatusVisibility
+        popUpStatusVisibility,
+        removeGroupFromGroupOptionList
     } = useContext(InternalPageContext);
 
     const [ searchCardFilterString, setSearchCardFilterString ] = useState("");
@@ -255,7 +256,8 @@ export default function InternalMainContent(){
             statusMessage, 
             statusType, 
             isAuthorized, 
-            success 
+            success,
+            groupExists
         } = getAppropriateAddCardToGroupStatusMessage(status);
 
         if (!isAuthorized) {
@@ -266,6 +268,9 @@ export default function InternalMainContent(){
             clearAddCardInputs();
             if (success) {
                 updateGroupCards(username, timestamp, id, destination, priority, content);
+            }     
+            else if (!groupExists) {
+                removeGroupFromGroupOptionList();
             }
         }
     }

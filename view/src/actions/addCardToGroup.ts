@@ -46,6 +46,8 @@ export function getAppropriateAddCardToGroupStatusMessage(httpStatus: number) {
     let isAuthorized = true;
     let success = false;
 
+    let groupExists = true;
+
     if (httpStatus === 200){
         statusMessage = "addCardWithSuccess";
         statusType = "success";
@@ -56,10 +58,11 @@ export function getAppropriateAddCardToGroupStatusMessage(httpStatus: number) {
     }
     else if (httpStatus === 404){
         statusMessage = "groupNotFound";
+        groupExists = false;
     }
     else if (httpStatus === 500){
         statusMessage = "serverError";
     }
     
-    return { statusMessage, statusType, isAuthorized, success };
+    return { statusMessage, statusType, isAuthorized, success, groupExists };
 }

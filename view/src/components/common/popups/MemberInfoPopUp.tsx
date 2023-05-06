@@ -15,7 +15,8 @@ export default function MemberInfoPopUp({ name, id, roles }: Data.MemberData) {
         memberPopUpVisibility, 
         userIsAdmin, 
         hideFirstLayerOverlayAndPopUps, 
-        handleKickUser 
+        handleKickUser,
+        handlePromoteMember
     } = useContext(InternalPageContext);
 
     const origin = "member--info";
@@ -29,6 +30,12 @@ export default function MemberInfoPopUp({ name, id, roles }: Data.MemberData) {
         origin: origin,
         message: "Kick",
         actionFunction: () => handleKickUser(id)
+    };
+
+    const promoteButtonProps: Props.ActionButtonProps = {
+        origin: origin,
+        message: "Promote",
+        actionFunction: () => handlePromoteMember(id)
     };
 
     function currentMemberIsAdmin(): boolean {
@@ -54,6 +61,7 @@ export default function MemberInfoPopUp({ name, id, roles }: Data.MemberData) {
             { userIsAdmin && !currentMemberIsAdmin() && (
                 <div className={memberInfoPopUpStyle.buttons__block}>
                     <ActionButton {...kickButtonProps}/>
+                    <ActionButton {...promoteButtonProps}/>
                 </div>
             )}
         </div>

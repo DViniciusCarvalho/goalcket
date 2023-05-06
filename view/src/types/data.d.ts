@@ -42,8 +42,9 @@ export namespace Data {
     }
 
     type GroupData = {
-        [key: string]: string | MemberData[] | Columns
+        [key: string]: string | number | MemberData[] | Columns
         name: string;
+        creation: number;
         members: MemberData[];
         columns: Columns;
     }

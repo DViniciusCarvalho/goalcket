@@ -26,6 +26,15 @@ def user_is_admin(group_data: Group, user_id: str) -> bool:
         return True
     return False
     
+def get_admins_number(group_data: Group):
+    members = group_data["members"]
+    count = 0
+    for member in members:
+        if "admin" in member["roles"]:
+            count = count + 1
+    return count
+    
+
 def create_group_hash(name: str) -> str:
     name_hash_object = sha256(name.encode())
     name_hash_bytes = name_hash_object.digest()

@@ -111,6 +111,7 @@ export namespace Props {
 
     interface GroupContentProps {
         name: string;
+        creation: number;
         members: Data.MemberData[];
         columns: Data.Columns;
     }

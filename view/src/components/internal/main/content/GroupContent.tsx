@@ -19,7 +19,7 @@ import { InternalPageContext } from "@/pages/internal";
 import GroupInfoPopUp from "@/components/common/popups/GroupInfoPopUp";
 
 
-export default function GroupContent({ name, members, columns }: Props.GroupContentProps){
+export default function GroupContent({ name, creation, members, columns }: Props.GroupContentProps){
     
     const { currentMemberData, openGroupSettings } = useContext(InternalPageContext);
 
@@ -27,6 +27,13 @@ export default function GroupContent({ name, members, columns }: Props.GroupCont
         name: currentMemberData.name,
         id: currentMemberData.id,
         roles: currentMemberData.roles
+    };
+
+    const groupInfoPopUpProps: Data.GroupData = {
+        name: name,
+        creation: creation,
+        members: members,
+        columns: columns
     };
 
     const toDoProps = { 
@@ -47,14 +54,14 @@ export default function GroupContent({ name, members, columns }: Props.GroupCont
     return (
         <div className={groupContentStyle.group__area__block}>
             <MemberInfoPopUp {...memberInfoPopUpProps}/>
-            <GroupInfoPopUp/>
+            <GroupInfoPopUp {...groupInfoPopUpProps}/>
             <div className={groupContentStyle.group__info__wrapper}>
                 <div className={groupContentStyle.group__members__block}>
                     { members.map(member => (
                         <Member key={member.id} name={member.name} id={member.id} roles={member.roles}/>
                     ))}
                 </div>
-                <button className={groupContentStyle.group__settings__button} onClick={() => openGroupSettings(name, members, columns)}>
+                <button className={groupContentStyle.group__settings__button} onClick={() => openGroupSettings(name, creation, members, columns)}>
                     <Image src={SettingsIcon} alt="settings icon" className={groupContentStyle.settings__icon}/>
                 </button>
             </div>

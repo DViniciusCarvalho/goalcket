@@ -25,7 +25,10 @@ export default function StatusPopUp({ content, visibilityClass, status }: Props.
         noColumnSpecified: "The destination column must be selected.",
         movedWithSuccess: "Moved with success.",
         kickedWithSuccess: "User kicked with success.",
-        notAdmin: "Just administrators can do this."
+        notAdmin: "Just administrators can do this.",
+        exitWithSuccess: "Successful exit.",
+        uniqueAdmin: "You are the unique admin here. Give to someone the admin privilege before.",
+        promotedWithSuccess: "Member promoted with success."
     };
 
     return (
