@@ -14,9 +14,8 @@ from controller import ClientController, DataController
 
 app = FastAPI()
 
-SERVER_HOST = "localhost"
-SERVER_PORT = 3001
-
+# SERVER_HOST = "localhost"
+# SERVER_PORT = 3001
 
 origins = [
     "http://localhost",
@@ -34,11 +33,11 @@ app.add_middleware(
 app.include_router(ClientController.router)
 app.include_router(DataController.router)
 
-if __name__ == "__main__":
-    run(
-        "app:app", 
-        reload=True, 
-        host=SERVER_HOST, 
-        port=SERVER_PORT,
-        log_level="debug"
-    )
+# if __name__ == "__main__":
+#     run(
+#         "app:app", 
+#         reload=True, 
+#         host=SERVER_HOST, 
+#         port=SERVER_PORT,
+#         log_level="debug"
+#     )

@@ -31,7 +31,7 @@ class Connection:
     group_collection = db.get_collection("groups")
 
     @staticmethod
-    def find_user_collection(filter_query: Dict[str, Union[str, ObjectId]]) -> Union[Dict[str, Any], None] | False:
+    def find_user_collection(filter_query: Dict[str, Union[str, ObjectId]]) -> Union[Dict[str, Any], None] | bool:
         try:
             value_returned = Connection.user_collection.find_one(filter_query)
             return value_returned
@@ -40,7 +40,7 @@ class Connection:
 
     @validate_arguments
     @staticmethod
-    def insert_user_collection(query: Dict[str, Union[str, Dict]]) -> Union[str, False]:
+    def insert_user_collection(query: Dict[str, Union[str, Dict]]) -> Union[str, bool]:
         try:
             result = Connection.user_collection.insert_one(query)
             return str(result.inserted_id)

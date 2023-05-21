@@ -23,7 +23,7 @@ def create_token(id: Union[str, None]) -> str:
     return token
 
 @validate_arguments
-def decode_token(token: str) -> Union[str, False]:
+def decode_token(token: str) -> Union[str, bool]:
     try:
         payload = decode(token, SECRET, ALGORITHM)
         user_id = payload["sub"]
