@@ -23,6 +23,7 @@ export default function Functionalities({ isGroup }: Props.FunctionalitiesProps)
     function copyHash(): void {
         const hashTextElement = hashTextRef.current! as HTMLParagraphElement;
         const hashValue = hashTextElement.innerText;
+        
         navigator.clipboard.writeText(hashValue);
     }
 

@@ -8,7 +8,7 @@ import { Props } from "@/types/props";
 
 export default function StatusPopUp({ content, visibilityClass, status }: Props.StatusPopUpProps) {
 
-    const popUpMessages: {[key: string]: string} = {
+    const statusPopUpMessages: {[key: string]: string} = {
         invalidLogin: "Invalid credentials, password or e-mail incorrect.",
         invalidInput: "Invalid credentials, don't use HTML tags and emails must have \"@\".",
         invalidUser: "E-mail already used. Please, try to use another one.",
@@ -37,7 +37,7 @@ export default function StatusPopUp({ content, visibilityClass, status }: Props.
         >
             <Image src={(status === "error")? ErrorIcon : SuccessIcon } 
                 alt="status icon" className={statusPopUpstyle.status__icon}/>
-            <p> { popUpMessages[content] } </p>
+            <p> { statusPopUpMessages[content] } </p>
         </div>
     );
 }

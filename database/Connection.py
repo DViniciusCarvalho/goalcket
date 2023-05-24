@@ -23,9 +23,9 @@ class Connection:
     mongo_password = getenv("MONGO_PASSWORD")
     mongo_db = getenv("MONGO_DB")
 
-    client = MongoClient(f"mongodb://{mongo_user}:{mongo_password}@localhost:27017/{mongo_db}")
+    client = MongoClient(f"mongodb://{mongo_user}:{mongo_password}@mongodb:27017/{mongo_db}")
 
-    db = client.get_database("goalcket")
+    db = client.get_database(mongo_db)
 
     user_collection = db.get_collection("users")
     group_collection = db.get_collection("groups")

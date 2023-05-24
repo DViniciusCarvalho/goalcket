@@ -23,6 +23,7 @@ export default function InternalHeader(){
         const selectedIndex = event.target!.selectedIndex;
         const selectedOption = event.target!.options[selectedIndex];
         const selectedOptionId = selectedOption.id;
+        
         handleChangeRoom(selectedOptionId);
     }
 

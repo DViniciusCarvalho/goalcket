@@ -22,7 +22,6 @@ function getChangePersonalCardContentRequestConfig(cardId: string, currentColumn
         newContent: newContent
     };
 
-    console.log(data);
     const parameters: Request.ChangeCardContentRequestParameters = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },

@@ -167,7 +167,7 @@ class DataController:
             group_column_destination = data["destination"]
             group_card_priority = data["priority"]
             group_card_content = data["content"]
-            group_exists_status_code, group_data = DataOperations.get_group_info(group_hash)
+            group_exists_status_code, group_data = DataOperations.get_group_info(user_id, group_hash)
             if group_exists_status_code == Http.ok:
                 member_info = get_member_info(group_data, user_id)
                 if member_info:

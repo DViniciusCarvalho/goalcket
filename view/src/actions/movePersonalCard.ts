@@ -20,7 +20,7 @@ Request.MoveCardRequestParameters {
         destinyColumn,
         cardData
     };
-    console.log(data)
+
     const parameters: Request.MoveCardRequestParameters = {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +43,9 @@ export function getPersonalDataWithMovedCard(personalData: Data.PersonalData, cu
     const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
     const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
+
     currentCardDataToMove.id = newHash;
+    
     deepCopy![currentColumn].cards.splice(cardIndex, 1);
     deepCopy![destinyColumn].cards.push(currentCardDataToMove as Data.CardData);
 

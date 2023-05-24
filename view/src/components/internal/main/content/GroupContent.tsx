@@ -21,7 +21,7 @@ import GroupInfoPopUp from "@/components/common/popups/GroupInfoPopUp";
 
 export default function GroupContent({ name, creation, members, columns }: Props.GroupContentProps){
     
-    const { currentMemberData, openGroupSettings } = useContext(InternalPageContext);
+    const { userId, currentMemberData, openGroupSettings } = useContext(InternalPageContext);
 
     const memberInfoPopUpProps: Data.MemberData = {
         name: currentMemberData.name,
@@ -58,7 +58,12 @@ export default function GroupContent({ name, creation, members, columns }: Props
             <div className={groupContentStyle.group__info__wrapper}>
                 <div className={groupContentStyle.group__members__block}>
                     { members.map(member => (
-                        <Member key={member.id} name={member.name} id={member.id} roles={member.roles}/>
+                        <Member 
+                          key={member.id} 
+                          name={member.id === userId? `${member.name} (you)` : member.name} 
+                          id={member.id} 
+                          roles={member.roles}
+                        />
                     ))}
                 </div>
                 <button className={groupContentStyle.group__settings__button} onClick={() => openGroupSettings(name, creation, members, columns)}>

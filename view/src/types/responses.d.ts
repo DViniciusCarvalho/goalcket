@@ -8,6 +8,7 @@ export namespace Response {
     
     interface FetchDataResponse {
         name: string;
+        userId: string;
         rooms: {
             personal: Data.PersonalData,
             groups: Data.GroupOptionData[]

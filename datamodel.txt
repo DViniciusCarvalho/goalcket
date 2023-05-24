@@ -1,51 +1,51 @@
 User:
 { 
-    "name": client.name, 
-    "email": client.email, 
-    "password": client.password, 
+    "name": string, 
+    "email": string, 
+    "password": string, 
     "rooms": { 
         "personal": { 
             "todo": { 
-                "color": "#4CB120", 
+                "color": string, 
                 "cards": [
                  {
-                    "content": "",
-                    "priority": "",
-                    "timestamp": "",
-                    "id": "",
+                    "content": string,
+                    "priority": string,
+                    "timestamp": int,
+                    "id": string,
                     "creator": {
-                        "name": "",
-                        "id": "",
-                        "roles": []
+                        "name": string,
+                        "id": string,
+                        "roles": string[]
                     }
                 }
                 ]
             },
             "doing": { 
-                "color": "#1F6B69", 
+                "color": string, 
                 "cards": [
                 {
-                    "content": "",
-                    "priority": "",
-                    "timestamp": "",
-                    "id": "",
+                    "content": string,
+                    "priority": string,
+                    "timestamp": int,
+                    "id": string,
                     "creator": {
-                        "name": "",
-                        "id": "",
-                        "roles": []
+                        "name": string,
+                        "id": string,
+                        "roles": string[]
                     }
                 }
                 ]
             },
             "done":{ 
-                "color": "#000000", 
+                "color": string, 
                 "cards": []
             }
         },
         "groups": [
             { 
-                "name": "", 
-                "hash": ""
+                "name": string, 
+                "hash": string
             }
         ]
     } 
@@ -54,40 +54,65 @@ User:
 
 Groups:
 { 
-    "name": "",
-    "hash": "",
-    "password": ""
+    "name": string,
+    "hash": string,
+    "password": string,
+    "creation": int
     "members": [
         {
-            "name": "",
-            "id": "",
-            "roles": []
+            "name": string,
+            "id": string,
+            "roles": string[]
         }
     ],
     "columns": {
         "todo": { 
-            "color": "#4CB120", 
+            "color": string, 
             "cards": [
                 {
-                    "content": "",
-                    "priority": "",
-                    "timestamp": "",
-                    "id": "",
+                    "content": string,
+                    "priority": string,
+                    "timestamp": string,
+                    "id": string,
                     "creator": {
-                        "name": "",
-                        "id": "",
+                        "name": string,
+                        "id": string,
                         "roles": []
                     }
                 }
             ]
         },
         "doing": { 
-            "color": "#1F6B69", 
-            "cards": []
+            "color": string, 
+            "cards": [
+                {
+                    "content": string,
+                    "priority": string,
+                    "timestamp": int,
+                    "id": string,
+                    "creator": {
+                        "name": string,
+                        "id": string,
+                        "roles": []
+                    }
+                }
+            ]
         },
         "done":{ 
-            "color": "#000000", 
-            "cards": []
+            "color": string, 
+            "cards": [
+                {
+                    "content": string,
+                    "priority": string,
+                    "timestamp": int,
+                    "id": string,
+                    "creator": {
+                        "name": string,
+                        "id": string,
+                        "roles": []
+                    }
+                }
+            ]
         }
     }
 }

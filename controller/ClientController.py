@@ -67,7 +67,7 @@ class ClientController:
         if user_id:
             fetch_data_status_code, name, rooms = ClientOperations.fetch_data(user_id)
             if fetch_data_status_code == Http.ok:
-                content = { "name": name, "rooms": rooms }
+                content = { "name": name, "userId": user_id, "rooms": rooms }
                 return JSONResponse(status_code=Http.ok, content=content)
             raise HTTPException(status_code=Http.internal_server_error)
         raise HTTPException(status_code=Http.forbidden)

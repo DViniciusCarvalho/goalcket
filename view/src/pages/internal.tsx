@@ -88,6 +88,7 @@ export default function Internal(){
     const router = useRouter();
 
     const [ username, setUsername ] = useState("");
+    const [ userId, setUserId ] = useState("");
     const [ userIsAdmin, setUserIsAdmin ] = useState(false);
 
     const [ personal, setPersonal ] = useState<Data.PersonalDataState>(null);
@@ -131,6 +132,7 @@ export default function Internal(){
 
     const contextValues = {
         username,
+        userId,
         personal,
         groups,
         addCardPopUpVisibility,
@@ -199,13 +201,14 @@ export default function Internal(){
 
     async function handleClientEntry() {
         const { status, responseObject } = await fetchUserInitialData();
-        const { name, rooms } = responseObject;
+        const { name, userId, rooms } = responseObject;
         
         if (status === 200) {
             const personalData = rooms.personal;
             const userGroups = rooms.groups;
             
             setUsername(() => name);
+            setUserId(() => userId);
             setPersonal(() => personalData);
             setGroups(() => userGroups);
             setLoaded(() => true);
@@ -741,7 +744,6 @@ export default function Internal(){
     }
 
     function openMemberInfo(name: string, id: string, roles: string[]) {
-        console.log(name, id, roles)
         setCurrentMemberData(() => { 
             return {
                 name: name,
