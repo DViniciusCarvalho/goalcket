@@ -1,38 +1,31 @@
 /.env
 
-/env
+/backend/env
+/**/__pycache__/
 
-app/__pycache__/
-controller/__pycache__/
-database/__pycache__/
-helpers/__pycache__/
-model/__pycache__/
+/frontend/view/node_modules
 
-/view/node_modules
+/frontend/view/.pnp
+/frontend/view/.pnp.js
 
-/view/.pnp
-/view/.pnp.js
+/frontend/view/coverage
 
-/view/coverage
+/frontend/view/.next/
+/frontend/view/out/
 
-/view/.next/
-/view/out/
+/frontend/view/build
 
-/view/build
+/frontend/view/.DS_Store
+/frontend/view/*.pem
 
-/view/.DS_Store
-/view/*.pem
+/frontend/view/npm-debug.log*
+/frontend/view/yarn-debug.log*
+/frontend/view/yarn-error.log*
+/frontend/view/.pnpm-debug.log*
 
-/view/npm-debug.log*
-/view/yarn-debug.log*
-/view/yarn-error.log*
-/view/.pnpm-debug.log*
+/frontend/view/.env*.local
 
-/view/.env*.local
+/frontend/view/.vercel
 
-/view/.vercel
-
-/view/*.tsbuildinfo
-/view/next-env.d.ts
-
-
+/frontend/view/*.tsbuildinfo
+/frontend/view/next-env.d.ts

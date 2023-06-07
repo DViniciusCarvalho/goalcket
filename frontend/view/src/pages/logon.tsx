@@ -4,10 +4,10 @@ import logonStyle from "@/styles/logon/Logon.module.css";
 
 import Link from "next/link";
 import StatusPopUp from "@/components/common/popups/StatusPopUp";
-import GoToHomeButton from "../common/buttons/GoToHomeButton";
-import NameInput from "../common/inputs/NameInput";
-import EmailInput from "../common/inputs/EmailInput";
-import PasswordInput from "../common/inputs/PasswordInput";
+import GoToHomeButton from "@/components/common/buttons/GoToHomeButton";
+import NameInput from "@/components/common/inputs/NameInput";
+import EmailInput from "@/components/common/inputs/EmailInput";
+import PasswordInput from "@/components/common/inputs/PasswordInput";
 import SubmitButton from "@/components/common/buttons/SubmitButton";
 
 import { delay } from "@/lib/utils";
@@ -17,7 +17,7 @@ import { logonUser, getAppropriateLogonUserStatusMessage } from "@/actions/logon
 import { Props } from "@/types/props";
 
 
-export default function logonComponent(){
+export default function Logon(){
     
     const [ nameValue, setNameValue ] = useState("");
     const [ emailValue, setEmailValue ] = useState("");

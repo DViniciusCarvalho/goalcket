@@ -4,11 +4,11 @@ import { useRouter } from "next/router";
 import loginStyle from "@/styles/login/Login.module.css";
 
 import Link from "next/link";
-import StatusPopUp from "../common/popups/StatusPopUp";
-import GoToHomeButton from "../common/buttons/GoToHomeButton";
-import EmailInput from "../common/inputs/EmailInput";
-import PasswordInput from "../common/inputs/PasswordInput";
-import SubmitButton from "../common/buttons/SubmitButton";
+import StatusPopUp from "@/components/common/popups/StatusPopUp";
+import GoToHomeButton from "@/components/common/buttons/GoToHomeButton";
+import EmailInput from "@/components/common/inputs/EmailInput";
+import PasswordInput from "@/components/common/inputs/PasswordInput";
+import SubmitButton from "@/components/common/buttons/SubmitButton";
 
 import { delay } from "@/lib/utils";
 
@@ -17,7 +17,7 @@ import { loginUser, getAppropriateLoginUserStatusMessage } from "@/actions/login
 import { Props } from "@/types/props";
 
 
-export default function LoginComponent(){
+export default function Login(){
 
     const router = useRouter();
 
