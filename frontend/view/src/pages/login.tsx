@@ -1,85 +1,131 @@
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
-import loginStyle from "@/styles/login/Login.module.css";
+import loginStyle from '@/styles/login/Login.module.css';
 
-import Link from "next/link";
-import StatusPopUp from "@/components/common/popups/StatusPopUp";
-import GoToHomeButton from "@/components/common/buttons/GoToHomeButton";
-import EmailInput from "@/components/common/inputs/EmailInput";
-import PasswordInput from "@/components/common/inputs/PasswordInput";
-import SubmitButton from "@/components/common/buttons/SubmitButton";
+import Link from 'next/link';
+import StatusPopUp from '@/components/common/popups/StatusPopUp';
+import GoToHomeButton from '@/components/common/buttons/GoToHomeButton';
+import EmailInput from '@/components/common/inputs/EmailInput';
+import PasswordInput from '@/components/common/inputs/PasswordInput';
+import SubmitButton from '@/components/common/buttons/SubmitButton';
 
-import { delay } from "@/lib/utils";
+import { delay } from '@/lib/utils';
 
-import { loginUser, getAppropriateLoginUserStatusMessage } from "@/actions/loginUser";
+import { 
+    loginUser, 
+    getAppropriateLoginUserStatusMessage 
+} from '@/actions/loginUser';
 
-import { Props } from "@/types/props";
+import { Props } from '@/types/props';
 
 
 export default function Login(){
 
     const router = useRouter();
 
-    const [ emailValue, setEmailValue ] = useState("");
-    const [ passwordValue, setPasswordValue ] = useState("");
+    const [ 
+        emailValue, 
+        setEmailValue 
+    ] = useState('');
 
-    const [ loadClass, setLoadClass ] = useState("");
+    const [ 
+        passwordValue, 
+        setPasswordValue 
+    ] = useState('');
+
+    const [ 
+        loadClass, 
+        setLoadClass 
+    ] = useState('');
     
-    const [ popUpVisibility, setPopUpVisibility ] = useState("invisible");
-    const [ popUpStatusContent, setpopUpStatusContent ] = useState("");
+    const [ 
+        popUpVisibility, 
+        setPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        popUpStatusContent, 
+        setpopUpStatusContent 
+    ] = useState('');
+
 
     const popUpProps: Props.StatusPopUpProps = {
         content: popUpStatusContent,
         visibilityClass: popUpVisibility,
-        status: "error"
+        status: 'error'
     };
 
     const emailInputProps: Props.InputProps = {
-        origin: "login",
+        origin: 'login',
         changeValue: changeEmail,
         value: emailValue
     };
 
     const passwordInputProps: Props.InputProps = {
-        origin: "login",
+        origin: 'login',
         changeValue: changePassword,
         value: passwordValue
     };
 
     const loginButtonProps: Props.SubmitButtonProps = {
-        message: "Sign in",
+        message: 'Sign in',
         handleSubmitButtonClick: handleSubmitButtonClick
     };
+
 
     let alreadyLoaded = false;
 
     useEffect(() => {
         if (!alreadyLoaded){
-            setLoadClass("loaded");
+            setLoadClass('loaded');
         }
         alreadyLoaded = true;
     }, []);
 
-    function changeEmail(event: React.ChangeEvent<HTMLInputElement>): void {
-        setEmailValue(event.target.value);
+
+    function changeEmail(
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void {
+
+        setEmailValue(previous => event.target.value);
     }
 
-    function changePassword(event: React.ChangeEvent<HTMLInputElement>): void {
-        setPasswordValue(event.target.value);
+
+    function changePassword(
+        event: React.ChangeEvent<HTMLInputElement>
+    ): void {
+
+        setPasswordValue(previous => event.target.value);
     }
 
-    async function handleSubmitButtonClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
+
+    async function handleSubmitButtonClick(
+        event: React.MouseEvent<HTMLInputElement, MouseEvent>
+    ): Promise<void> {
+
         event.preventDefault();
 
-        const { status, responseObject } = await loginUser(emailValue, passwordValue);
+        const { 
+            status, 
+            responseObject 
+        } = await loginUser(
+            emailValue, 
+            passwordValue
+        );
 
-        const { token } = responseObject;
-        const { statusMessage, isAuthenticated } = getAppropriateLoginUserStatusMessage(status);
+        const { 
+            token 
+        } = responseObject;
+
+        const { 
+            statusMessage, 
+            isAuthenticated 
+        } = getAppropriateLoginUserStatusMessage(status);
 
         if (isAuthenticated) {
-            localStorage.setItem("token", token);
-            router.push("/internal");
+            localStorage.setItem('token', token);
+            router.push('/internal');
         }
         else {
             showPopUp(statusMessage);
@@ -87,30 +133,54 @@ export default function Login(){
         }
     }
 
-    async function showPopUp(statusMessage: string) {
-        setpopUpStatusContent(() => statusMessage);
-        setPopUpVisibility(() => "visible");
+
+    async function showPopUp(
+        statusMessage: string
+    ): Promise<void> {
+
+        setpopUpStatusContent(previous => statusMessage);
+        setPopUpVisibility(previous => 'visible');
+
         await delay(5000);
-        setPopUpVisibility(() => "invisible");
+
+        setPopUpVisibility(previous => 'invisible');
     }
+
 
     function clearInputs(): void {
-        setEmailValue(() => "");
-        setPasswordValue(() => "");
+
+        setEmailValue(previous => '');
+        setPasswordValue(previous => '');
     }
 
+
     return (
-        <div className={`${loginStyle.form__background} ${loginStyle[loadClass]}`}>
+        <div 
+            className={`
+                ${loginStyle.form__background} 
+                ${loginStyle[loadClass]}
+                `
+            }
+        >
             <GoToHomeButton/>
             <StatusPopUp {...popUpProps}/>
             <div className={loginStyle.form__block}>
-                <form action="/login" method="post" className={loginStyle.form__field} autoComplete="off">
-                    <h1 className={loginStyle.login__message}>Sign in</h1>
+                <form 
+                    action='/login' 
+                    method='post' 
+                    className={loginStyle.form__field} 
+                    autoComplete='off'
+                >
+                    <h1 className={loginStyle.login__message}>
+                        Sign in
+                    </h1>
                     <hr className={loginStyle.separation__line}/>
                     <EmailInput {...emailInputProps}/>
                     <PasswordInput {...passwordInputProps}/>
                     <SubmitButton {...loginButtonProps}/>       
-                    <p className={loginStyle.login__link}> Doesn't have an account? <Link href="/logon">Sign up</Link></p>
+                    <p className={loginStyle.login__link}> 
+                        Doesn't have an account? <Link href='/logon'>Sign up</Link>
+                    </p>
                 </form>
             </div>
         </div>    

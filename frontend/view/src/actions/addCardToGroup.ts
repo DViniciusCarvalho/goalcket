@@ -3,16 +3,36 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function addCardToGroup(groupHash: string, destination: string, priority: string, content: string):
-Promise<{ status: number, responseObject: Response.AddCardToGroupResponse }> {
-    const requestConfig = getAddCardGroupRequestConfig(groupHash, destination, priority, content);
+export function addCardToGroup(
+    groupHash: string, 
+    destination: string, 
+    priority: string, 
+    content: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.AddCardToGroupResponse 
+}> {
+
+    const requestConfig = getAddCardGroupRequestConfig(
+        groupHash, 
+        destination, 
+        priority, 
+        content
+    );
+
     const promisedResponse = doAddCardGroupRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getAddCardGroupRequestConfig(groupHash: string, destination: string, priority: string, content:string):
-Request.AddCardRequestParameters {
+
+function getAddCardGroupRequestConfig(
+    groupHash: string, 
+    destination: string, 
+    priority: string, 
+    content: string
+): Request.AddCardRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         hash: groupHash,
@@ -30,8 +50,14 @@ Request.AddCardRequestParameters {
     return parameters;
 }
 
-async function doAddCardGroupRequest(requestConfig: Request.AddCardRequestParameters):
-Promise<{ status: number, responseObject: Response.AddCardToGroupResponse }>{
+
+async function doAddCardGroupRequest(
+    requestConfig: Request.AddCardRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.AddCardToGroupResponse 
+}>{
+
     const response = await fetch(ADD_CARD_TO_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.AddCardToGroupResponse = await response.json();
@@ -39,7 +65,11 @@ Promise<{ status: number, responseObject: Response.AddCardToGroupResponse }>{
     return { status, responseObject };
 }
 
-export function getAppropriateAddCardToGroupStatusMessage(httpStatus: number) {
+
+export function getAppropriateAddCardToGroupStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "error";
 
@@ -64,5 +94,11 @@ export function getAppropriateAddCardToGroupStatusMessage(httpStatus: number) {
         statusMessage = "serverError";
     }
     
-    return { statusMessage, statusType, isAuthorized, success, groupExists };
+    return { 
+        statusMessage, 
+        statusType, 
+        isAuthorized, 
+        success, 
+        groupExists 
+    };
 }

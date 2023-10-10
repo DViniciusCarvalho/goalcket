@@ -4,14 +4,23 @@ import { Request } from "@/types/requests";
 import { getMemberIndex } from "@/lib/utils";
 
 
-export function kickUser(groupId: string, userIdToKick: string): Promise<number> {
+export function kickUser(
+    groupId: string, 
+    userIdToKick: string
+): Promise<number> {
+
     const requestConfig = getKickUserRequestConfig(groupId, userIdToKick);
     const promisedResponse = doKickUserRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getKickUserRequestConfig(groupId: string, userIdToKick: string): Request.KickUserRequestParameters {
+
+function getKickUserRequestConfig(
+    groupId: string, 
+    userIdToKick: string
+): Request.KickUserRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId,
@@ -27,14 +36,23 @@ function getKickUserRequestConfig(groupId: string, userIdToKick: string): Reques
     return parameters;
 }
 
-async function doKickUserRequest(requestConfig: Request.KickUserRequestParameters): Promise<number> {
+
+async function doKickUserRequest(
+    requestConfig: Request.KickUserRequestParameters
+): Promise<number> {
+
     const response = await fetch(KICK_USER_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getGroupDataWithoutKickedUser(groupData: Data.GroupData, userId: string): Data.GroupData {
+
+export function getGroupDataWithoutKickedUser(
+    groupData: Data.GroupData, 
+    userId: string
+): Data.GroupData {
+
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
     const members: Data.MemberData[] = deepCopy!.members;
     const memberIndex = getMemberIndex(members, userId);
@@ -44,7 +62,11 @@ export function getGroupDataWithoutKickedUser(groupData: Data.GroupData, userId:
     return deepCopy;
 }
 
-export function getAppropriateKickUserStatusMessage(httpStatus: number) {
+
+export function getAppropriateKickUserStatusMessage(
+    httpStatus: number
+) {
+    
     let statusMessage = "serverError"; 
     let statusType = "error";
 

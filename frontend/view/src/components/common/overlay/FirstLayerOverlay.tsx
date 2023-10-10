@@ -1,12 +1,21 @@
-import React from "react";
-import overlayStyle from "@/styles/common/overlay/Overlay.module.css";
-import { Props } from "@/types/props";
+import React from 'react';
+import overlayStyle from '@/styles/common/overlay/Overlay.module.css';
+import { Props } from '@/types/props';
 
 
-export default function FirstLayerOverlay({ visibility, hideFirstLayerOverlayAndPopUps }: Props.OverlayProps) {
+export default function FirstLayerOverlay({ 
+    visibility, 
+    hideFirstLayerOverlayAndPopUps 
+}: Props.FirstLayerOverlayProps) {
+
     return (
-        <div className={`${overlayStyle.first__layer} ${overlayStyle[visibility]}`} 
-         onClick={hideFirstLayerOverlayAndPopUps}
+        <div 
+            className={`
+                ${overlayStyle.first__layer} 
+                ${overlayStyle[visibility]}
+                `
+            } 
+            onClick={hideFirstLayerOverlayAndPopUps}
         />
     );
 }

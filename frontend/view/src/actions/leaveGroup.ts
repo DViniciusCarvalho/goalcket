@@ -3,13 +3,21 @@ import { getGroupOptionIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
-export function leaveGroup(groupId: string): Promise<number> {
+
+export function leaveGroup(
+    groupId: string
+): Promise<number> {
+
     const requestConfig = getLeaveGroupRequestConfig(groupId);
     const promisedResponseData = doLeaveGroupRequest(requestConfig);
     return promisedResponseData;
 }
 
-function getLeaveGroupRequestConfig(groupId: string): Request.LeaveGroupRequestParameters {
+
+function getLeaveGroupRequestConfig(
+    groupId: string
+): Request.LeaveGroupRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId
@@ -24,15 +32,23 @@ function getLeaveGroupRequestConfig(groupId: string): Request.LeaveGroupRequestP
     return parameters;
 }
 
-async function doLeaveGroupRequest(requestConfig: Request.LeaveGroupRequestParameters): Promise<number> {
+
+async function doLeaveGroupRequest(
+    requestConfig: Request.LeaveGroupRequestParameters
+): Promise<number> {
+
     const response = await fetch(LEAVE_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getUpdatedGroupOptionsList(groupsList: Data.GroupOptionData[], groupHash: string):
-Data.GroupOptionData[] {
+
+export function getUpdatedGroupOptionsList(
+    groupsList: Data.GroupOptionData[], 
+    groupHash: string
+): Data.GroupOptionData[] {
+
     const deepCopy: Data.GroupOptionData[] = JSON.parse(JSON.stringify(groupsList));
     const groupOptionIndex = getGroupOptionIndex(groupsList, groupHash);
 
@@ -41,7 +57,11 @@ Data.GroupOptionData[] {
     return deepCopy;
 }
 
-export function getAppropriateLeaveGroupStatusMessage(httpStatus: number) {
+
+export function getAppropriateLeaveGroupStatusMessage(
+    httpStatus: number
+) {
+    
     let statusMessage = "serverError"; 
     let statusType = "error";
 

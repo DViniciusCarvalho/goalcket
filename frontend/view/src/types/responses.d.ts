@@ -6,7 +6,7 @@ export namespace Response {
         token: string;
     }
     
-    interface FetchDataResponse {
+    interface FetchInitialDataResponse {
         name: string;
         userId: string;
         rooms: {

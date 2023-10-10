@@ -1,14 +1,21 @@
 import { DELETE_GROUP_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
-export function deleteGroup(groupId: string): Promise<number> {
+
+export function deleteGroup(
+    groupId: string
+): Promise<number> {
+
     const requestConfig = getDeleteGroupRequestConfig(groupId);
     const promisedResponseData = doDeleteGroupRequest(requestConfig);
 
     return promisedResponseData;
 }
 
-function getDeleteGroupRequestConfig(groupId: string): Request.DeleteGroupRequestParameters {
+function getDeleteGroupRequestConfig(
+    groupId: string
+): Request.DeleteGroupRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId
@@ -23,14 +30,22 @@ function getDeleteGroupRequestConfig(groupId: string): Request.DeleteGroupReques
     return parameters;
 }
 
-async function doDeleteGroupRequest(requestConfig: Request.DeleteGroupRequestParameters): Promise<number> {
+
+async function doDeleteGroupRequest(
+    requestConfig: Request.DeleteGroupRequestParameters
+): Promise<number> {
+
     const response = await fetch(DELETE_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getAppropriateDeleteGroupStatusMessage(httpStatus: number) {
+
+export function getAppropriateDeleteGroupStatusMessage(
+    httpStatus: number
+) {
+    
     let statusMessage = "";
     let statusType = "error";
 

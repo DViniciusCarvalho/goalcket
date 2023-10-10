@@ -3,16 +3,28 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function joinGroup(username: string, groupHash: string, groupPassword: string): 
-Promise<{ status: number, responseObject: Response.JoinGroupResponse }>{
+export function joinGroup(
+    username: string, 
+    groupHash: string, 
+    groupPassword: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.JoinGroupResponse 
+}>{
+
     const requestConfig = getJoinGroupRequestConfig(username, groupHash, groupPassword);
     const promisedResponse = doJoinGroupRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getJoinGroupRequestConfig(username: string, groupHash: string, groupPassword: string): 
-Request.JoinGroupRequestParameters {
+
+function getJoinGroupRequestConfig(
+    username: string, 
+    groupHash: string, 
+    groupPassword: string
+): Request.JoinGroupRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         username: username,
@@ -29,8 +41,14 @@ Request.JoinGroupRequestParameters {
     return parameters;
 }
 
-async function doJoinGroupRequest(requestConfig: Request.JoinGroupRequestParameters): 
-Promise<{ status: number, responseObject: Response.JoinGroupResponse }> {
+
+async function doJoinGroupRequest(
+    requestConfig: Request.JoinGroupRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.JoinGroupResponse 
+}> {
+
     const response = await fetch(JOIN_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.JoinGroupResponse = await response.json();
@@ -38,7 +56,11 @@ Promise<{ status: number, responseObject: Response.JoinGroupResponse }> {
     return { status, responseObject };
 }
 
-export const getAppropriateJoinGroupStatusMessage = (httpStatus: number) => {
+
+export function getAppropriateJoinGroupStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "";
 
@@ -70,5 +92,10 @@ export const getAppropriateJoinGroupStatusMessage = (httpStatus: number) => {
         statusType = "error";
     }
 
-    return { statusMessage, statusType, isAuthorized, success };
+    return { 
+        statusMessage, 
+        statusType, 
+        isAuthorized, 
+        success 
+    };
 }

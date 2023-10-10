@@ -2,15 +2,25 @@ import { GET_GROUP_CONTENT_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
-export function getGroupContent(roomId: string): 
-Promise<{ status: number, responseObject: Response.GetGroupContentResponse }> {
+
+export function getGroupContent(
+    roomId: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.GetGroupContentResponse 
+}> {
+
     const requestConfig = getGroupContentRequestConfig(roomId);
     const promisedResponseData = doGetGroupContentRequest(requestConfig);
     
     return promisedResponseData;
 }
 
-function getGroupContentRequestConfig(roomId: string): Request.GetGroupContentRequestParameters {
+
+function getGroupContentRequestConfig(
+    roomId: string
+): Request.GetGroupContentRequestParameters {
+
     const parameters = {
         token: localStorage.getItem("token") ?? "",
         roomId: roomId
@@ -25,8 +35,14 @@ function getGroupContentRequestConfig(roomId: string): Request.GetGroupContentRe
     return requestConfig;
 }
 
-async function doGetGroupContentRequest(requestConfig: Request.GetGroupContentRequestParameters): 
-Promise<{ status: number, responseObject: Response.GetGroupContentResponse }>{
+
+async function doGetGroupContentRequest(
+    requestConfig: Request.GetGroupContentRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.GetGroupContentResponse 
+}>{
+
     const response = await fetch(GET_GROUP_CONTENT_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.GetGroupContentResponse = await response.json();
@@ -34,7 +50,11 @@ Promise<{ status: number, responseObject: Response.GetGroupContentResponse }>{
     return { status, responseObject };
 }
 
-export function getAppropriateGetGroupStatusMessage(httpStatus: number) {
+
+export function getAppropriateGetGroupStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
 
     let success = false;
@@ -61,5 +81,10 @@ export function getAppropriateGetGroupStatusMessage(httpStatus: number) {
         statusMessage = "internalServerError";
     }
 
-    return { statusMessage, success, canLoadData, groupExists };
+    return { 
+        statusMessage, 
+        success, 
+        canLoadData, 
+        groupExists 
+    };
 }

@@ -5,17 +5,31 @@ import Card from "@/components/internal/main/card/Card";
 import { Props } from "@/types/props";
 
 
-export default function CardsArea({ column, cards }: Props.CardsAreaProps){
+export default function CardsArea({ 
+    column, 
+    cards 
+}: Props.CardsAreaProps){
 
-    const { searchCardFilterString } = useContext(InternalMainContentContext);
+    const { 
+        searchCardFilterString 
+    } = useContext(InternalMainContentContext);
 
     return (
-        <section className={cardsAreaStyles.cards__area} id={`${column}_area`}>
+        <section 
+            className={cardsAreaStyles.cards__area} 
+            id={`${column}_area`}
+        >
             {cards && (
                 (cards.map(card => (
-                    ( card.content.includes(searchCardFilterString) && (    
-                        <Card key={card.id} content={card.content} priority={card.priority} timestamp={card.timestamp} 
-                            id={card.id} creator={card.creator}/>
+                    (card.content.includes(searchCardFilterString) && (    
+                        <Card 
+                            key={card.id} 
+                            content={card.content} 
+                            priority={card.priority} 
+                            timestamp={card.timestamp} 
+                            id={card.id} 
+                            creator={card.creator}
+                        />
                     ))
                 )))
             )}

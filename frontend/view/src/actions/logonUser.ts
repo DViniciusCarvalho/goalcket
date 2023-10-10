@@ -2,14 +2,25 @@ import { LOGON_USER_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
 
-export function logonUser(name: string, email: string, password: string): Promise<number> {
+export function logonUser(
+    name: string, 
+    email: string, 
+    password: string
+): Promise<number> {
+
     const requestConfig = getLogonRequestConfig(name, email, password);
     const promisedResponse = doLogonRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getLogonRequestConfig(name: string, email: string, password: string): Request.LogonRequestParameters {
+
+function getLogonRequestConfig(
+    name: string, 
+    email: string, 
+    password: string
+): Request.LogonRequestParameters {
+
     const dataToSend = { 
         name: name, 
         email: email, 
@@ -25,14 +36,22 @@ function getLogonRequestConfig(name: string, email: string, password: string): R
     return parameters;
 }
 
-async function doLogonRequest(requestConfig: Request.LogonRequestParameters): Promise<number> {
+
+async function doLogonRequest(
+    requestConfig: Request.LogonRequestParameters
+): Promise<number> {
+
     const response = await fetch(LOGON_USER_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getAppropriateLogonUserStatusMessage(httpStatus: number) {
+
+export function getAppropriateLogonUserStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "";
 
@@ -53,5 +72,8 @@ export function getAppropriateLogonUserStatusMessage(httpStatus: number) {
         statusType = "error";
     }
 
-    return { statusMessage, statusType };
+    return { 
+        statusMessage, 
+        statusType 
+    };
 }

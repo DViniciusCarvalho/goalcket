@@ -32,4 +32,4 @@ services:
       context: ./frontend/view
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 8080:8080

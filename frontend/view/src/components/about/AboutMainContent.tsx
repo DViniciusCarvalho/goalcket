@@ -1,5 +1,5 @@
-import React from "react";
-import aboutStyles from "../../styles/about/About.module.css";
+import React from 'react';
+import aboutStyles from '../../styles/about/About.module.css';
 
 
 export default function AboutMainContent(){

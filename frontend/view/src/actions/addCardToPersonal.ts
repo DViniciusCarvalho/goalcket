@@ -3,16 +3,36 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function addCardToPersonal(username: string, destination: string, priority: string, content: string):
-Promise<{ status: number, responseObject: Response.AddCardToPersonalResponse }> {
-    const requestConfig = getAddCardPersonalRequestConfig(username, destination, priority, content);
+export function addCardToPersonal(
+    username: string, 
+    destination: string, 
+    priority: string, 
+    content: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.AddCardToPersonalResponse
+}> {
+
+    const requestConfig = getAddCardPersonalRequestConfig(
+        username, 
+        destination, 
+        priority, 
+        content
+    );
+
     const promisedResponse = doAddCardToPersonalRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getAddCardPersonalRequestConfig(name: string, destination: string, priority: string, content: string): 
-Request.AddCardRequestParameters {
+
+function getAddCardPersonalRequestConfig(
+    name: string, 
+    destination: string, 
+    priority: string, 
+    content: string
+): Request.AddCardRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         username: name,
@@ -30,8 +50,14 @@ Request.AddCardRequestParameters {
     return parameters;
 }
 
-async function doAddCardToPersonalRequest(requestConfig: Request.AddCardRequestParameters):
-Promise<{ status: number, responseObject: Response.AddCardToPersonalResponse }> {
+
+async function doAddCardToPersonalRequest(
+    requestConfig: Request.AddCardRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.AddCardToPersonalResponse 
+}> {
+
     const response = await fetch(ADD_CARD_TO_PERSONAL_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.AddCardToPersonalResponse = await response.json();
@@ -40,7 +66,10 @@ Promise<{ status: number, responseObject: Response.AddCardToPersonalResponse }> 
 }
 
 
-export function getAppropriateAddCardPersonalStatusMessage(httpStatus: number) {
+export function getAppropriateAddCardPersonalStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "error";
 
@@ -59,5 +88,10 @@ export function getAppropriateAddCardPersonalStatusMessage(httpStatus: number) {
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, isAuthorized, success };
+    return { 
+        statusMessage, 
+        statusType, 
+        isAuthorized, 
+        success 
+    };
 }

@@ -7,7 +7,12 @@ import { Props } from "@/types/props";
 import { formatDate, getAdminsNumber } from "@/lib/utils";
 import ActionButton from "../buttons/ActionButton";
 
-export default function GroupInfoPopUp({ name, creation, members, columns }: Data.GroupData) {
+export default function GroupInfoPopUp({ 
+    name, 
+    creation, 
+    members, 
+    columns 
+}: Data.GroupData) {
 
     const { 
         groupInfoPopUpVisibility, 
@@ -17,59 +22,72 @@ export default function GroupInfoPopUp({ name, creation, members, columns }: Dat
         handleDeleteGroup
     } = useContext(InternalPageContext);
 
-    const origin = "group--info";
+
+    const ORIGIN = "group--info";
+
 
     const closeButtonProps: Props.ExitButtonProps = {
-        origin: origin,
+        origin: ORIGIN,
         actionFunction: hideFirstLayerOverlayAndPopUps
     };
 
     const leaveGroupButtonProps: Props.ActionButtonProps = {
-        origin: origin,
+        origin: ORIGIN,
         message: "Leave group",
         actionFunction: handleLeaveGroup
-    }
+    };
 
     const deleteGroupButtonProps: Props.ActionButtonProps = {
-        origin: origin,
+        origin: ORIGIN,
         message: "Delete group",
         actionFunction: handleDeleteGroup
-    }
+    };
+
 
     return (
-        <div className={`${groupInfoPopUpStyle.group__info__pop__up__container} 
-          ${groupInfoPopUpStyle[groupInfoPopUpVisibility]}`}
+        <div 
+            className={`
+                ${groupInfoPopUpStyle.group__info__pop__up__container} 
+                ${groupInfoPopUpStyle[groupInfoPopUpVisibility]}
+                `
+            }
         >
             <CloseButton {...closeButtonProps}/>
             <div className={groupInfoPopUpStyle.group__info__wrapper}>
                 <div className={groupInfoPopUpStyle.group__name}>
-                    <p className={groupInfoPopUpStyle.label}>Group name:</p>
+                    <p className={groupInfoPopUpStyle.label}>
+                        Group name:
+                    </p>
                     <p className={groupInfoPopUpStyle.data}>
-                        { name }
+                        {name}
                     </p>
                 </div>
                 <div className={groupInfoPopUpStyle.group__creation}>
                     <p className={groupInfoPopUpStyle.label}>Created in:</p>
                     <p className={groupInfoPopUpStyle.data}>
-                        { formatDate(Number(creation)) }
+                        {formatDate(Number(creation))}
                     </p>
                 </div>
                 <div className={groupInfoPopUpStyle.group__participants__number}>
-                    <p className={groupInfoPopUpStyle.label}>Participants:</p>
+                    <p className={groupInfoPopUpStyle.label}>
+                        Participants:
+                    </p>
                     <p className={groupInfoPopUpStyle.data}>
-                        { members.length }
+                        {members.length}
                     </p>
                 </div>
                 <div className={groupInfoPopUpStyle.group__administrators__number}>
-                    <p className={groupInfoPopUpStyle.label}>Administrators:</p>
+                    <p className={groupInfoPopUpStyle.label}>
+                        Administrators:
+                    </p>
                     <p className={groupInfoPopUpStyle.data}>
-                        { getAdminsNumber(members) }
+                        {getAdminsNumber(members)}
                     </p>
                 </div>
             </div>
             <div className={groupInfoPopUpStyle.buttons__wrapper}>
                 <ActionButton {...leaveGroupButtonProps}/>
-                { userIsAdmin && (
+                {userIsAdmin && (
                     <ActionButton {...deleteGroupButtonProps}/>
                 )}
             </div>

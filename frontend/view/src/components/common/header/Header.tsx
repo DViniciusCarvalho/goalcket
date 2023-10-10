@@ -1,25 +1,37 @@
-import React, { useState } from "react";
-import headerStyle from "../../../styles/common/header/Header.module.css";
-import Menu from "./Menu";
-import { debounce } from "@/lib/utils";
-import { Props } from "@/types/props";
+import React, { useState } from 'react';
+import headerStyle from '../../../styles/common/header/Header.module.css';
+import Menu from './Menu';
+import { debounce } from '@/lib/utils';
+import { Props } from '@/types/props';
 
 
-export default function Header({ needChangeBackground, headerPage }: Props.HeaderProps){
+export default function Header({ 
+    needChangeBackground, 
+    headerPage 
+}: Props.HeaderProps){
 
-    const [ headerBackgroundColor, setHeaderBackgroundColor ] = useState("in--origin");
+    const [ 
+        headerBackgroundColor, 
+        setHeaderBackgroundColor 
+    ] = useState('in--origin');
+
 
     const menuProps: Props.MenuProps = {
         headerPosition: headerBackgroundColor,
         headerPage: headerPage
     }
 
-    function defineHeaderClass(scrollTop: number): void {
-        setHeaderBackgroundColor(() => scrollTop <= 300? "in--origin" : "out--origin");
+
+    function defineHeaderClass(
+        scrollTop: number
+    ): void {
+
+        setHeaderBackgroundColor(previous => scrollTop <= 300? 'in--origin' : 'out--origin');
     }
 
-    if (typeof window !== "undefined" && needChangeBackground){
-        window.addEventListener("scroll", debounce(() => {
+
+    if (typeof window !== 'undefined' && needChangeBackground){
+        window.addEventListener('scroll', debounce(() => {
             const html = document.documentElement!;
             const scrollTop = html.scrollTop || document.body.scrollTop;
             defineHeaderClass(scrollTop);
@@ -27,8 +39,17 @@ export default function Header({ needChangeBackground, headerPage }: Props.Heade
     }
 
     return (
-        <header className={`${headerStyle.header} ${headerStyle[headerPage]} ${headerStyle[headerBackgroundColor]}`}>
-            <div className={headerStyle.header__logo}> GOALCKET </div>
+        <header 
+            className={`
+                ${headerStyle.header} 
+                ${headerStyle[headerPage]} 
+                ${headerStyle[headerBackgroundColor]}
+                `
+            }
+        >
+            <div className={headerStyle.header__logo}> 
+                GOALCKET 
+            </div>
             <Menu {...menuProps}/>
         </header>
     );

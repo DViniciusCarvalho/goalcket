@@ -3,14 +3,20 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function fetchUserInitialData(): Promise<{ status: number, responseObject: Response.FetchDataResponse }> {
+export function fetchUserInitialData(): Promise<{ 
+    status: number, 
+    responseObject: Response.FetchInitialDataResponse 
+}> {
+
     const requestConfig = getFetchDataRequestConfig();
     const promisedResponseData = doFetchDataRequest(requestConfig);
 
     return promisedResponseData;
 }
 
+
 function getFetchDataRequestConfig(): Request.FetchDataRequestParameters {
+
     const token = { 
         token: localStorage.getItem("token") ?? "" 
     };
@@ -24,11 +30,20 @@ function getFetchDataRequestConfig(): Request.FetchDataRequestParameters {
     return requestConfig;
 }
 
-async function doFetchDataRequest(requestConfig: Request.FetchDataRequestParameters): 
-Promise<{ status: number, responseObject: Response.FetchDataResponse }> {
+
+async function doFetchDataRequest(
+    requestConfig: Request.FetchDataRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.FetchInitialDataResponse 
+}> {
+
     const response = await fetch(FETCH_USER_INITIAL_DATA_ENDPOINT, requestConfig);
     const { status } = response;
-    const responseObject: Response.FetchDataResponse = await response.json();
+    const responseObject: Response.FetchInitialDataResponse = await response.json();
 
-    return { status, responseObject };
+    return { 
+        status, 
+        responseObject 
+    };
 }

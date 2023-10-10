@@ -3,16 +3,33 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function createGroup(username: string, groupName: string, groupPassword: string): 
-Promise<{ status: number, responseObject: Response.CreateGroupResponse }> {
-    const requestConfig = getCreateGroupRequestConfig(username, groupName, groupPassword);
+export function createGroup(
+    username: string, 
+    groupName: string, 
+    groupPassword: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.CreateGroupResponse 
+}> {
+
+    const requestConfig = getCreateGroupRequestConfig(
+        username, 
+        groupName, 
+        groupPassword
+    );
+
     const promisedResponse = doCreateGroupRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getCreateGroupRequestConfig(username: string, groupName: string, groupPassword: string):
-Request.CreateGroupRequestParameters {
+
+function getCreateGroupRequestConfig(
+    username: string, 
+    groupName: string, 
+    groupPassword: string
+): Request.CreateGroupRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         username: username,
@@ -29,8 +46,14 @@ Request.CreateGroupRequestParameters {
     return parameters;
 }
 
-async function doCreateGroupRequest(requestConfig: Request.CreateGroupRequestParameters):
-Promise<{ status: number, responseObject: Response.CreateGroupResponse }> {
+
+async function doCreateGroupRequest(
+    requestConfig: Request.CreateGroupRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.CreateGroupResponse 
+}> {
+
     const response = await fetch(CREATE_GROUP_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.CreateGroupResponse = await response.json();
@@ -38,7 +61,11 @@ Promise<{ status: number, responseObject: Response.CreateGroupResponse }> {
     return { status, responseObject };
 }
 
-export function getAppropriateCreateGroupStatusMessage(httpStatus: number) {
+
+export function getAppropriateCreateGroupStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = ""; 
     let statusType = "";
 
@@ -62,5 +89,10 @@ export function getAppropriateCreateGroupStatusMessage(httpStatus: number) {
         statusType = "error";
     }
 
-    return { statusMessage, statusType, isAuthorized, success };
+    return { 
+        statusMessage, 
+        statusType, 
+        isAuthorized, 
+        success 
+    };
 }

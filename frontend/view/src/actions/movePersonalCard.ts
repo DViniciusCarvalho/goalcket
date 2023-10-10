@@ -5,15 +5,33 @@ import { Request } from "@/types/requests";
 import { Response } from "@/types/responses";
 
 
-export function movePersonalCard(currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string): Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse }> {
-    const requestConfig = getMovePersonalCardRequestConfig(currentColumn, destinyColumn, currentCardDataToMove);
+export function movePersonalCard(
+    currentCardDataToMove: Data.CardData, 
+    currentColumn: string, 
+    destinyColumn: string
+): Promise<{ 
+    status: number, 
+    responseObject: Response.MoveCardFromPersonalResponse 
+}> {
+
+    const requestConfig = getMovePersonalCardRequestConfig(
+        currentColumn, 
+        destinyColumn, 
+        currentCardDataToMove
+    );
+
     const promisedResponseData = doMovePersonalCardRequest(requestConfig);
     
     return promisedResponseData;
 }
 
-function getMovePersonalCardRequestConfig(currentColumn: string, destinyColumn: string, cardData: Data.CardData):
-Request.MoveCardRequestParameters {
+
+function getMovePersonalCardRequestConfig(
+    currentColumn: string, 
+    destinyColumn: string, 
+    cardData: Data.CardData
+): Request.MoveCardRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         currentColumn,
@@ -30,8 +48,14 @@ Request.MoveCardRequestParameters {
     return parameters;
 }
 
-async function doMovePersonalCardRequest(requestConfig: Request.MoveCardRequestParameters):
-Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse }> {
+
+async function doMovePersonalCardRequest(
+    requestConfig: Request.MoveCardRequestParameters
+): Promise<{ 
+    status: number, 
+    responseObject: Response.MoveCardFromPersonalResponse 
+}> {
+
     const response = await fetch(MOVE_PERSONAL_CARD_ENDPOINT, requestConfig);
     const { status } = response;
     const responseObject: Response.MoveCardFromPersonalResponse = await response.json();
@@ -39,7 +63,15 @@ Promise<{ status: number, responseObject: Response.MoveCardFromPersonalResponse 
     return { status, responseObject };
 }
 
-export function getPersonalDataWithMovedCard(personalData: Data.PersonalData, currentCardDataToMove: Data.CardData, currentColumn: string, destinyColumn: string, newHash: string): Data.PersonalData {
+
+export function getPersonalDataWithMovedCard(
+    personalData: Data.PersonalData, 
+    currentCardDataToMove: Data.CardData, 
+    currentColumn: string, 
+    destinyColumn: string, 
+    newHash: string
+): Data.PersonalData {
+
     const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
     const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
@@ -52,7 +84,11 @@ export function getPersonalDataWithMovedCard(personalData: Data.PersonalData, cu
     return deepCopy;
 }
 
-export function getAppropriateMovePersonalCardStatusMessage(httpStatus: number) {
+
+export function getAppropriateMovePersonalCardStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "error";
 
@@ -74,5 +110,10 @@ export function getAppropriateMovePersonalCardStatusMessage(httpStatus: number) 
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, success, isAuthorized };
+    return { 
+        statusMessage, 
+        statusType, 
+        success, 
+        isAuthorized 
+    };
 }

@@ -3,15 +3,28 @@ import { getMemberIndex } from "@/lib/utils";
 import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
-export function promoteMember(groupId: string, userIdToPromove: string): Promise<number> {
-    const requestConfig = getPromoteMemberRequestConfig(groupId, userIdToPromove);
+
+export function promoteMember(
+    groupId: string, 
+    userIdToPromove: string
+): Promise<number> {
+
+    const requestConfig = getPromoteMemberRequestConfig(
+        groupId, 
+        userIdToPromove
+    );
+
     const promisedResponse = doPromoteMemberRequest(requestConfig);
 
     return promisedResponse;
 }
 
-function getPromoteMemberRequestConfig(groupId: string, userIdToPromove: string): 
-Request.PromoteMemberRequestParameters {
+
+function getPromoteMemberRequestConfig(
+    groupId: string, 
+    userIdToPromove: string
+): Request.PromoteMemberRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId,
@@ -27,15 +40,23 @@ Request.PromoteMemberRequestParameters {
     return parameters;
 }
 
-async function doPromoteMemberRequest(requestConfig: Request.PromoteMemberRequestParameters): Promise<number> {
+
+async function doPromoteMemberRequest(
+    requestConfig: Request.PromoteMemberRequestParameters
+): Promise<number> {
+
     const response = await fetch(PROMOTE_MEMBER_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getGroupDataWithMemberRoleUpdated(groupData: Data.GroupData, userIdToPromote: string):
-Data.GroupData {
+
+export function getGroupDataWithMemberRoleUpdated(
+    groupData: Data.GroupData, 
+    userIdToPromote: string
+): Data.GroupData {
+
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
     const members: Data.MemberData[] = deepCopy.members;
     const memberIndex = getMemberIndex(members, userIdToPromote);
@@ -45,7 +66,11 @@ Data.GroupData {
     return deepCopy;
 }
 
-export function getAppropriatePromoteMemberStatusMessage(httpStatus: number) {
+
+export function getAppropriatePromoteMemberStatusMessage(
+    httpStatus: number
+) {
+    
     let statusMessage = "serverError";
     let statusType = "error";
 

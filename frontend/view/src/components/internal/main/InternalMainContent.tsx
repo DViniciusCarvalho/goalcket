@@ -1,31 +1,52 @@
-import React, { useState, useContext, useRef, createContext } from "react";
-import { useRouter } from "next/router";
+import React, { 
+    useState, 
+    useContext, 
+    useRef, 
+    createContext 
+} from 'react';
 
-import mainStyles from "@/styles/internal/main/Main.module.css";
-import groupPopUpStyle from "@/styles/common/popups/GroupPopUp.module.css";
+import { useRouter } from 'next/router';
 
-import TokenIcon from "../../../../public/assets/token.png";
-import LockIcon from "../../../../public/assets/lock.png";
-import GroupIcon from "../../../../public/assets/group.png";
+import mainStyles from '@/styles/internal/main/Main.module.css';
+import groupPopUpStyle from '@/styles/common/popups/GroupPopUp.module.css';
 
-import { InternalPageContext } from "@/pages/internal";
+import TokenIcon from '../../../../public/assets/token.png';
+import LockIcon from '../../../../public/assets/lock.png';
+import GroupIcon from '../../../../public/assets/group.png';
 
-import StatusPopUp from "@/components/common/popups/StatusPopUp";
-import DeleteCardPopUp from "@/components/common/popups/DeleteCardPopUp";
-import MoveCardPopUp from "@/components/common/popups/MoveCardPopUp";
-import BigCardPopUp from "@/components/common/popups/BigCardPopUp";
-import GroupPopUp from "@/components/common/popups/GroupPopUp";
-import PersonalContent from "@/components/internal/main/content/PersonalContent";
-import GroupContent from "@/components/internal/main/content/GroupContent";
-import ErrorContent from "@/components/internal/main/content/ErrorContent";
+import { InternalPageContext } from '@/pages/internal';
 
-import { joinGroup, getAppropriateJoinGroupStatusMessage } from "@/actions/joinGroup";
-import { createGroup, getAppropriateCreateGroupStatusMessage } from "@/actions/createGroup";
-import { addCardToPersonal, getAppropriateAddCardPersonalStatusMessage } from "@/actions/addCardToPersonal";
-import { addCardToGroup, getAppropriateAddCardToGroupStatusMessage } from "@/actions/addCardToGroup";
+import StatusPopUp from '@/components/common/popups/StatusPopUp';
+import DeleteCardPopUp from '@/components/common/popups/DeleteCardPopUp';
+import MoveCardPopUp from '@/components/common/popups/MoveCardPopUp';
+import BigCardPopUp from '@/components/common/popups/BigCardPopUp';
+import GroupPopUp from '@/components/common/popups/GroupPopUp';
+import PersonalContent from '@/components/internal/main/content/PersonalContent';
+import GroupContent from '@/components/internal/main/content/GroupContent';
+import ErrorContent from '@/components/internal/main/content/ErrorContent';
 
-import { Data } from "@/types/data";
-import { Props } from "@/types/props";
+import { 
+    joinGroup, 
+    getAppropriateJoinGroupStatusMessage 
+} from '@/actions/joinGroup';
+
+import { 
+    createGroup, 
+    getAppropriateCreateGroupStatusMessage 
+} from '@/actions/createGroup';
+
+import { 
+    addCardToPersonal, 
+    getAppropriateAddCardPersonalStatusMessage 
+} from '@/actions/addCardToPersonal';
+
+import { 
+    addCardToGroup, 
+    getAppropriateAddCardToGroupStatusMessage 
+} from '@/actions/addCardToGroup';
+
+import { Data } from '@/types/data';
+import { Props } from '@/types/props';
 
 
 export const InternalMainContentContext = createContext<any>(null);
@@ -65,14 +86,23 @@ export default function InternalMainContent(){
         removeGroupFromGroupOptionList
     } = useContext(InternalPageContext);
 
-    const [ searchCardFilterString, setSearchCardFilterString ] = useState("");
 
-    const [ bigCardProps, setBigCardProps ] = useState<Props.BigCardProps | null>(null);
+    const [ 
+        searchCardFilterString, 
+        setSearchCardFilterString 
+    ] = useState('');
+
+    const [ 
+        bigCardProps, 
+        setBigCardProps 
+    ] = useState<Props.BigCardProps | null>(null);
+
 
     const firstInputElement = firstInputRef.current! as HTMLInputElement;
     const secondInputElement = secondInputRef.current! as HTMLInputElement;
 
-    const contextProps = {
+
+    const contextValues = {
         destinationRef: destinationOfCardSelectRef,
         priorityRef: priorityOfCardSelectRef,
         contentRef: contentOfCardRef,
@@ -83,6 +113,7 @@ export default function InternalMainContent(){
         hashTextRef,
         openCard
     };
+
 
     const statusPopUpProps: Props.StatusPopUpProps = {
         content: popUpStatusContent,
@@ -102,16 +133,16 @@ export default function InternalMainContent(){
     const joinGroupProps: Props.GroupPopUpProps = {
         firstImage: TokenIcon,
         secondImage: LockIcon,
-        firstLabelMessage: "Group token:",
-        secondLabelMessage: "Group password:",
+        firstLabelMessage: 'Group token:',
+        secondLabelMessage: 'Group password:',
         ...commonProps
     };
 
     const createGroupProps: Props.GroupPopUpProps = {
         firstImage: GroupIcon,
         secondImage: LockIcon,
-        firstLabelMessage: "Group name:",
-        secondLabelMessage: "Group password:",
+        firstLabelMessage: 'Group name:',
+        secondLabelMessage: 'Group password:',
         ...commonProps
     };
 
@@ -129,17 +160,21 @@ export default function InternalMainContent(){
 
 
     function searchMatches(): void {
+
         const searchInput = searchInputRef.current! as HTMLInputElement;
         const searchValue = searchInput.value;
+
         setSearchCardFilterString(() => searchValue);
     }
 
+
     function handleJoinClick(): void {
+
         const firstInputValue = firstInputElement.value;
         const secondInputValue = secondInputElement.value;
 
-        if (popUpType === "create") {
-            setPopUpType(() => "join");
+        if (popUpType === 'create') {
+            setPopUpType(() => 'join');
             clearInputs();
         }
         else {
@@ -147,9 +182,25 @@ export default function InternalMainContent(){
         }
     }
 
-    async function handleJoinGroup(groupHash: string, groupPassword: string) {
-        const { status, responseObject } = await joinGroup(username, groupHash, groupPassword);
-        const { name, hash } = responseObject;
+
+    async function handleJoinGroup(
+        groupHash: string, 
+        groupPassword: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await joinGroup(
+            username, 
+            groupHash, 
+            groupPassword
+        );
+
+        const { 
+            name,
+            hash 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -159,10 +210,11 @@ export default function InternalMainContent(){
         } = getAppropriateJoinGroupStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             clearInputs();
             if (success) {
                 updateOptions(name, hash);
@@ -170,22 +222,46 @@ export default function InternalMainContent(){
         }
     }
 
+
     function handleCreateClick(): void {
+
         const groupName = firstInputElement.value;
         const groupPassword = secondInputElement.value;
 
-        if (popUpType === "join") {
-            setPopUpType(() => "create");
+        if (popUpType === 'join') {
+            setPopUpType(() => 'create');
+
             clearInputs();
         }
         else {
-            handleCreateGroup(username, groupName, groupPassword);
+            handleCreateGroup(
+                username, 
+                groupName, 
+                groupPassword
+            );
         }
     }
 
-    async function handleCreateGroup(username: string, groupName: string, groupPassword: string) {
-        const { status, responseObject } = await createGroup(username, groupName, groupPassword);
-        const { name, hash } = responseObject;
+
+    async function handleCreateGroup(
+        username: string, 
+        groupName: string, 
+        groupPassword: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await createGroup(
+            username, 
+            groupName, 
+            groupPassword
+        );
+
+        const { 
+            name,
+            hash 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -195,18 +271,22 @@ export default function InternalMainContent(){
         } = getAppropriateCreateGroupStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             clearInputs();
+
             if (success) {
                 updateOptions(name, hash);
             }
         }
     }
 
+
     function addCard(): void {
+
         const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
         const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
         const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;
@@ -215,19 +295,50 @@ export default function InternalMainContent(){
         const priorityValue = priorityElement.value;
         const contentValue = contentElement.value;
 
-        if (currentRoom === "personal") {
-            handleAddCardToPersonal(username, destinationValue, priorityValue, contentValue);
+        if (currentRoom === 'personal') {
+            handleAddCardToPersonal(
+                username, 
+                destinationValue, 
+                priorityValue, 
+                contentValue
+            );
         }
         else {
             const groupHash = hashTextRef.current! as HTMLParagraphElement;
             const groupHashValue = groupHash.innerText;
-            handleAddCardToGroup(username, groupHashValue, destinationValue, priorityValue, contentValue);
+
+            handleAddCardToGroup(
+                username, 
+                groupHashValue, 
+                destinationValue, 
+                priorityValue, 
+                contentValue
+            );
         }
     }
 
-    async function handleAddCardToPersonal(username: string, destination: string, priority: string, content: string) {
-        const { status, responseObject } = await addCardToPersonal(username, destination, priority, content);
-        const { timestamp, id } = responseObject;
+
+    async function handleAddCardToPersonal(
+        username: string, 
+        destination: string, 
+        priority: string, 
+        content: string
+    ): Promise<void> {
+        
+        const { 
+            status, 
+            responseObject 
+        } = await addCardToPersonal(
+            username, 
+            destination, 
+            priority, 
+            content
+        );
+
+        const { 
+            timestamp, 
+            id 
+        } = responseObject;
 
         const {
             statusMessage, 
@@ -237,20 +348,48 @@ export default function InternalMainContent(){
         } = getAppropriateAddCardPersonalStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             clearAddCardInputs();
+
             if (success) {
-                updatePersonalCards(username, timestamp, id, destination, priority, content);
+                updatePersonalCards(
+                    username, 
+                    timestamp, 
+                    id, 
+                    destination, 
+                    priority, 
+                    content
+                );
             }
         }
     }
 
-    async function handleAddCardToGroup(username: string, groupHash: string, destination: string, priority: string, content: string) {
-        const { status, responseObject } = await addCardToGroup(groupHash, destination, priority, content);
-        const { timestamp, id } = responseObject;
+    async function handleAddCardToGroup(
+        username: string, 
+        groupHash: string, 
+        destination: string, 
+        priority: string, 
+        content: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await addCardToGroup(
+            groupHash, 
+            destination, 
+            priority, 
+            content
+        );
+
+        const { 
+            timestamp, 
+            id 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -261,13 +400,22 @@ export default function InternalMainContent(){
         } = getAppropriateAddCardToGroupStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             clearAddCardInputs();
+
             if (success) {
-                updateGroupCards(username, timestamp, id, destination, priority, content);
+                updateGroupCards(
+                    username, 
+                    timestamp, 
+                    id, 
+                    destination, 
+                    priority, 
+                    content
+                );
             }     
             else if (!groupExists) {
                 removeGroupFromGroupOptionList();
@@ -275,22 +423,35 @@ export default function InternalMainContent(){
         }
     }
 
+
     function clearInputs(): void {
-        firstInputElement.value = "";
-        secondInputElement.value = "";
+
+        firstInputElement.value = '';
+        secondInputElement.value = '';
     }
 
+
     function clearAddCardInputs(): void {
+
         const destinationElement = destinationOfCardSelectRef.current! as HTMLSelectElement;
         const priorityElement = priorityOfCardSelectRef.current! as HTMLSelectElement;
         const contentElement = contentOfCardRef.current! as HTMLTextAreaElement;
 
-        destinationElement.value = "todo";
-        priorityElement.value = "low";
-        contentElement.value = "";
+        destinationElement.value = 'todo';
+        priorityElement.value = 'low';
+        contentElement.value = '';
     }
 
-    function openCard(content: string, priority: string, timestamp: number, id: string, creator: Data.MemberData, column: string): void {
+
+    function openCard(
+        content: string, 
+        priority: string, 
+        timestamp: number, 
+        id: string, 
+        creator: Data.MemberData, 
+        column: string
+    ): void {
+
         const bigCardPartialProps: Props.BigCardProps = { 
             content, 
             priority, 
@@ -300,28 +461,42 @@ export default function InternalMainContent(){
             column 
         };
 
-        setBigCardProps(() => bigCardPartialProps);
-        changePopUpToVisible("bigCard");
+        setBigCardProps(previous => bigCardPartialProps);
+        changePopUpToVisible('bigCard');
     }
+
 
     return (
         <main className={mainStyles.main__area}>
-            <InternalMainContentContext.Provider value={contextProps}>
+            <InternalMainContentContext.Provider value={{...contextValues}}>
                 <StatusPopUp {...statusPopUpProps}/>
                 <DeleteCardPopUp/>
                 <MoveCardPopUp/>
-                {bigCardProps && (<BigCardPopUp {...bigCardProps as Props.BigCardProps}/>)}
-                <div className={`${groupPopUpStyle.pop__up__container} 
-                  ${groupPopUpStyle[createJoinGroupPopUpVisibility]}`}
+
+                {bigCardProps && (
+                    <BigCardPopUp {...bigCardProps as Props.BigCardProps}/>
+                )}
+
+                <div 
+                    className={`
+                        ${groupPopUpStyle.pop__up__container} 
+                        ${groupPopUpStyle[createJoinGroupPopUpVisibility]}
+                        `
+                    }
                 >
-                    { popUpType === "join"? 
-                        <GroupPopUp {...joinGroupProps}/> : <GroupPopUp {...createGroupProps}/>
+                    {popUpType === 'join'
+                        ? <GroupPopUp {...joinGroupProps}/> 
+                        : <GroupPopUp {...createGroupProps}/>
                     }
                 </div>
-                {(currentRoom === "personal")? <PersonalContent {...personalProps}/> : (
-                    okToLoad? (getGroupWithSuccess ? 
-                        <GroupContent {...groupContentProps}/> : <ErrorContent {...errorProps}/>
-                    ) : ""
+                {
+                    currentRoom === 'personal'
+                    ? <PersonalContent {...personalProps}/> 
+                    : (okToLoad
+                       ? (getGroupWithSuccess 
+                          ? <GroupContent {...groupContentProps}/> 
+                          : <ErrorContent {...errorProps}/>
+                    ) : ''
                 )}
             </InternalMainContentContext.Provider>
         </main>

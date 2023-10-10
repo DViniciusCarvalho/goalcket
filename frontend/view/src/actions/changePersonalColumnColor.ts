@@ -2,15 +2,23 @@ import { CHANGE_PERSONAL_COLUMN_COLOR_ENDPOINT } from "@/lib/endpoints";
 import { Request } from "@/types/requests";
 
 
-export function changePersonalColumnColor(currentColorValue: string, column: string): Promise<number> {
+export function changePersonalColumnColor(
+    currentColorValue: string, 
+    column: string
+): Promise<number> {
+
     const requestConfig = getChangeColorPersonalRequestConfig(currentColorValue, column);
     const promisedResponseData = doChangeGroupColumnColorRequest(requestConfig);
 
     return promisedResponseData;
 }
 
-function getChangeColorPersonalRequestConfig(currentColorValue: string, column: string):
-Request.ChangeColorPersonalRequestParameters {
+
+function getChangeColorPersonalRequestConfig(
+    currentColorValue: string, 
+    column: string
+): Request.ChangeColorPersonalRequestParameters {
+
     const data = { 
         token: localStorage.getItem("token") ?? "", 
         color: currentColorValue, 
@@ -26,7 +34,11 @@ Request.ChangeColorPersonalRequestParameters {
     return parameters;
 }
 
-async function doChangeGroupColumnColorRequest(requestConfig: Request.ChangeColorGroupRequestParameters): Promise<number> {
+
+async function doChangeGroupColumnColorRequest(
+    requestConfig: Request.ChangeColorGroupRequestParameters
+): Promise<number> {
+    
     const response = await fetch(CHANGE_PERSONAL_COLUMN_COLOR_ENDPOINT, requestConfig);
     const { status } = response;
 

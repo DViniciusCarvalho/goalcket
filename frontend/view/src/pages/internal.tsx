@@ -1,134 +1,244 @@
-import React, { useEffect, useState, createContext } from "react";
-import { useRouter } from "next/router";
+import React, { useEffect, useState, createContext } from 'react';
+import { useRouter } from 'next/router';
 
-import internalStyles from "@/styles/internal/Internal.module.css";
+import internalStyles from '@/styles/internal/Internal.module.css';
 
-import FirstLayerOverlay from "@/components/common/overlay/FirstLayerOverlay";
-import SecondLayerOverlay from "@/components/common/overlay/SecondLayerOverlay";
-import InternalHeader from "@/components/internal/header/InternalHeader";
-import InternalMainContent from "@/components/internal/main/InternalMainContent";
+import FirstLayerOverlay from '@/components/common/overlay/FirstLayerOverlay';
+import SecondLayerOverlay from '@/components/common/overlay/SecondLayerOverlay';
+import InternalHeader from '@/components/internal/header/InternalHeader';
+import InternalMainContent from '@/components/internal/main/InternalMainContent';
 
-import { delay } from "@/lib/utils";
+import { delay } from '@/lib/utils';
+
 import {  
     getAppropriatePopUpsVisibility, 
     getAppropriateBigCardOptionPopUpsVisibility,
-} from "@/lib/popUpVisibility";
+} from '@/lib/popUpVisibility';
 
-import { fetchUserInitialData } from "@/actions/fetchInitialData";
+import { fetchUserInitialData } from '@/actions/fetchInitialData';
 
 import { 
     getGroupContent, 
     getAppropriateGetGroupStatusMessage 
-} from "@/actions/getGroupContent";
+} from '@/actions/getGroupContent';
 
 import { 
     deletePersonalCard, 
     getPersonalDataWithoutDeletedCard, 
     getAppropriateDeletePersonalCardStatusMessage 
-} from "@/actions/deletePersonalCard";
+} from '@/actions/deletePersonalCard';
 
 import { 
     deleteGroupCard, 
     getGroupDataWithoutDeletedCard, 
     getAppropriateDeleteGroupCardStatusMessage 
-} from "@/actions/deleteGroupCard";
+} from '@/actions/deleteGroupCard';
 
 import { 
     getPersonalDataWithMovedCard, 
     movePersonalCard, 
     getAppropriateMovePersonalCardStatusMessage 
-} from "@/actions/movePersonalCard";
+} from '@/actions/movePersonalCard';
 
 import { 
     getGroupDataWithMovedCard, 
     moveGroupCard, 
     getAppropriateMoveGroupCardStatusMessage 
-} from "@/actions/moveGroupCard";
+} from '@/actions/moveGroupCard';
 
 import { 
     changePersonalCardContent, 
     getPersonalDataWithModifiedCardContent 
-} from "@/actions/changePersonalCardContent";
+} from '@/actions/changePersonalCardContent';
 
 import { 
     changeGroupCardContent, 
     getGroupDataWithModifiedCard 
-} from "@/actions/changeGroupCardContent";
+} from '@/actions/changeGroupCardContent';
 
 import {
     leaveGroup,
     getAppropriateLeaveGroupStatusMessage,
     getUpdatedGroupOptionsList
-} from "@/actions/leaveGroup";
+} from '@/actions/leaveGroup';
 
 import { 
     getAppropriateKickUserStatusMessage, 
     getGroupDataWithoutKickedUser, 
     kickUser 
-} from "@/actions/kickUserFromGroup";
+} from '@/actions/kickUserFromGroup';
 
 import { 
     deleteGroup, 
     getAppropriateDeleteGroupStatusMessage 
-} from "@/actions/deleteGroup";
+} from '@/actions/deleteGroup';
 
 import { 
     getAppropriatePromoteMemberStatusMessage, 
     promoteMember, 
     getGroupDataWithMemberRoleUpdated 
-} from "@/actions/promoteMembers";
+} from '@/actions/promoteMembers';
 
-import { Data } from "@/types/data";
+import { Data } from '@/types/data';
 
 
 export const InternalPageContext = createContext<any>(null);
+
 
 export default function Internal(){
 
     const router = useRouter();
 
-    const [ username, setUsername ] = useState("");
-    const [ userId, setUserId ] = useState("");
-    const [ userIsAdmin, setUserIsAdmin ] = useState(false);
 
-    const [ personal, setPersonal ] = useState<Data.PersonalDataState>(null);
-    const [ groups, setGroups ] = useState<Data.GroupOptionDataList>(null);
-    const [ loaded, setLoaded ] = useState(false);
+    const [ 
+        username, 
+        setUsername 
+    ] = useState('');
+
+    const [ 
+        userId, 
+        setUserId 
+    ] = useState('');
+
+    const [ 
+        userIsAdmin, 
+        setUserIsAdmin 
+    ] = useState(false);
+
+    const [ 
+        personal, 
+        setPersonal 
+    ] = useState<Data.PersonalDataState>(null);
+
+    const [ 
+        groups, 
+        setGroups 
+    ] = useState<Data.GroupOptionDataList>(null);
+
+    const [ 
+        loaded, 
+        setLoaded 
+    ] = useState(false);
     
-    const [ currentRoom, setCurrentRoom ] = useState("personal");
-    const [ groupData, setGroupData ] = useState<Data.GroupDataState>(null);
-    const [ getGroupWithSuccess, setGetGroupWithSuccess ] = useState(false);
-    const [ getGroupRequestStatusMessage, setGetGroupRequestStatusMessage ] = useState("notFound");
-    const [ currentGroupId, setCurrentGroupId ] = useState("");
-    const [ popUpType, setPopUpType ] = useState("join");
-    const [ okToLoad, setOkToLoad ] = useState(false);
+    const [ 
+        currentRoom, 
+        setCurrentRoom 
+    ] = useState('personal');
 
-    const [ firstLayerOverlayVisibility, setFirstLayerOverlayVisibility ] = useState("invisible");
-    const [ secondLayerOverlayVisibility, setSecondLayerOverlayVisibility ] = useState("invisible");
+    const [ 
+        groupData, 
+        setGroupData 
+    ] = useState<Data.GroupDataState>(null);
 
-    const [ popUpStatusVisibility, setPopUpStatusVisibility ] = useState("invisible");
-    const [ popUpStatusContent, setpopUpStatusContent ] = useState("serverError");
-    const [ popUpStatusType, setPopUpStatusType ] = useState("error");
+    const [ 
+        getGroupWithSuccess, 
+        setGetGroupWithSuccess 
+    ] = useState(false);
 
-    const [ createJoinGroupPopUpVisibility, setCreateJoinGroupPopUpVisibility ] = useState("invisible");
-    const [ addCardPopUpVisibility, setAddCardPopUpVisibility ] = useState("invisible");
-    const [ bigCardPopUpVisibility, setBigCardPopUpVisibility ] = useState("invisible");
+    const [ 
+        getGroupRequestStatusMessage, 
+        setGetGroupRequestStatusMessage 
+    ] = useState('notFound');
 
-    const [ deleteCardPopUpVisibility, setDeleteCardPopUpVisibility ] = useState("invisible");
-    const [ moveCardPopUpVisibility, setMoveCardPopUpVisibility ] = useState("invisible");
+    const [ 
+        currentGroupId, 
+        setCurrentGroupId 
+    ] = useState('');
 
-    const [ memberPopUpVisibility, setMemberPopUpVisibility ] = useState("invisible");
-    const [ groupInfoPopUpVisibility, setGroupInfoPopUpVisibility ] = useState("invisible");
+    const [ 
+        popUpType, 
+        setPopUpType 
+    ] = useState('join');
 
-    const [ currentColumn, setCurrentColumn ] = useState("todo");
-    const [ currentCardIdToDelete, setCurrentCardIdToDelete ] = useState("");
-    const [ currentCardDataToMove, setCurrentCardDataToMove ] = useState({});
+    const [ 
+        okToLoad, 
+        setOkToLoad 
+    ] = useState(false);
 
-    const [ currentMemberData, setCurrentMemberData ] = useState<Data.MemberData>({
-        name: "",
-        id: "",
+    const [ 
+        firstLayerOverlayVisibility, 
+        setFirstLayerOverlayVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        secondLayerOverlayVisibility, 
+        setSecondLayerOverlayVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        popUpStatusVisibility, 
+        setPopUpStatusVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        popUpStatusContent, 
+        setpopUpStatusContent 
+    ] = useState('serverError');
+
+    const [ 
+        popUpStatusType, 
+        setPopUpStatusType 
+    ] = useState('error');
+
+    const [ 
+        createJoinGroupPopUpVisibility, 
+        setCreateJoinGroupPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        addCardPopUpVisibility, 
+        setAddCardPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        bigCardPopUpVisibility, 
+        setBigCardPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        deleteCardPopUpVisibility, 
+        setDeleteCardPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        moveCardPopUpVisibility, 
+        setMoveCardPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        memberPopUpVisibility, 
+        setMemberPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        groupInfoPopUpVisibility, 
+        setGroupInfoPopUpVisibility 
+    ] = useState('invisible');
+
+    const [ 
+        currentColumn, 
+        setCurrentColumn 
+    ] = useState('todo');
+
+    const [ 
+        currentCardIdToDelete, 
+        setCurrentCardIdToDelete 
+    ] = useState('');
+
+    const [ 
+        currentCardDataToMove, 
+        setCurrentCardDataToMove 
+    ] = useState({});
+
+    const [ 
+        currentMemberData, 
+        setCurrentMemberData 
+    ] = useState<Data.MemberData>({
+        name: '',
+        id: '',
         roles: []
     });
+
 
     const contextValues = {
         username,
@@ -179,6 +289,7 @@ export default function Internal(){
         handlePromoteMember
     };
 
+
     const firstLayerOverlayProps = {
         visibility: firstLayerOverlayVisibility,
         hideFirstLayerOverlayAndPopUps
@@ -189,46 +300,72 @@ export default function Internal(){
         hideSecondLayerOverlayAndBigCardOptionPopUps,
     }
 
-    let alreadyReloaded = false;
 
+    let alreadyLoaded = false;
 
     useEffect(() => {
-        if (!alreadyReloaded){
-            alreadyReloaded = true; 
+        if (!alreadyLoaded) {
             handleClientEntry();
         }
+        alreadyLoaded = true;
     }, []);
 
-    async function handleClientEntry() {
-        const { status, responseObject } = await fetchUserInitialData();
-        const { name, userId, rooms } = responseObject;
+
+    async function handleClientEntry(): Promise<void> {
+        
+        const {
+            status,
+            responseObject
+        } = await fetchUserInitialData();
+
+        const { 
+            name, 
+            userId, 
+            rooms 
+        } = responseObject;
         
         if (status === 200) {
             const personalData = rooms.personal;
             const userGroups = rooms.groups;
             
-            setUsername(() => name);
-            setUserId(() => userId);
-            setPersonal(() => personalData);
-            setGroups(() => userGroups);
-            setLoaded(() => true);
+            setUsername(previous => name);
+            setUserId(previous => userId);
+            setPersonal(previous => personalData);
+            setGroups(previous => userGroups);
+            setLoaded(previous => true);
         }
         else {
-            router.push("/login");
+            router.push('/login');
         }
     }
 
-    function handleChangeRoom(roomId: string): void {
+
+    function handleChangeRoom(
+        roomId: string
+    ): void {
+
         setCurrentRoom(() => roomId);
-        if (roomId !== "personal") {
+        
+        if (roomId !== 'personal') {
             setCurrentGroupId(() => roomId);
             handleGetGroupContent(roomId);
         }
     }
 
-    async function handleGetGroupContent(roomId: string) {
-        const { status, responseObject } = await getGroupContent(roomId);
-        const { group, isAdmin } = responseObject;
+
+    async function handleGetGroupContent(
+        roomId: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await getGroupContent(roomId);
+
+        const { 
+            group, 
+            isAdmin 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -239,31 +376,54 @@ export default function Internal(){
 
         if (success && canLoadData) {
             loadGroupData(group);
-            setUserIsAdmin(() => isAdmin);
+            setUserIsAdmin(previous => isAdmin);
         }
         else if (!groupExists) {
             removeGroupFromGroupOptionList();
         }
         
-        setGetGroupRequestStatusMessage(() => statusMessage);
-        setGetGroupWithSuccess(() => success);
+        setGetGroupRequestStatusMessage(previous => statusMessage);
+        setGetGroupWithSuccess(previous => success);
     }
 
-    async function loadGroupData(groupData: Data.GroupData) {
-        setOkToLoad(() => false);
+
+    async function loadGroupData(
+        groupData: Data.GroupData
+    ): Promise<void> {
+
+        setOkToLoad(previous => false);
+
         await delay(1);
-        setOkToLoad(() => true);
-        setGroupData(() => groupData);
+
+        setOkToLoad(previous => true);
+        setGroupData(previous => groupData);
     }
 
-    function updateOptions(name: string, hash: string): void {
+
+    function updateOptions(
+        name: string, 
+        hash: string
+    ): void {
+
         setGroups(previous => [
             ...previous as Array<Data.GroupOptionData>, 
-            { name: name, hash: hash }
+            { 
+                name, 
+                hash
+            }
         ]);
     }
 
-    function updatePersonalCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
+
+    function updatePersonalCards(
+        name: string, 
+        timestamp: number, 
+        id: string, 
+        destinationValue: string, 
+        priorityValue: string, 
+        contentValue: string
+    ): void {
+
         const newCard: Data.CardData = {
             content: contentValue,
             priority: priorityValue,
@@ -271,20 +431,31 @@ export default function Internal(){
             id: id,
             creator: {
                 name: name,
-                roles: [ "admin" ]
+                roles: [ 'admin' ]
             }
         };
 
         setPersonal(previous => {
             const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(previous));
+
             deepCopy![destinationValue].cards.push(newCard);
+
             return deepCopy;
         });
 
         hideFirstLayerOverlayAndPopUps();
     }
 
-    function updateGroupCards(name: string, timestamp: number, id: string, destinationValue: string, priorityValue: string, contentValue: string): void {
+
+    function updateGroupCards(
+        name: string, 
+        timestamp: number, 
+        id: string, 
+        destinationValue: string, 
+        priorityValue: string, 
+        contentValue: string
+    ): void {
+
         const newCard: Data.CardData = {
             content: contentValue,
             priority: priorityValue,
@@ -292,25 +463,24 @@ export default function Internal(){
             id: id,
             creator: {
                 name: name,
-                roles: [ "admin" ]
+                roles: [ 'admin' ]
             }
         };
 
         setGroupData(previous => {
             const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(previous));
+
             deepCopy.columns![destinationValue].cards.push(newCard);
+
             return deepCopy;
         });   
 
         hideFirstLayerOverlayAndPopUps();
     }
 
-    /*
-     * DELETE CARD
-     */
 
     function handleDeleteCard(): void {
-        if (currentRoom === "personal") {
+        if (currentRoom === 'personal') {
             handleDeletePersonalCard();
         }
         else {
@@ -318,7 +488,9 @@ export default function Internal(){
         }
     }
 
-    async function handleDeletePersonalCard() {
+
+    async function handleDeletePersonalCard(): Promise<void> {
+
         const status = await deletePersonalCard(
             currentCardIdToDelete, 
             currentColumn
@@ -332,7 +504,7 @@ export default function Internal(){
         } = getAppropriateDeletePersonalCardStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
@@ -342,20 +514,29 @@ export default function Internal(){
         }
     }
 
+
     function removeCardFromPersonalDOM(): void {
+
         const personalData = personal as Data.PersonalData;
+
         const personalCardsWithoutDeleteCard = getPersonalDataWithoutDeletedCard(
             personalData, 
             currentColumn
         );
 
-        setPersonal(() => personalCardsWithoutDeleteCard);
+        setPersonal(previous => personalCardsWithoutDeleteCard);
         hideFirstLayerOverlayAndPopUps();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }
 
-    async function handleDeleteGroupCard() {
-        const status = await deleteGroupCard(currentGroupId, currentColumn, currentCardIdToDelete);
+
+    async function handleDeleteGroupCard(): Promise<void> {
+
+        const status = await deleteGroupCard(
+            currentGroupId, 
+            currentColumn, 
+            currentCardIdToDelete
+        );
 
         const { 
             statusMessage, 
@@ -366,7 +547,7 @@ export default function Internal(){
         } = getAppropriateDeleteGroupCardStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
@@ -379,23 +560,25 @@ export default function Internal(){
         }
     }
 
+
     function removeCardFromGroupDOM(): void {
+
         const groupCardsWithoutDeleteCard = getGroupDataWithoutDeletedCard(
             groupData as Data.GroupData, 
             currentColumn
         );
 
-        setGroupData(() => groupCardsWithoutDeleteCard);
+        setGroupData(previous => groupCardsWithoutDeleteCard);
         hideFirstLayerOverlayAndPopUps();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }
 
-    /*
-     * MOVE CARD
-     */
 
-    function handleMoveCard(destinyColumn: string): void {
-        if (currentRoom === "personal") {
+    function handleMoveCard(
+        destinyColumn: string
+    ): void {
+
+        if (currentRoom === 'personal') {
             handleMovePersonalCard(destinyColumn);
         }
         else {
@@ -403,14 +586,23 @@ export default function Internal(){
         }
     }
 
-    async function handleMovePersonalCard(destinyColumn: string) {
-        const { status, responseObject } = await movePersonalCard(
+
+    async function handleMovePersonalCard(
+        destinyColumn: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await movePersonalCard(
             currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
 
-        const { hash } = responseObject;
+        const {
+            hash 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -420,7 +612,7 @@ export default function Internal(){
         } = getAppropriateMovePersonalCardStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
@@ -430,8 +622,14 @@ export default function Internal(){
         }
     }
 
-    function moveCardFromPersonalDOM(destinyColumn: string, newHash: string): void {
+
+    function moveCardFromPersonalDOM(
+        destinyColumn: string, 
+        newHash: string
+    ): void {
+
         const personalData = personal as Data.PersonalData;
+
         const personalCardsWithoutDeleteCard = getPersonalDataWithMovedCard(
             personalData, 
             currentCardDataToMove as Data.CardData, 
@@ -440,20 +638,29 @@ export default function Internal(){
             newHash
         );
 
-        setPersonal(() => personalCardsWithoutDeleteCard);
+        setPersonal(previous => personalCardsWithoutDeleteCard);
         hideFirstLayerOverlayAndPopUps();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }
 
-    async function handleMoveGroupCard(destinyColumn: string) {
-        const { status, responseObject } = await moveGroupCard(
+
+    async function handleMoveGroupCard(
+        destinyColumn: string
+    ): Promise<void> {
+
+        const { 
+            status, 
+            responseObject 
+        } = await moveGroupCard(
             currentRoom, 
             currentCardDataToMove as Data.CardData, 
             currentColumn, 
             destinyColumn
         );
         
-        const { hash } = responseObject;
+        const {
+            hash 
+        } = responseObject;
 
         const { 
             statusMessage, 
@@ -464,10 +671,11 @@ export default function Internal(){
         } = getAppropriateMoveGroupCardStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             if (success) {
                 moveCardFromGroupDOM(destinyColumn, hash);
             }
@@ -477,7 +685,12 @@ export default function Internal(){
         }
     }
 
-    function  moveCardFromGroupDOM(destinyColumn: string, newHash: string): void {
+
+    function  moveCardFromGroupDOM(
+        destinyColumn: string, 
+        newHash: string
+    ): void {
+
         const groupCardsWithMovedCard = getGroupDataWithMovedCard(
             groupData as Data.GroupData, 
             currentCardIdToDelete,
@@ -487,20 +700,23 @@ export default function Internal(){
             newHash
         );
 
-        setGroupData(() => groupCardsWithMovedCard);
+        setGroupData(previous => groupCardsWithMovedCard);
         hideFirstLayerOverlayAndPopUps();
         hideSecondLayerOverlayAndBigCardOptionPopUps();
     }
 
-    /* 
-     * SAVE CARD
-     */
 
-    function handleSaveCard(id: string, column: string, oldContent: string, newContent: string) {
+    function handleSaveCard(
+        id: string, 
+        column: string, 
+        oldContent: string, 
+        newContent: string
+    ): void {
+
         if (oldContent === newContent) {
             return;
         }
-        else if (currentRoom === "personal") {
+        else if (currentRoom === 'personal') {
             handleChangePersonalCardContent(id, column, newContent);
         }
         else {
@@ -508,42 +724,97 @@ export default function Internal(){
         }
     }
 
-    async function handleChangePersonalCardContent(cardId: string, currentColumn: string, newContent: string) {
-        const status = await changePersonalCardContent(cardId, currentColumn, newContent);
-        if (status === 200) updatePersonalCardContentInTheDOM(cardId, currentColumn, newContent);
+
+    async function handleChangePersonalCardContent(
+        cardId: string, 
+        currentColumn: string, 
+        newContent: string
+    ): Promise<void> {
+
+        const status = await changePersonalCardContent(
+            cardId, 
+            currentColumn, 
+            newContent
+        );
+
+        if (status === 200) {
+            updatePersonalCardContentInTheDOM(
+                cardId, 
+                currentColumn, 
+                newContent
+            );
+        }
     }
 
-    function updatePersonalCardContentInTheDOM(cardId: string, currentColumn: string, newContent: string): void {
+
+    function updatePersonalCardContentInTheDOM(
+        cardId: string, 
+        currentColumn: string, 
+        newContent: string
+    ): void {
+
         const personalDataWithModifiedCard = getPersonalDataWithModifiedCardContent(
             personal as Data.PersonalData,
             cardId, 
             currentColumn,
             newContent
         );
+
         setPersonal(() => personalDataWithModifiedCard);
     }
 
-    async function handleChangeGroupCardContent(groupId: string, cardId: string, currentColumn: string, currentContent: string) {
-        const status = await changeGroupCardContent(groupId, cardId, currentColumn, currentContent);
-        if (status === 200) updateGroupCardContentInTheDOM(groupData, currentColumn, cardId, currentContent);
+
+    async function handleChangeGroupCardContent(
+        groupId: string, 
+        cardId: string, 
+        currentColumn: string, 
+        currentContent: string
+    ): Promise<void> {
+
+        const status = await changeGroupCardContent(
+            groupId, 
+            cardId, 
+            currentColumn, 
+            currentContent
+        );
+
+        if (status === 200) {
+            updateGroupCardContentInTheDOM(
+                groupData, 
+                currentColumn, 
+                cardId, 
+                currentContent
+            );
+        }
     }
 
-    function updateGroupCardContentInTheDOM(groupData: Data.GroupDataState, currentColumn: string, cardId: string, newContent: string): void {
+
+    function updateGroupCardContentInTheDOM(
+        groupData: Data.GroupDataState, 
+        currentColumn: string, 
+        cardId: string, 
+        newContent: string
+    ): void {
+
         const groupDataWithModifiedCard = getGroupDataWithModifiedCard(
             groupData as Data.GroupData,
             currentColumn,
             cardId,
             newContent
         );
+
         setGroupData(() => groupDataWithModifiedCard);
     }
 
-    /*
-     * KICK USER FROM GROUP
-     */
 
-    async function handleKickUser(userIdToKick: string) {
-        const status = await kickUser(currentGroupId, userIdToKick);
+    async function handleKickUser(
+        userIdToKick: string
+    ): Promise<void> {
+
+        const status = await kickUser(
+            currentGroupId, 
+            userIdToKick
+        );
 
         const { 
             statusMessage, 
@@ -554,7 +825,7 @@ export default function Internal(){
         } = getAppropriateKickUserStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
@@ -565,23 +836,26 @@ export default function Internal(){
                 removeGroupFromGroupOptionList();
             }
         }
-
     }
 
-    function removeMemberFromDOM(userIdToKick: string) {
+
+    function removeMemberFromDOM(
+        userIdToKick: string
+    ): void {
+
         const groupDataWithoutKickedUser = getGroupDataWithoutKickedUser(
             groupData as Data.GroupData, 
             userIdToKick
         );
+
         setGroupData(() => groupDataWithoutKickedUser);
     }
 
-    /*
-     * LEAVE GROUP
-     */
 
-    async function handleLeaveGroup() {
+    async function handleLeaveGroup(): Promise<void> {
+
         const status = await leaveGroup(currentGroupId);
+
         const { 
             statusMessage, 
             statusType, 
@@ -591,7 +865,7 @@ export default function Internal(){
         } = getAppropriateLeaveGroupStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
@@ -601,12 +875,11 @@ export default function Internal(){
         }
     }
 
-    /*
-     * DELETE GROUP
-     */
 
-    async function handleDeleteGroup() {
+    async function handleDeleteGroup(): Promise<void> {
+
         const status = await deleteGroup(currentGroupId);
+
         const { 
             statusMessage, 
             statusType, 
@@ -616,22 +889,26 @@ export default function Internal(){
         } = getAppropriateDeleteGroupStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             if (success || !groupExists) {
                 removeGroupFromGroupOptionList();
             }
         }
     }
 
-    /*
-     * PROMOTE MEMBER TO ADMIN
-     */ 
 
-    async function handlePromoteMember(userIdToPromote: string) {
-        const status = await promoteMember(currentGroupId, userIdToPromote);
+    async function handlePromoteMember(
+        userIdToPromote: string
+    ): Promise<void> {
+
+        const status = await promoteMember(
+            currentGroupId, 
+            userIdToPromote
+        );
 
         const { 
             statusMessage, 
@@ -642,10 +919,11 @@ export default function Internal(){
         } = getAppropriatePromoteMemberStatusMessage(status);
 
         if (!isAuthorized) {
-            router.push("/login");
+            router.push('/login');
         }
         else {
             showStatusPopUp(statusMessage, statusType);
+
             if (success) {
                 promoteUserToAdminInTheDOM(userIdToPromote);
             }
@@ -655,17 +933,27 @@ export default function Internal(){
         }
     }
 
-    /*
-     * UPDATE OF CURRENT BIG CARD DATA
-     */
 
-    function handleDeleteCardPopUpState(id: string, column: string): void {
+    function handleDeleteCardPopUpState(
+        id: string, 
+        column: string
+    ): void {
+
         setCurrentCardIdToDelete(() => id);
         setCurrentColumn(() => column);
-        changeBigCardOptionPopUpToVisible("deleteCard");
+        changeBigCardOptionPopUpToVisible('deleteCard');
     }
 
-    function handleMoveCardPopUpState(content: string, priority: string, timestamp: number, id: string, creator: Data.MemberData, column: string): void {
+
+    function handleMoveCardPopUpState(
+        content: string, 
+        priority: string, 
+        timestamp: number, 
+        id: string, 
+        creator: Data.MemberData, 
+        column: string
+    ): void {
+
         const currentCardDataToMove = {
             content: content, 
             priority: priority, 
@@ -676,27 +964,34 @@ export default function Internal(){
 
         setCurrentCardDataToMove(() => currentCardDataToMove);
         setCurrentColumn(() => column);
-        changeBigCardOptionPopUpToVisible("moveCard");
+        changeBigCardOptionPopUpToVisible('moveCard');
     }
-    
-    /*
-     * POPUP MANIPULATION
-     */
 
-    async function showStatusPopUp(statusMessage: string, statusType: string){
+
+    async function showStatusPopUp(
+        statusMessage: string, 
+        statusType: string
+    ){
+
         setpopUpStatusContent(() => statusMessage);
         setPopUpStatusType(() => statusType);
-        setPopUpStatusVisibility(() => "visible");
+        setPopUpStatusVisibility(() => 'visible');
         await delay(4000);
-        setPopUpStatusVisibility(() => "invisible");
+        setPopUpStatusVisibility(() => 'invisible');
     }
 
+
     function hideFirstLayerOverlayAndPopUps(): void {
-        setFirstLayerOverlayVisibility(() => "invisible");
+
+        setFirstLayerOverlayVisibility(() => 'invisible');
         hideAllPopUps();
     }
 
-    function changePopUpToVisible(identifierString: string): void {
+
+    function changePopUpToVisible(
+        identifierString: string
+    ): void {
+
         const { 
             createJoinGroupVisibility, 
             addCardVisibility, 
@@ -705,29 +1000,36 @@ export default function Internal(){
             groupInfoVisibility
         } = getAppropriatePopUpsVisibility(identifierString);
 
-        setPopUpType(() => "join");
+        setPopUpType(() => 'join');
         setCreateJoinGroupPopUpVisibility(() => createJoinGroupVisibility);
         setAddCardPopUpVisibility(() => addCardVisibility);
         setBigCardPopUpVisibility(() => bigCardVisibility);
         setMemberPopUpVisibility(() => memberInfoVisibility);
         setGroupInfoPopUpVisibility(() => groupInfoVisibility);
-        setFirstLayerOverlayVisibility(() => "visible");
+        setFirstLayerOverlayVisibility(() => 'visible');
     }
+
 
     function hideAllPopUps(): void {
-        setCreateJoinGroupPopUpVisibility(() => "invisible");
-        setAddCardPopUpVisibility(() => "invisible");
-        setBigCardPopUpVisibility(() => "invisible");
-        setMemberPopUpVisibility(() => "invisible");
-        setGroupInfoPopUpVisibility(() =>"invisible");
+
+        setCreateJoinGroupPopUpVisibility(() => 'invisible');
+        setAddCardPopUpVisibility(() => 'invisible');
+        setBigCardPopUpVisibility(() => 'invisible');
+        setMemberPopUpVisibility(() => 'invisible');
+        setGroupInfoPopUpVisibility(() =>'invisible');
     }
 
+
     function hideSecondLayerOverlayAndBigCardOptionPopUps(): void {
-        setSecondLayerOverlayVisibility(() => "invisible");
+        setSecondLayerOverlayVisibility(() => 'invisible');
         hideAllBigCardOptionPopUps();
     }
 
-    function changeBigCardOptionPopUpToVisible(identifierString: string): void {
+
+    function changeBigCardOptionPopUpToVisible(
+        identifierString: string
+    ): void {
+
         const { 
             deleteCardVisibility, 
             moveCardVisibility 
@@ -735,15 +1037,22 @@ export default function Internal(){
 
         setDeleteCardPopUpVisibility(() => deleteCardVisibility);
         setMoveCardPopUpVisibility(() => moveCardVisibility);
-        setSecondLayerOverlayVisibility(() => "visible");
+        setSecondLayerOverlayVisibility(() => 'visible');
     }
+
 
     function hideAllBigCardOptionPopUps(): void {
-        setDeleteCardPopUpVisibility(() => "invisible");
-        setMoveCardPopUpVisibility(() => "invisible");
+        setDeleteCardPopUpVisibility(() => 'invisible');
+        setMoveCardPopUpVisibility(() => 'invisible');
     }
 
-    function openMemberInfo(name: string, id: string, roles: string[]) {
+
+    function openMemberInfo(
+        name: string, 
+        id: string, 
+        roles: string[]
+    ) {
+
         setCurrentMemberData(() => { 
             return {
                 name: name,
@@ -751,12 +1060,14 @@ export default function Internal(){
                 roles: roles
             }
         });
-        changePopUpToVisible("memberInfo");
+        changePopUpToVisible('memberInfo');
     }
 
+
     function openGroupSettings(): void {
-        changePopUpToVisible("groupInfo");
+        changePopUpToVisible('groupInfo');
     }
+
 
     function removeGroupFromGroupOptionList(): void {
         const groupOptionsListUpdated = getUpdatedGroupOptionsList(
@@ -765,10 +1076,14 @@ export default function Internal(){
         );
         setGroups(() => groupOptionsListUpdated);
         hideFirstLayerOverlayAndPopUps();
-        setCurrentRoom(() => "personal");
+        setCurrentRoom(() => 'personal');
     }
 
-    function promoteUserToAdminInTheDOM(userIdToPromote: string): void {
+
+    function promoteUserToAdminInTheDOM(
+        userIdToPromote: string
+    ): void {
+
         const groupDataWithUpdatedMemberRoles = getGroupDataWithMemberRoleUpdated(
             groupData as Data.GroupData,
             userIdToPromote
@@ -777,10 +1092,11 @@ export default function Internal(){
         setGroupData(() => groupDataWithUpdatedMemberRoles);
         setCurrentMemberData(previous => {
             const deepCopy = JSON.parse(JSON.stringify(previous));
-            deepCopy.roles.push("admin");
+            deepCopy.roles.push('admin');
             return deepCopy;
         });
     }
+
 
     return (
         <div className={internalStyles.internal__background}>

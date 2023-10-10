@@ -4,15 +4,30 @@ import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
 
-export function deleteGroupCard(groupId: string, currentColumn: string, currentCardIdToDelete: string): Promise<number> {
-    const requestConfig = getDeleteGroupCardRequestConfig(groupId, currentColumn, currentCardIdToDelete);
+export function deleteGroupCard(
+    groupId: string, 
+    currentColumn: string, 
+    currentCardIdToDelete: string
+): Promise<number> {
+
+    const requestConfig = getDeleteGroupCardRequestConfig(
+        groupId, 
+        currentColumn, 
+        currentCardIdToDelete
+    );
+
     const promisedResponseData = doDeleteGroupCardRequest(requestConfig);
     
     return promisedResponseData;
 }
 
-function getDeleteGroupCardRequestConfig(groupId: string, column: string, currentCardIdToDelete: string): 
-Request.DeleteCardRequestParameters {
+
+function getDeleteGroupCardRequestConfig(
+    groupId: string, 
+    column: string, 
+    currentCardIdToDelete: string
+): Request.DeleteCardRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         groupId: groupId,
@@ -29,14 +44,23 @@ Request.DeleteCardRequestParameters {
     return parameters;
 }
 
-async function doDeleteGroupCardRequest(requestConfig: Request.DeleteCardRequestParameters): Promise<number> {
+
+async function doDeleteGroupCardRequest(
+    requestConfig: Request.DeleteCardRequestParameters
+): Promise<number> {
+
     const response = await fetch(DELETE_GROUP_CARD_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getGroupDataWithoutDeletedCard(groupData: Data.GroupData, currentColumn: string): Data.GroupData {
+
+export function getGroupDataWithoutDeletedCard(
+    groupData: Data.GroupData, 
+    currentColumn: string
+): Data.GroupData {
+
     const deepCopy: Data.GroupData = JSON.parse(JSON.stringify(groupData));
     const cards: Data.CardData[] = deepCopy!.columns[currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
@@ -46,7 +70,11 @@ export function getGroupDataWithoutDeletedCard(groupData: Data.GroupData, curren
     return deepCopy;
 }
 
-export function getAppropriateDeleteGroupCardStatusMessage(httpStatus: number) {
+
+export function getAppropriateDeleteGroupCardStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "error";
 
@@ -70,5 +98,11 @@ export function getAppropriateDeleteGroupCardStatusMessage(httpStatus: number) {
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, success, isAuthorized, groupExists };
+    return { 
+        statusMessage, 
+        statusType, 
+        success, 
+        isAuthorized, 
+        groupExists 
+    };
 }

@@ -1,10 +1,21 @@
 import { Data } from "@/types/data";
+import { Response } from "./responses";
 
 export namespace Props {
 
-    interface OverlayProps {
+    interface InternalPageProps {
+        entryStatus: number;
+        entryResponse: Response.FetchInitialDataResponse
+    }
+
+    interface FirstLayerOverlayProps {
         visibility: string;
         hideFirstLayerOverlayAndPopUps: () => void;
+    }
+
+    interface SecondLayerOverlayProps {
+        visibility: string;
+        hideSecondLayerOverlayAndBigCardOptionPopUps: () => void;
     }
 
     interface HeaderProps {

@@ -27,9 +27,8 @@
     width: 80%;
     height: 40px;
     border-radius: 10px;
-    border: 1px solid rgba(66, 69, 78, 0.445);
+    border: 1px solid rgba(42, 43, 46, 0.336);
     background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
 }
 
 .search__input {
@@ -136,9 +135,8 @@
     appearance: none;
     width: 80%;
     text-align: center;
-    border: 1px solid rgba(66, 69, 78, 0.445);
+    border: 1px solid rgba(42, 43, 46, 0.336);
     background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
 }
 
 .content__text__block {
@@ -159,9 +157,8 @@
     height: 130px;
     border-radius: 10px;
     font-size: 1em;
-    border: 1px solid rgba(66, 69, 78, 0.445);
+    border: 1px solid rgba(42, 43, 46, 0.336);
     background-color: white;
-    box-shadow: inset 0px 0px 2px rgba(45, 45, 49, 0.637);
 }
 
 /* Group token container */

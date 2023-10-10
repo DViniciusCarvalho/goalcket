@@ -4,15 +4,27 @@ import { Data } from "@/types/data";
 import { Request } from "@/types/requests";
 
 
-export function deletePersonalCard(currentCardIdToDelete: string, currentColumn: string): Promise<number> {
-    const requestConfig = getDeletePersonalCardRequestConfig(currentCardIdToDelete, currentColumn);
+export function deletePersonalCard(
+    currentCardIdToDelete: string, 
+    currentColumn: string
+): Promise<number> {
+
+    const requestConfig = getDeletePersonalCardRequestConfig(
+        currentCardIdToDelete, 
+        currentColumn
+    );
+
     const promisedResponseData = doDeletePersonalCardRequest(requestConfig);
 
     return promisedResponseData;
 }
 
-function getDeletePersonalCardRequestConfig(currentCardIdToDelete: string, column: string): 
-Request.DeleteCardRequestParameters {
+
+function getDeletePersonalCardRequestConfig(
+    currentCardIdToDelete: string, 
+    column: string
+): Request.DeleteCardRequestParameters {
+
     const data = {
         token: localStorage.getItem("token") ?? "",
         column: column,
@@ -28,15 +40,23 @@ Request.DeleteCardRequestParameters {
     return parameters;
 }
 
-async function doDeletePersonalCardRequest(requestConfig: Request.DeleteCardRequestParameters): Promise<number> {
+
+async function doDeletePersonalCardRequest(
+    requestConfig: Request.DeleteCardRequestParameters
+): Promise<number> {
+
     const response = await fetch(DELETE_PERSONAL_CARD_ENDPOINT, requestConfig);
     const { status } = response;
 
     return status;
 }
 
-export function getPersonalDataWithoutDeletedCard(personalData: Data.PersonalData, currentColumn: string): 
-Data.PersonalData {
+
+export function getPersonalDataWithoutDeletedCard(
+    personalData: Data.PersonalData, 
+    currentColumn: string
+): Data.PersonalData {
+
     const deepCopy: Data.PersonalData = JSON.parse(JSON.stringify(personalData));
     const cards: Data.CardData[] = deepCopy![currentColumn].cards;
     const cardIndex = getCardIndex(cards, currentColumn);
@@ -46,7 +66,11 @@ Data.PersonalData {
     return deepCopy;
 }
 
-export function getAppropriateDeletePersonalCardStatusMessage(httpStatus: number) {
+
+export function getAppropriateDeletePersonalCardStatusMessage(
+    httpStatus: number
+) {
+
     let statusMessage = "";
     let statusType = "error";
 
@@ -68,7 +92,10 @@ export function getAppropriateDeletePersonalCardStatusMessage(httpStatus: number
         statusMessage = "serverError";
     }
 
-    return { statusMessage, statusType, success, isAuthorized };
+    return { 
+        statusMessage, 
+        statusType, 
+        success, 
+        isAuthorized 
+    };
 }
-
-
