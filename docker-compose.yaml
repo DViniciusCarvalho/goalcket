@@ -6,7 +6,7 @@ services:
     volumes:
       - ./database/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
-      - 27017:27017
+      - 27020:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
@@ -18,7 +18,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - 3001:3001
+      - 5050:5050
     environment:
       - MONGO_USER=${MONGO_USER}
       - MONGO_PASSWORD=${MONGO_PASSWORD}

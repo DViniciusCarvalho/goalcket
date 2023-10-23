@@ -99,6 +99,7 @@ export default function GroupPopUp({
                     <input 
                         type='text' 
                         id='second__input__id' 
+                        placeholder={'min 9 chars'}
                         className={groupPopUpStyle.second__input} 
                         ref={secondInputRef}
                     />

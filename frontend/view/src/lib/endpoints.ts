@@ -1,5 +1,5 @@
 const API_HOST = 'localhost';
-const API_PORT = 3001;
+const API_PORT = 5050;
 const API_ENDPOINT = `http://${API_HOST}:${API_PORT}/`;
 
 export const LOGON_USER_ENDPOINT = API_ENDPOINT + 'logon-user';
